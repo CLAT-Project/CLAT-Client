@@ -28,14 +28,14 @@ const Login = () => {
             <div className="flex flex-col gap-[16px]">
               <div className="input-with-login-icon">
                 <input
-                  className="h-[52px] w-full rounded-[18px] border border-[#616161] px-[45px] py-[12px] focus:outline-none"
+                  className="h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none"
                   type="text"
                   placeholder="이메일"
                 />
               </div>
               <div className="input-with-password-icon">
                 <input
-                  className="h-[52px] w-full rounded-[18px] border border-[#616161] px-[45px] py-[12px] focus:outline-none"
+                  className="h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none"
                   type="password"
                   placeholder="비밀번호"
                 />
@@ -44,13 +44,13 @@ const Login = () => {
                 {/* <p className=' text-[8px] text-center'>올바르지 않은 이메일 또는 비밀번호입니다.</p> */}
               </div>
             </div>
-            <button className="h-[52px] w-full rounded-[18px] bg-primary text-white">
+            <button className="h-[52px] w-full rounded-18 bg-primary text-white">
               로그인
             </button>
           </form>
-          <div className='mt-[36px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack'>
-            <p className='cursor-pointer'>비밀번호를 잊으셨나요?</p>
-            <p className='cursor-pointer'>회원가입 하기</p>
+          <div className="mt-[36px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack">
+            <p className="cursor-pointer">비밀번호를 잊으셨나요?</p>
+            <p className="cursor-pointer">회원가입 하기</p>
           </div>
         </div>
       </div>

@@ -3,13 +3,13 @@
 }
 
 .input-with-login-icon::before {
-  content: url('/images/svg/login-person.svg');
+  content: url('/images/svg/bi_person.svg');
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 27px;
+  height: 27px;
 }
 
 .input-with-password-icon {
@@ -17,11 +17,11 @@
 }
 
 .input-with-password-icon::before {
-  content: url('/images/svg/login-person.svg');
+  content: url('/images/svg/uil_lock.svg');
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
+  width: 27px;
+  height: 24px;
 }

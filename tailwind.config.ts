@@ -15,6 +15,10 @@ const config: Config = {
         primary: '#2C75FF',
         lightBlack: '#243048',
       },
+      borderRadius: {
+        18: '18px',
+        49: '49px',
+      },
     },
   },
   plugins: [],
