@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import './login.css'
+import Link from 'next/link'
 
 const Login = () => {
   return (
@@ -50,7 +51,9 @@ const Login = () => {
           </form>
           <div className="mt-[36px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack">
             <p className="cursor-pointer">비밀번호를 잊으셨나요?</p>
-            <p className="cursor-pointer">회원가입 하기</p>
+            <Link href="/signup">
+              <p className="cursor-pointer">회원가입 하기</p>
+            </Link>
           </div>
         </div>
       </div>
