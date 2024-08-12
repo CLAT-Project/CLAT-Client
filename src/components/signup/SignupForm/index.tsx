@@ -2,9 +2,12 @@
 
 import CheckBox from '@/components/common/CheckBox'
 import InputField from '@/components/common/InputField'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const SignupForm = () => {
+  const navigate = useRouter()
+
   const [checkedState, setCheckedState] = useState({
     checked1: false,
     checked2: false,
@@ -77,7 +80,7 @@ const SignupForm = () => {
             keyProp="checked2"
           />
         </div>
-        <div className="mt-[35px]">
+        <div className="mt-[40px]">
           <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white">
             다음 단계
           </button>
