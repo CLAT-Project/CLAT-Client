@@ -5,7 +5,7 @@ import InputField from '@/components/common/InputField'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-const SignupForm = () => {
+const SignupForm = ({ onNext }: { onNext: () => void }) => {
   const navigate = useRouter()
 
   const [checkedState, setCheckedState] = useState({
@@ -66,7 +66,7 @@ const SignupForm = () => {
             isButton={false}
           />
         </div>
-        <div className='w-full flex justify-center mt-10 gap-10'>
+        <div className="mt-10 flex w-full justify-center gap-10">
           <CheckBox
             label="개인정보 이용 동의"
             checked={checkedState.checked1}
@@ -81,7 +81,10 @@ const SignupForm = () => {
           />
         </div>
         <div className="mt-[40px]">
-          <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white">
+          <button
+            className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white"
+            onClick={onNext}
+          >
             다음 단계
           </button>
         </div>

@@ -1,18 +1,17 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
 interface ICheckBoxProps {
-  label: string;
-  checked: boolean;
-  onChange: (isChecked: boolean, key: string) => void;
-  keyProp: string;
-};
+  label: string
+  checked: boolean
+  onChange: (isChecked: boolean, key: string) => void
+  keyProp: string
+}
 
 const CheckBox = ({ label, checked, onChange, keyProp }: ICheckBoxProps) => {
-
   return (
-    <label className="flex items-center space-x-2 cursor-pointer">
+    <label className="flex cursor-pointer items-center space-x-2">
       <input
         type="checkbox"
         checked={checked}

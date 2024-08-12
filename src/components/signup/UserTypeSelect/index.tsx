@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-const UserTypeSelect = () => {
+const UserTypeSelect = ({ onNext }: { onNext: () => void }) => {
   return (
     <div className="mx-auto w-[60%]">
       <p className="w-full pr-[20px] pt-[11px] text-right text-[11px]">
@@ -14,7 +14,10 @@ const UserTypeSelect = () => {
         </p>
       </div>
       <div className="mt-[84px] flex w-full justify-center gap-[36px]">
-        <div className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black pb-[58px]">
+        <div
+          className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black pb-[58px]"
+          onClick={onNext}
+        >
           <p className="mt-[29px] text-[32px] text-primary">학생</p>
           <p className="text-[22px]">회원가입</p>
           <div className="mt-[20px]">
@@ -26,7 +29,10 @@ const UserTypeSelect = () => {
             />
           </div>
         </div>
-        <div className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black">
+        <div
+          className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black"
+          onClick={onNext}
+        >
           <p className="mt-[29px] text-[32px] text-primary">교수</p>
           <p className="text-[22px]">회원가입</p>
           <div className="mt-[2px]">

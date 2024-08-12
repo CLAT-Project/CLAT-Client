@@ -13,6 +13,9 @@
   top: 50%;
   transform: translateY(-50%);
 }
+.signup-progress-circle.active {
+  background-color: #324aff; /* 파란색으로 변경 */
+}
 .signuo-progress-circle::before {
   content: '';
   position: absolute;

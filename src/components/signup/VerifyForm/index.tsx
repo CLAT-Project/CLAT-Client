@@ -1,16 +1,17 @@
-import InputField from "@/components/common/InputField"
-import VerificationCodeInput from "@/components/signup/VerifyForm/VerificationCodeInput"
-import { useState } from "react";
+import InputField from '@/components/common/InputField'
+import VerificationCodeInput from '@/components/signup/VerifyForm/VerificationCodeInput'
+import { useState } from 'react'
 
-const VerifyForm = () => {
-  const [verificationCode, setVerificationCode] = useState<number[]>(Array(6).fill(""));
+const VerifyForm = ({ onNext }: { onNext: () => void }) => {
+  const [verificationCode, setVerificationCode] = useState<number[]>(
+    Array(6).fill(''),
+  )
 
   const handleVerificationCodeChange = (value: string, index: number) => {
-    const newCode = [...verificationCode];
-    newCode[index] = Number(value);
-    setVerificationCode(newCode);
-  };
-
+    const newCode = [...verificationCode]
+    newCode[index] = Number(value)
+    setVerificationCode(newCode)
+  }
 
   return (
     <div className="mx-auto w-[60%]">
@@ -32,15 +33,20 @@ const VerifyForm = () => {
             isButton={true}
             buttonText="인증번호 발송"
           />
-          <div className="flex items-center gap-5 mt-4">
-            <div className="flex w-[540px] items-center justify-between  ">
-              <label className="min-w-[80px] text-[14px] ">인증번호</label>
+          <div className="mt-4 flex items-center gap-5">
+            <div className="flex w-[540px] items-center justify-between">
+              <label className="min-w-[80px] text-[14px]">인증번호</label>
               <VerificationCodeInput onChange={handleVerificationCodeChange} />
             </div>
-            <button className="h-[36px] border border-black px-[15px] rounded-[8px]">확인</button>
+            <button className="h-[36px] rounded-[8px] border border-black px-[15px]">
+              확인
+            </button>
           </div>
-          <div className="mt-[100px] mx-auto">
-            <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white">
+          <div className="mx-auto mt-[100px]">
+            <button
+              className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white"
+              onClick={onNext}
+            >
               다음 단계
             </button>
           </div>

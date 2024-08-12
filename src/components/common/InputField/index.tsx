@@ -15,7 +15,7 @@ const InputField = ({
 }: IInputFiledProps) => {
   return (
     <div className="flex items-center gap-5">
-      <div className="flex w-[540px] items-center justify-between ">
+      <div className="flex w-[540px] items-center justify-between">
         <label className="min-w-[80px] text-[14px]">{label}</label>
         <input className="signup-input" type={type} placeholder={placeholder} />
       </div>
