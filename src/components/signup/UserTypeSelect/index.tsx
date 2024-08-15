@@ -1,6 +1,21 @@
 import Image from 'next/image'
+import { Dispatch, SetStateAction } from 'react'
 
-const UserTypeSelect = ({ onNext }: { onNext: () => void }) => {
+interface IUserTypeSelectProps {
+  onNext: () => void
+  setUserType: Dispatch<SetStateAction<string>>
+}
+
+const UserTypeSelect = ({ onNext, setUserType }: IUserTypeSelectProps) => {
+  const onClickUserType = (userType: string) => {
+    if (userType === 'student') {
+      setUserType('student')
+    } else if (userType === 'professor') {
+      setUserType('professor')
+    }
+    onNext()
+  }
+
   return (
     <div className="mx-auto w-[60%]">
       <p className="w-full pr-[20px] pt-[11px] text-right text-[11px]">
@@ -16,7 +31,7 @@ const UserTypeSelect = ({ onNext }: { onNext: () => void }) => {
       <div className="mt-[84px] flex w-full justify-center gap-[36px]">
         <div
           className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black pb-[58px]"
-          onClick={onNext}
+          onClick={() => onClickUserType('student')}
         >
           <p className="mt-[29px] text-[32px] text-primary">학생</p>
           <p className="text-[22px]">회원가입</p>
@@ -31,7 +46,7 @@ const UserTypeSelect = ({ onNext }: { onNext: () => void }) => {
         </div>
         <div
           className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black"
-          onClick={onNext}
+          onClick={() => onClickUserType('professor')}
         >
           <p className="mt-[29px] text-[32px] text-primary">교수</p>
           <p className="text-[22px]">회원가입</p>

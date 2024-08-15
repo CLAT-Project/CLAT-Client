@@ -1,8 +1,22 @@
+'use client'
+
 import Image from 'next/image'
 import './login.css'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+
+interface FormValue {
+  id: string
+  password: string
+}
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitted, isSubmitting, errors },
+  } = useForm<FormValue>()
+
   return (
     <div className="relative h-screen w-screen">
       <div className="absolute left-0 top-0 h-full w-full">
@@ -25,27 +39,56 @@ const Login = () => {
         </div>
         <div className="flex w-[331px] flex-col">
           <p className="text-[18px] font-bold">LOGIN</p>
-          <form className="mt-[9px]">
+          <form
+            className="mt-[9px]"
+            onSubmit={handleSubmit((data) => {
+              alert(JSON.stringify(data))
+            })}
+          >
             <div className="flex flex-col gap-[16px]">
               <div className="input-with-login-icon">
                 <input
-                  className="h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none"
+                  id="id"
+                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.id ? 'border-red-500' : 'border-[#616161]'}`}
                   type="text"
-                  placeholder="이메일"
+                  placeholder="아이디"
+                  {...register('id', {
+                    required: true,
+                  })}
+                  aria-invalid={
+                    isSubmitted ? (errors.id ? 'true' : 'false') : undefined
+                  }
                 />
               </div>
               <div className="input-with-password-icon">
                 <input
-                  className="h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none"
+                  id="password"
+                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.password ? 'border-red-500' : 'border-[#616161]'}`}
                   type="password"
                   placeholder="비밀번호"
+                  {...register('password', {
+                    required: true,
+                  })}
+                  aria-invalid={
+                    isSubmitted
+                      ? errors.password
+                        ? 'true'
+                        : 'false'
+                      : undefined
+                  }
                 />
               </div>
               <div className="h-[39px]">
-                {/* <p className=' text-[8px] text-center'>올바르지 않은 이메일 또는 비밀번호입니다.</p> */}
+                {(errors.id || errors.password) && (
+                  <p>모든 필드를 입력해주세요.</p>
+                )}
               </div>
             </div>
-            <button className="h-[52px] w-full rounded-18 bg-primary text-white">
+            <button
+              className="h-[52px] w-full rounded-18 bg-primary text-white"
+              type="submit"
+              disabled={isSubmitting}
+            >
               로그인
             </button>
           </form>

@@ -1,11 +1,10 @@
 import Image from 'next/image'
 import './signupHeader.css'
 
-
 const SignupHeader = ({ currentStep }: { currentStep: number }) => {
   const getCircleStyle = (step: number) => ({
-    backgroundColor: currentStep == step ? '#2C75FF' : '#d9d9d9',  // 파란색 또는 기본 회색
-  });
+    backgroundColor: currentStep == step ? '#2C75FF' : '#d9d9d9', // 파란색 또는 기본 회색
+  })
 
   return (
     <div>
@@ -19,17 +18,26 @@ const SignupHeader = ({ currentStep }: { currentStep: number }) => {
       </div>
       <div className="flex justify-center">
         <div className="signup-progress-bar">
-          <div className="signuo-progress-circle left-[-2%]" style={{ ...getCircleStyle(1) }}>
+          <div
+            className="signuo-progress-circle left-[-2%]"
+            style={{ ...getCircleStyle(1) }}
+          >
             <div className="absolute left-1/2 top-[120%] w-[120px] -translate-x-1/2 text-center text-[12px] opacity-70">
               회원정보
             </div>
           </div>
-          <div className="signuo-progress-circle left-[48%] -translate-x-1/2" style={{ ...getCircleStyle(2) }}>
+          <div
+            className="signuo-progress-circle left-[48%] -translate-x-1/2"
+            style={{ ...getCircleStyle(2) }}
+          >
             <div className="absolute left-1/2 top-[120%] w-[120px] -translate-x-1/2 text-center text-[12px] opacity-70">
               본인인증
             </div>
           </div>
-          <div className="signuo-progress-circle left-[98%]" style={{ ...getCircleStyle(3) }}>
+          <div
+            className="signuo-progress-circle left-[98%]"
+            style={{ ...getCircleStyle(3) }}
+          >
             <div className="absolute left-1/2 top-[120%] w-[120px] -translate-x-1/2 text-center text-[12px] opacity-70">
               인증 확인 및 완료
             </div>
