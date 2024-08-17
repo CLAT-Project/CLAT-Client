@@ -1,11 +1,17 @@
 import axios from 'axios'
 
-const Api = axios.create({
-  baseURL: process.env.REACT_APP_BASE_END_POINT,
+export const Api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true,
 })
 
-export default Api
+export const mutipartApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+  withCredentials: true,
+})

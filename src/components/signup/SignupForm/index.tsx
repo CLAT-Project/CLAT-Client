@@ -2,14 +2,15 @@
 
 import CheckBox from '@/components/common/CheckBox'
 import InputField from '@/components/common/InputField'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
 
 interface SignupFormProps {
   onNext: () => void
   register: any
   handleSubmit: any
   errors: any
+  onSubmit: (data: any) => void
+  setSelectedImgFile: Dispatch<SetStateAction<File | null>>
 }
 
 const SignupForm = ({
@@ -17,8 +18,11 @@ const SignupForm = ({
   register,
   handleSubmit,
   errors,
+  onSubmit,
+  setSelectedImgFile,
 }: SignupFormProps) => {
-  const navigate = useRouter()
+  const imgRef = useRef<HTMLInputElement>(null)
+  const [selectedImgName, setSelectedImgNaem] = useState<string>('')
 
   const [checkedState, setCheckedState] = useState({
     checked1: false,
@@ -32,13 +36,30 @@ const SignupForm = ({
     })
   }
 
-  const onSubmit = (data: any) => {
+  const onClickFileBtn = () => {
+    if (imgRef.current) {
+      imgRef.current.click()
+    }
+  }
+
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const imageFile = e.target.files?.[0]
+
+    if (imageFile) {
+      setSelectedImgNaem(imageFile.name)
+      setSelectedImgFile(imageFile)
+    } else {
+      setSelectedImgNaem('')
+      setSelectedImgFile(null)
+    }
+  }
+
+  const onClickNextBtn = () => {
     if (!checkedState.checked1 || !checkedState.checked2) {
-      alert('필수 항목을 체크해주세요.')
+      alert('필수 항목에 동의해주세요.')
       return
     }
-    console.log(data, "data")
-    console.log('Checked State:', checkedState)
+    onNext()
   }
 
   return (
@@ -47,28 +68,44 @@ const SignupForm = ({
         <span className="text-red-400">*</span> 표시는 필수 항목입니다.
       </p>
       <div className="mt-[48px] flex flex-col items-center justify-center">
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-[32px]">
           <InputField
             label="학교/기관"
             type="text"
             placeholder="학교/기관을 입력해주세요."
             isButton={false}
-            name="school"
+            name="schoolName"
             register={register}
             errors={errors}
             validationRules={{ required: true }}
           />
-          <InputField
-            label="증명서"
-            type="text"
-            placeholder="증명서를 첨부해주세요."
-            isButton={true}
-            buttonText="파일"
-            name="certification"
-            register={register}
-            errors={errors}
-            validationRules={{ required: true }}
-          />
+          <div className="relative flex items-center gap-5">
+            <div className="flex w-[540px] items-center justify-between">
+              <label className="min-w-[80px] text-[14px]">증명서</label>
+              <input
+                className={`hidden`}
+                type="file"
+                accept="image/*"
+                placeholder="증명서를 첨부해주세요."
+                ref={imgRef}
+                onChange={handleChangeImage}
+              />
+              <p className="signup-input flex items-center">
+                <span>{selectedImgName}</span>
+              </p>
+            </div>
+            <div
+              className="cursor-pointer rounded-[8px] bg-primary px-[23px] py-[7px] text-[14px] text-white"
+              onClick={onClickFileBtn}
+            >
+              파일 선택
+            </div>
+            <div className="absolute -bottom-2 left-1/4 h-[10px]">
+              <p className="color-[0a0a0a] mt-1 text-[10px] text-sm">
+                재직/재학 증명서를 첨부해주십시오.
+              </p>
+            </div>
+          </div>
           <InputField
             label="이름"
             type="text"
@@ -126,7 +163,7 @@ const SignupForm = ({
           />
         </div>
         <div className="mt-[40px]">
-          <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white">
+          <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white" onClick={() => onClickNextBtn()}>
             다음 단계
           </button>
         </div>

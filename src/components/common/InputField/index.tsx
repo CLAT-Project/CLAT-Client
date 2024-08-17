@@ -25,7 +25,7 @@ const InputField = ({
 }: IInputFiledProps) => {
   return (
     <>
-      <div className="flex items-center gap-5 border relative">
+      <div className="relative flex items-center gap-5">
         <div className="flex w-[540px] items-center justify-between">
           <label className="min-w-[80px] text-[14px]">{label}</label>
           <input
@@ -40,15 +40,14 @@ const InputField = ({
             {buttonText}
           </button>
         )}
-        <div className='h-[10px] absolute -bottom-4 left-1/2'>
+        <div className="absolute -bottom-2 left-1/4 h-[10px]">
           {errors?.[name] && (
-            <p className="mt-1 text-sm text-red-500">
+            <p className="mt-1 text-[10px] text-sm text-red-500">
               모든 필드를 입력해주세요.
             </p>
           )}
         </div>
       </div>
-
     </>
   )
 }
