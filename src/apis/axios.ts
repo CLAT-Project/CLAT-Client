@@ -17,6 +17,10 @@ export const mutipartApi = axios.create({
   withCredentials: true,
 })
 
+/**
+ * @description 요청 인터셉터
+ * @description 요청 시 accessToken을 헤더에 추가 
+ */
 Api.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     if (typeof window !== 'undefined') {

@@ -1,5 +1,10 @@
 import { Api, mutipartApi } from '@/apis/axios'
 
+/**
+ * @description 로그인 요청
+ * @param param { username, password }
+ * @returns 
+ */
 const postSingin = async ({
   username,
   password,
@@ -24,6 +29,12 @@ const postSingin = async ({
     throw error
   }
 }
+/**
+ * @description 회원가입 요청
+ * @description multipart/form-data 형식으로 요청
+ * @param param { formData : joinDto: json형태의 입력값, file: 이미지 파일 }
+ * @returns user name을 반환
+ */
 const postSignup = async ({ formData }: { formData: FormData }) => {
   const { data, headers } = await mutipartApi.post('/join', formData)
 
@@ -33,7 +44,11 @@ const postSignup = async ({ formData }: { formData: FormData }) => {
   }
   return data
 }
-
+/**
+ * @description 이메일 인증 요청
+ * @param param { email:string }
+ * @returns 
+ */
 const postVerifyEmail = async ({ email }: { email: string }) => {
   const { data } = await Api.post(`/verify-email`, {
     email,
@@ -41,7 +56,11 @@ const postVerifyEmail = async ({ email }: { email: string }) => {
 
   return data
 }
-
+/**
+ * @description 인증번호 확인 요청
+ * @param param { email, verificationCode: 6자리 숫자 }
+ * @returns 
+ */
 const postVerifyNum = async ({
   email,
   verificationCode,
@@ -56,7 +75,11 @@ const postVerifyNum = async ({
 
   return data
 }
-
+/**
+ * @description 리프레시 토큰으로 새로운 엑세스 토큰 발급 요청
+ * @param param 
+ * @returns 
+ */
 const silentRefresh = async () => {
   try {
     const { data } = await Api.post('/reIssue')
@@ -68,7 +91,11 @@ const silentRefresh = async () => {
     throw error
   }
 }
-
+/**
+ * @description 중복 아이디 체크 요청
+ * @param param { username: string }
+ * @returns 
+ */
 const postCheckId = async ({ username }: { username: string }) => {
   const { data } = await Api.post(`/idCheck`, {
     username,
