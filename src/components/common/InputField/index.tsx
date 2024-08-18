@@ -10,6 +10,7 @@ interface IInputFiledProps {
   register?: UseFormRegister<any>
   errors?: FieldErrors<any>
   validationRules?: any
+  onClickBtn?: (data?: any) => void
 }
 
 const InputField = ({
@@ -22,6 +23,7 @@ const InputField = ({
   register,
   errors,
   validationRules,
+  onClickBtn,
 }: IInputFiledProps) => {
   return (
     <>
@@ -36,14 +38,17 @@ const InputField = ({
           />
         </div>
         {isButton && (
-          <button className="rounded-[8px] bg-primary px-[23px] py-[7px] text-[14px] text-white">
+          <div
+            className="cursor-pointer rounded-[8px] bg-primary px-[23px] py-[7px] text-[14px] text-white"
+            onClick={onClickBtn}
+          >
             {buttonText}
-          </button>
+          </div>
         )}
         <div className="absolute -bottom-3 left-1/4 h-[10px]">
-          {errors?.[name] && (
+          {errors?.[name]?.message && (
             <p className="mt-1 text-[10px] text-red-500">
-              모든 필드를 입력해주세요.
+              {errors?.[name]?.message.toString()}
             </p>
           )}
         </div>

@@ -1,21 +1,36 @@
 import authApi from '@/apis/auth'
 import { useMutation } from '@tanstack/react-query'
 
-export const useSigninMutation = () => {
+export const useSigninMutation = <TData>({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: (data: TData) => void
+  onError?: (error: Error) => void
+}) => {
   return useMutation({
     mutationFn: ({
-      userName,
+      username,
       password,
     }: {
-      userName: string
+      username: string
       password: string
-    }) => authApi.postSingin({ userName, password }),
+    }) => authApi.postSingin({ username, password }),
+    onSuccess: onSuccess,
+    onError: onError,
   })
 }
-export const useSignupMutation = () => {
+export const useSignupMutation = ({
+  onSuccessFallback,
+}: {
+  onSuccessFallback: () => void
+}) => {
   return useMutation({
     mutationFn: ({ formData }: { formData: FormData }) =>
       authApi.postSignup({ formData }),
+    onSuccess: () => {
+      onSuccessFallback()
+    },
   })
 }
 
@@ -26,7 +41,9 @@ export const useVerifyEmailMutation = () => {
   })
 }
 
-export const useVerifyCodeMutation = ({onSuccessFallback}: {
+export const useVerifyCodeMutation = ({
+  onSuccessFallback,
+}: {
   onSuccessFallback: () => void
 }) => {
   return useMutation({
@@ -40,6 +57,12 @@ export const useVerifyCodeMutation = ({onSuccessFallback}: {
     onSuccess: () => {
       onSuccessFallback()
     },
-    
+  })
+}
+
+export const useIdCheckMutation = () => {
+  return useMutation({
+    mutationFn: ({ username }: { username: string }) =>
+      authApi.postCheckId({ username }),
   })
 }

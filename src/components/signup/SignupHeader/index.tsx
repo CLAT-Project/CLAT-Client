@@ -36,7 +36,7 @@ const SignupHeader = ({ currentStep }: { currentStep: number }) => {
           </div>
           <div
             className="signuo-progress-circle left-[98%]"
-            style={{ ...getCircleStyle(3) }}
+            style={{ ...getCircleStyle(3), ...getCircleStyle(4) }}
           >
             <div className="absolute left-1/2 top-[120%] w-[120px] -translate-x-1/2 text-center text-[12px] opacity-70">
               인증 확인 및 완료

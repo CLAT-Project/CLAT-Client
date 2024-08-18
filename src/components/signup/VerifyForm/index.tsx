@@ -8,46 +8,48 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface IVerifyFormProps {
-  onNext: () => void
   status: boolean
   setStatus: Dispatch<SetStateAction<boolean>>
+  onSubmitSignup: () => void
 }
 
-const VerifyForm = ({ onNext, status, setStatus }: IVerifyFormProps) => {
+const VerifyForm = ({
+  status,
+  setStatus,
+  onSubmitSignup,
+}: IVerifyFormProps) => {
   const [verificationCode, setVerificationCode] = useState<number[]>(
     Array(6).fill(''),
   )
 
   const verifyEmail = useVerifyEmailMutation()
-  const verifyCode = useVerifyCodeMutation(
-    {
-      onSuccessFallback: () => {
-        setStatus(true)
-      },
+  const verifyCode = useVerifyCodeMutation({
+    onSuccessFallback: () => {
+      setStatus(true)
+      alert('인증되었습니다.')
     },
-  )
+  })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm()
+  } = useForm<{ email: string }>()
 
   const handleVerificationCodeChange = (value: string, index: number) => {
     const newCode = [...verificationCode]
     newCode[index] = Number(value)
     setVerificationCode(newCode)
   }
-
   const onClickNextBtn = () => {
-    if (status === true) {
-      onNext()
+    if (status) {
+      onSubmitSignup()
     }
   }
 
-  const onSubmitEmail = (data: any) => {
-    verifyEmail.mutate({ email: data.email })
+  const onSubmitEmail = () => {
+    verifyEmail.mutate({ email: watch('email') })
   }
 
   const onSubmitVerifyCode = (data: any) => {
@@ -58,6 +60,7 @@ const VerifyForm = ({ onNext, status, setStatus }: IVerifyFormProps) => {
       verificationCode: Number(verificationCode.join('')),
     })
   }
+
   return (
     <div className="mx-auto w-[60%]">
       <p className="w-full pr-[20px] pt-[11px] text-right text-[11px]">
@@ -77,6 +80,7 @@ const VerifyForm = ({ onNext, status, setStatus }: IVerifyFormProps) => {
             buttonText="인증번호 발송"
             register={register}
             errors={errors}
+            onClickBtn={onSubmitEmail}
           />
           <div className="mt-4 flex items-center gap-5">
             <div className="flex w-[540px] items-center justify-between">
@@ -92,8 +96,8 @@ const VerifyForm = ({ onNext, status, setStatus }: IVerifyFormProps) => {
           </div>
           <div className="mx-auto mt-[100px]">
             <div
-              className={`rounded-[9px] px-[42px] py-[14px] text-[18px] font-bold text-white ${status ? 'bg-primary' : 'bg-gray-400'}`}
-              onClick={onClickNextBtn}
+              className={`cursor-pointer rounded-[9px] px-[42px] py-[14px] text-[18px] font-bold text-white ${status ? 'bg-primary' : 'bg-gray-400'}`}
+              onClick={() => onClickNextBtn()}
             >
               다음 단계
             </div>

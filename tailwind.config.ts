@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       boxShadow: {
         login: '0 8px 13.8px 9px rgba(50, 74, 255, 0.3)',
+        inner: '0 4px 4px 0 rgba(0, 0,0, 0.25)',
       },
       colors: {
         primary: '#2C75FF',

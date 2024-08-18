@@ -1,36 +1,37 @@
 import { Api, mutipartApi } from '@/apis/axios'
 
 const postSingin = async ({
-  userName,
+  username,
   password,
 }: {
-  userName: string
+  username: string
   password: string
 }) => {
   try {
     const { data, headers } = await Api.post(`/login`, {
-      userName,
+      username,
       password,
     })
 
     const accessToken = headers['authorization']
-    localStorage.setItem('accessToken', accessToken)
+    console.log(headers, 'headers')
 
+    if (accessToken) {
+      localStorage.setItem('accessToken', accessToken)
+    }
     return data
   } catch (error) {
     throw error
   }
 }
 const postSignup = async ({ formData }: { formData: FormData }) => {
-  try {
-    const { data } = await mutipartApi.post('/auth/signup', {
-      formData,
-    })
+  const { data, headers } = await mutipartApi.post('/join', formData)
 
-    return data
-  } catch (error) {
-    throw error
+  const accessToken = headers['authorization']
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken)
   }
+  return data
 }
 
 const postVerifyEmail = async ({ email }: { email: string }) => {
@@ -67,12 +68,21 @@ const silentRefresh = async () => {
     throw error
   }
 }
+
+const postCheckId = async ({ username }: { username: string }) => {
+  const { data } = await Api.post(`/idCheck`, {
+    username,
+  })
+
+  return data
+}
 const authApi = {
   postSingin,
   postSignup,
   postVerifyEmail,
   postVerifyNum,
   silentRefresh,
+  postCheckId,
 }
 
 export default authApi

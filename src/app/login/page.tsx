@@ -5,6 +5,8 @@ import './login.css'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { useSigninMutation } from '@/hooks/mutations/useAuthMutation'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface FormValue {
   id: string
@@ -12,16 +14,27 @@ interface FormValue {
 }
 
 const Login = () => {
+  const route = useRouter()
+  const [errorMsg, setErrorMsg] = useState('')
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitted, isSubmitting, errors },
   } = useForm<FormValue>()
-  const signin = useSigninMutation()
+
+  const signin = useSigninMutation({
+    onSuccess: () => {
+      route.push('/')
+    },
+    onError: (error: any) => {
+      setErrorMsg(error.response?.data.message ?? '로그인에 실패하였습니다.')
+    },
+  })
 
   const onSubmitSignin = (data: FormValue) => {
     signin.mutate({
-      userName: data.id,
+      username: data.id,
       password: data.password,
     })
   }
@@ -48,12 +61,12 @@ const Login = () => {
         </div>
         <div className="flex w-[331px] flex-col">
           <p className="text-[18px] font-bold">LOGIN</p>
-          <form className="mt-[9px]" onSubmit={handleSubmit(onSubmitSignin)}>
+          <form className="mt-[12px]" onSubmit={handleSubmit(onSubmitSignin)}>
             <div className="flex flex-col gap-[16px]">
               <div className="input-with-login-icon">
                 <input
                   id="id"
-                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.id ? 'border-red-500' : 'border-[#616161]'}`}
+                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.id ? 'border-errorRed shadow-inner' : 'border-[#616161]'}`}
                   type="text"
                   placeholder="아이디"
                   {...register('id', {
@@ -67,7 +80,7 @@ const Login = () => {
               <div className="input-with-password-icon">
                 <input
                   id="password"
-                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.password ? 'border-red-500' : 'border-[#616161]'}`}
+                  className={`h-[52px] w-full rounded-18 border border-[#616161] px-[45px] py-[12px] focus:outline-none ${errors.password ? 'border-errorRed shadow-inner' : 'border-[#616161]'}`}
                   type="password"
                   placeholder="비밀번호"
                   {...register('password', {
@@ -84,7 +97,7 @@ const Login = () => {
               </div>
             </div>
             <div className="flex h-[39px] items-center justify-center gap-2">
-              {(errors.id || errors.password) && (
+              {errorMsg && (
                 <>
                   <p>
                     <Image
@@ -95,7 +108,7 @@ const Login = () => {
                     />
                   </p>
                   <p className="relative inline-block text-center text-[10px] text-errorRed">
-                    모든 필드를 입력해주세요.
+                    {errorMsg}
                   </p>
                 </>
               )}

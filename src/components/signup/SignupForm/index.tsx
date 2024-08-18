@@ -2,15 +2,25 @@
 
 import CheckBox from '@/components/common/CheckBox'
 import InputField from '@/components/common/InputField'
+import ImageUpload from '@/components/signup/SignupForm/ImageUpload'
+import { useIdCheckMutation } from '@/hooks/mutations/useAuthMutation'
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import {
+  FieldErrors,
+  FieldValues,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  UseFormWatch,
+} from 'react-hook-form'
 
 interface SignupFormProps {
   onNext: () => void
-  register: any
-  handleSubmit: any
-  errors: any
+  register: UseFormRegister<FieldValues>
+  handleSubmit: UseFormHandleSubmit<FieldValues, undefined>
+  errors: FieldErrors<FieldValues>
   onSubmit: (data: any) => void
   setSelectedImgFile: Dispatch<SetStateAction<File | null>>
+  watch: UseFormWatch<FieldValues>
 }
 
 const SignupForm = ({
@@ -20,14 +30,17 @@ const SignupForm = ({
   errors,
   onSubmit,
   setSelectedImgFile,
+  watch,
 }: SignupFormProps) => {
-  const imgRef = useRef<HTMLInputElement>(null)
-  const [selectedImgName, setSelectedImgNaem] = useState<string>('')
+  const [selectedImgName, setSelectedImgName] = useState<string>('')
+  const [idCheck, setIdCheck] = useState<boolean>()
   const [checkedState, setCheckedState] = useState({
     checked1: false,
     checked2: false,
     checked3: false,
   })
+
+  const checkId = useIdCheckMutation()
 
   const handleChangeChecked = (isChecked: boolean, key: string) => {
     setCheckedState({
@@ -36,27 +49,63 @@ const SignupForm = ({
     })
   }
 
-  const onClickFileBtn = () => {
-    if (imgRef.current) {
-      imgRef.current.click()
-    }
-  }
-
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const imageFile = e.target.files?.[0]
-
-    if (imageFile) {
-      setSelectedImgNaem(imageFile.name)
-      setSelectedImgFile(imageFile)
+  const handleImageChange = (file: File | null, filename: string) => {
+    if (file) {
+      setSelectedImgName(filename)
+      setSelectedImgFile(file)
     } else {
-      setSelectedImgNaem('')
+      setSelectedImgName('')
       setSelectedImgFile(null)
     }
   }
 
+  const validatePasswordConfirm = (
+    password: string,
+    passwordConfirm: string,
+  ): string | null => {
+    if (password !== passwordConfirm) {
+      return '비밀번호와 비밀번호 확인이 일치하지 않습니다.'
+    }
+    return null
+  }
+
+  const onClickIdCheckBtn = () => {
+    checkId.mutate({ username: watch('username') })
+
+    if (checkId?.data?.code === '200 OK' && !checkId.isPending) {
+      setIdCheck(true)
+      alert(checkId?.data?.message)
+    } else {
+      setIdCheck(false)
+      alert(checkId?.data?.message)
+    }
+  }
+
   const onClickNextBtn = () => {
-    if (!checkedState.checked1 || !checkedState.checked2) {
+    const username = watch('username')
+    const password = watch('password')
+    const passwordConfirm = watch('passwordConfirm')
+    const name = watch('name')
+    const schoolName = watch('schoolName')
+
+    if (
+      !checkedState.checked1 ||
+      !checkedState.checked2 ||
+      !checkedState.checked3
+    ) {
       alert('필수 항목에 동의해주세요.')
+      return
+    }
+
+    if (
+      username === '' ||
+      password === '' ||
+      passwordConfirm === '' ||
+      name === '' ||
+      schoolName === '' ||
+      !idCheck ||
+      !selectedImgName
+    ) {
       return
     }
     onNext()
@@ -77,35 +126,12 @@ const SignupForm = ({
             name="schoolName"
             register={register}
             errors={errors}
-            validationRules={{ required: true }}
+            validationRules={{ required: '학교/기관을 필수 입력해주세요.' }}
           />
-          <div className="relative flex items-center gap-5">
-            <div className="flex w-[540px] items-center justify-between">
-              <label className="required relative text-[14px]">증명서</label>
-              <input
-                className={`hidden`}
-                type="file"
-                accept="image/*"
-                placeholder="증명서를 첨부해주세요."
-                ref={imgRef}
-                onChange={handleChangeImage}
-              />
-              <p className="signup-input flex items-center">
-                <span>{selectedImgName}</span>
-              </p>
-            </div>
-            <div
-              className="cursor-pointer rounded-[8px] bg-primary px-[23px] py-[7px] text-[14px] text-white"
-              onClick={onClickFileBtn}
-            >
-              파일 선택
-            </div>
-            <div className="absolute -bottom-2 left-1/4 h-[10px]">
-              <p className="color-[0a0a0a] mt-1 text-[10px]">
-                재직/재학 증명서를 첨부해주십시오.
-              </p>
-            </div>
-          </div>
+          <ImageUpload
+            onChange={handleImageChange}
+            selectedImgName={selectedImgName}
+          />
           <InputField
             label="이름"
             type="text"
@@ -114,7 +140,7 @@ const SignupForm = ({
             name="name"
             register={register}
             errors={errors}
-            validationRules={{ required: true }}
+            validationRules={{ required: '이름을 필수 입력해주세요.' }}
           />
           <InputField
             label="아이디"
@@ -122,10 +148,11 @@ const SignupForm = ({
             placeholder="아이디를 입력해주세요."
             isButton={true}
             buttonText="중복확인"
-            name="id"
+            name="username"
             register={register}
             errors={errors}
-            validationRules={{ required: true }}
+            validationRules={{ required: '아이디를 필수 입력해주세요.' }}
+            onClickBtn={onClickIdCheckBtn}
           />
           <InputField
             label="비밀번호"
@@ -135,7 +162,19 @@ const SignupForm = ({
             name="password"
             register={register}
             errors={errors}
-            validationRules={{ required: true }}
+            validationRules={{
+              required: true,
+              maxLength: {
+                value: 14,
+                message: '비밀번호는 14자 이하로 입력해주세요.',
+              },
+              pattern: {
+                value:
+                  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]{8,14}$/,
+                message:
+                  '비밀번호는 영문, 숫자, 특수문자 조합으로 8자 이상 14자 이하여야 합니다.',
+              },
+            }}
           />
           <InputField
             label="비밀번호 확인"
@@ -145,7 +184,11 @@ const SignupForm = ({
             name="passwordConfirm"
             register={register}
             errors={errors}
-            validationRules={{ required: true }}
+            validationRules={{
+              required: true,
+              validate: (value: string) =>
+                validatePasswordConfirm(watch('password'), value),
+            }}
           />
         </div>
         <div className="mt-10 flex w-full justify-center gap-10">

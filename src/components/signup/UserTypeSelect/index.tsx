@@ -8,10 +8,10 @@ interface IUserTypeSelectProps {
 
 const UserTypeSelect = ({ onNext, setUserType }: IUserTypeSelectProps) => {
   const onClickUserType = (userType: string) => {
-    if (userType === 'student') {
-      setUserType('student')
-    } else if (userType === 'professor') {
-      setUserType('professor')
+    if (userType === 'STUDENT') {
+      setUserType('STUDENT')
+    } else if (userType === 'PROFESSOR') {
+      setUserType('PROFESSOR')
     }
     onNext()
   }
@@ -31,7 +31,7 @@ const UserTypeSelect = ({ onNext, setUserType }: IUserTypeSelectProps) => {
       <div className="mt-[84px] flex w-full justify-center gap-[36px]">
         <div
           className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black pb-[58px]"
-          onClick={() => onClickUserType('student')}
+          onClick={() => onClickUserType('STUDENT')}
         >
           <p className="mt-[29px] text-[32px] text-primary">학생</p>
           <p className="text-[22px]">회원가입</p>
@@ -46,7 +46,7 @@ const UserTypeSelect = ({ onNext, setUserType }: IUserTypeSelectProps) => {
         </div>
         <div
           className="flex w-[275px] cursor-pointer flex-col items-center rounded-[14px] border border-black"
-          onClick={() => onClickUserType('professor')}
+          onClick={() => onClickUserType('PROFESSOR')}
         >
           <p className="mt-[29px] text-[32px] text-primary">교수</p>
           <p className="text-[22px]">회원가입</p>
