@@ -15,6 +15,7 @@ const config: Config = {
         primary: '#2C75FF',
         lightBlack: '#243048',
         verify: '#D3E2FF',
+        errorRed: `#E94B2C`,
       },
       borderRadius: {
         18: '18px',

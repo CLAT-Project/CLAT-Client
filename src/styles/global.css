@@ -11,6 +11,14 @@
     -webkit-appearance: none;
     margin: 0;
   }
+  .required::before {
+    content: '*';
+    position: absolute;
+    top: -14%;
+    right: -10px;
+    color: red;
+    font-size: 16px;
+  }
 }
 
 @layer components {

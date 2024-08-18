@@ -23,10 +23,10 @@ const SignupForm = ({
 }: SignupFormProps) => {
   const imgRef = useRef<HTMLInputElement>(null)
   const [selectedImgName, setSelectedImgNaem] = useState<string>('')
-
   const [checkedState, setCheckedState] = useState({
     checked1: false,
     checked2: false,
+    checked3: false,
   })
 
   const handleChangeChecked = (isChecked: boolean, key: string) => {
@@ -81,7 +81,7 @@ const SignupForm = ({
           />
           <div className="relative flex items-center gap-5">
             <div className="flex w-[540px] items-center justify-between">
-              <label className="min-w-[80px] text-[14px]">증명서</label>
+              <label className="required relative text-[14px]">증명서</label>
               <input
                 className={`hidden`}
                 type="file"
@@ -101,7 +101,7 @@ const SignupForm = ({
               파일 선택
             </div>
             <div className="absolute -bottom-2 left-1/4 h-[10px]">
-              <p className="color-[0a0a0a] mt-1 text-[10px] text-sm">
+              <p className="color-[0a0a0a] mt-1 text-[10px]">
                 재직/재학 증명서를 첨부해주십시오.
               </p>
             </div>
@@ -156,14 +156,23 @@ const SignupForm = ({
             keyProp="checked1"
           />
           <CheckBox
-            label="마케팅 수신 동의"
+            label="서비스 이용 약관"
             checked={checkedState.checked2}
             onChange={handleChangeChecked}
             keyProp="checked2"
           />
+          <CheckBox
+            label="마케팅 수신 동의"
+            checked={checkedState.checked3}
+            onChange={handleChangeChecked}
+            keyProp="checked3"
+          />
         </div>
         <div className="mt-[40px]">
-          <button className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white" onClick={() => onClickNextBtn()}>
+          <button
+            className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white"
+            onClick={() => onClickNextBtn()}
+          >
             다음 단계
           </button>
         </div>

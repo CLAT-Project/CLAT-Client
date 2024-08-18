@@ -15,12 +15,12 @@ interface IDataType {
   userType: string
   schoolName: string
 }
-//TODO: tailwind 동적 스타일링 고민
+
 const Signup = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [userType, setUserType] = useState('')
   const [selectedImgFile, setSelectedImgFile] = useState<File | null>(null)
-
+  const [status, setStatus] = useState(false)
 
   const {
     register,
@@ -50,8 +50,9 @@ const Signup = () => {
     if (selectedImgFile) {
       formData.append('file', selectedImgFile)
     }
-
-    signup.mutate({ formData })
+    if (status === true) {
+      signup.mutate({ formData })
+    }
   }
 
   return (
@@ -70,7 +71,13 @@ const Signup = () => {
           setSelectedImgFile={setSelectedImgFile}
         />
       )}
-      {currentStep === 3 && <VerifyForm onNext={goToNextStep} />}
+      {currentStep === 3 && (
+        <VerifyForm
+          onNext={goToNextStep}
+          status={status}
+          setStatus={setStatus}
+        />
+      )}
     </>
   )
 }

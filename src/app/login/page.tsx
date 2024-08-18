@@ -4,6 +4,7 @@ import Image from 'next/image'
 import './login.css'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import { useSigninMutation } from '@/hooks/mutations/useAuthMutation'
 
 interface FormValue {
   id: string
@@ -16,6 +17,14 @@ const Login = () => {
     handleSubmit,
     formState: { isSubmitted, isSubmitting, errors },
   } = useForm<FormValue>()
+  const signin = useSigninMutation()
+
+  const onSubmitSignin = (data: FormValue) => {
+    signin.mutate({
+      userName: data.id,
+      password: data.password,
+    })
+  }
 
   return (
     <div className="relative h-screen w-screen">
@@ -39,12 +48,7 @@ const Login = () => {
         </div>
         <div className="flex w-[331px] flex-col">
           <p className="text-[18px] font-bold">LOGIN</p>
-          <form
-            className="mt-[9px]"
-            onSubmit={handleSubmit((data) => {
-              alert(JSON.stringify(data))
-            })}
-          >
+          <form className="mt-[9px]" onSubmit={handleSubmit(onSubmitSignin)}>
             <div className="flex flex-col gap-[16px]">
               <div className="input-with-login-icon">
                 <input
@@ -78,11 +82,23 @@ const Login = () => {
                   }
                 />
               </div>
-              <div className="h-[39px]">
-                {(errors.id || errors.password) && (
-                  <p>모든 필드를 입력해주세요.</p>
-                )}
-              </div>
+            </div>
+            <div className="flex h-[39px] items-center justify-center gap-2">
+              {(errors.id || errors.password) && (
+                <>
+                  <p>
+                    <Image
+                      src="/images/svg/info.svg"
+                      width={8}
+                      height={8}
+                      alt="info"
+                    />
+                  </p>
+                  <p className="relative inline-block text-center text-[10px] text-errorRed">
+                    모든 필드를 입력해주세요.
+                  </p>
+                </>
+              )}
             </div>
             <button
               className="h-[52px] w-full rounded-18 bg-primary text-white"
