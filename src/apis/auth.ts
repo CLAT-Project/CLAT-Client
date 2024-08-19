@@ -3,7 +3,7 @@ import { Api, mutipartApi } from '@/apis/axios'
 /**
  * @description 로그인 요청
  * @param param { username, password }
- * @returns 
+ * @returns
  */
 const postSingin = async ({
   username,
@@ -18,8 +18,7 @@ const postSingin = async ({
       password,
     })
 
-    const accessToken = headers['authorization']
-    console.log(headers, 'headers')
+    const accessToken = headers.access
 
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken)
@@ -38,7 +37,8 @@ const postSingin = async ({
 const postSignup = async ({ formData }: { formData: FormData }) => {
   const { data, headers } = await mutipartApi.post('/join', formData)
 
-  const accessToken = headers['authorization']
+  const accessToken = headers.access
+
   if (accessToken) {
     localStorage.setItem('accessToken', accessToken)
   }
@@ -47,7 +47,7 @@ const postSignup = async ({ formData }: { formData: FormData }) => {
 /**
  * @description 이메일 인증 요청
  * @param param { email:string }
- * @returns 
+ * @returns
  */
 const postVerifyEmail = async ({ email }: { email: string }) => {
   const { data } = await Api.post(`/verify-email`, {
@@ -59,7 +59,7 @@ const postVerifyEmail = async ({ email }: { email: string }) => {
 /**
  * @description 인증번호 확인 요청
  * @param param { email, verificationCode: 6자리 숫자 }
- * @returns 
+ * @returns
  */
 const postVerifyNum = async ({
   email,
@@ -77,16 +77,18 @@ const postVerifyNum = async ({
 }
 /**
  * @description 리프레시 토큰으로 새로운 엑세스 토큰 발급 요청
- * @param param 
- * @returns 
+ * @param param
+ * @returns
  */
 const silentRefresh = async () => {
   try {
-    const { data } = await Api.post('/reIssue')
+    const { data, headers } = await Api.post('/reIssue')
 
-    localStorage.setItem('accessToken', data.accessToken)
+    const accessToken = headers.access
 
-    return data
+    localStorage.setItem('accessToken', accessToken)
+
+    return { data, headers }
   } catch (error) {
     throw error
   }
@@ -94,7 +96,7 @@ const silentRefresh = async () => {
 /**
  * @description 중복 아이디 체크 요청
  * @param param { username: string }
- * @returns 
+ * @returns
  */
 const postCheckId = async ({ username }: { username: string }) => {
   const { data } = await Api.post(`/idCheck`, {

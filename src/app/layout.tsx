@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Noto_Sans_KR } from 'next/font/google'
 import '../styles/global.css'
+import PrivateRouter from '@/hoc/privateRoute'
 
 const notoSansKR = Noto_Sans_KR({ subsets: ['latin'] })
 
