@@ -25,7 +25,6 @@ export default function RootLayout({
       <TQueryProvider>
         <body className={notoSansKR.className}>{children}
           <Toaster />
-
         </body>
       </TQueryProvider>
     </html>

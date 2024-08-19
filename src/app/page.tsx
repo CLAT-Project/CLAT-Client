@@ -1,4 +1,4 @@
-import PrivateRoute from '@/hoc/privateRoute'
+import PrivateRoute from "@/hoc/PrivateRoute"
 
 const App = () => {
   return (
