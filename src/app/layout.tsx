@@ -23,7 +23,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <TQueryProvider>
-        <body className={notoSansKR.className}>{children}
+        <body className={notoSansKR.className}>
+          {children}
           <Toaster />
         </body>
       </TQueryProvider>

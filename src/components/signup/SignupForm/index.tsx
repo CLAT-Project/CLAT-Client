@@ -73,8 +73,9 @@ const SignupForm = ({
 
   const onClickIdCheckBtn = async () => {
     try {
-      const response = await checkId.mutateAsync({ username: watch('username') })
-
+      const response = await checkId.mutateAsync({
+        username: watch('username'),
+      })
 
       if (response?.code === '200 OK') {
         setIdCheck(true)

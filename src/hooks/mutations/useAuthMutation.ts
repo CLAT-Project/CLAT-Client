@@ -40,12 +40,12 @@ export const useVerifyEmailMutation = () => {
   return useMutation({
     mutationFn: ({ email }: { email: string }) =>
       authApi.postVerifyEmail({ email }),
-      onSuccess: () => {
-        toast.success('인증번호가 발송되었습니다.')
-      },
-      onError: (error:any)=> {
-        toast.error(error.response.data.message)
-      }
+    onSuccess: () => {
+      toast.success('인증번호가 발송되었습니다.')
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
   })
 }
 
@@ -65,9 +65,9 @@ export const useVerifyCodeMutation = ({
     onSuccess: () => {
       onSuccessFallback()
     },
-    onError: (error:any)=> {
+    onError: (error: any) => {
       toast.error(error.response.data.message)
-    }
+    },
   })
 }
 
