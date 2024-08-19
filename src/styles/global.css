@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  input:focus {
+    outline: none;
+  }
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .required::before {
+    content: '*';
+    position: absolute;
+    top: -14%;
+    right: -10px;
+    color: red;
+    font-size: 16px;
+  }
+}
+
+@layer components {
+  .signup-input {
+    @apply h-[40px] w-[379px] rounded-[14px] border border-black pl-4 text-sm focus:outline-none;
+  }
+}
