@@ -1,5 +1,11 @@
+import PrivateRoute from '@/hoc/PrivateRoute'
+
 const App = () => {
-  return <main>Home</main>
+  return (
+    <PrivateRoute>
+      <main>Home</main>
+    </PrivateRoute>
+  )
 }
 
 export default App

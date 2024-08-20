@@ -1,6 +1,8 @@
 import authApi from '@/apis/auth'
 import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
+//TODO : 인증번호 유효 입력 기간 설정
 export const useSigninMutation = <TData>({
   onSuccess,
   onError,
@@ -38,6 +40,12 @@ export const useVerifyEmailMutation = () => {
   return useMutation({
     mutationFn: ({ email }: { email: string }) =>
       authApi.postVerifyEmail({ email }),
+    onSuccess: () => {
+      toast.success('인증번호가 발송되었습니다.')
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
   })
 }
 
@@ -56,6 +64,9 @@ export const useVerifyCodeMutation = ({
     }) => authApi.postVerifyNum({ email, verificationCode }),
     onSuccess: () => {
       onSuccessFallback()
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
     },
   })
 }

@@ -62,7 +62,7 @@ const Signup = () => {
       signup.mutate({ formData })
     }
   }
-  console.log(signup.data, "signup.data")
+
   return (
     <>
       <SignupHeader currentStep={currentStep} />

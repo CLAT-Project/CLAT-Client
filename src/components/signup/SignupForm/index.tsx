@@ -4,6 +4,7 @@ import CheckBox from '@/components/common/CheckBox'
 import InputField from '@/components/common/InputField'
 import ImageUpload from '@/components/signup/SignupForm/ImageUpload'
 import { useIdCheckMutation } from '@/hooks/mutations/useAuthMutation'
+import { AxiosError } from 'axios'
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import {
   FieldErrors,
@@ -12,6 +13,7 @@ import {
   UseFormRegister,
   UseFormWatch,
 } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 interface SignupFormProps {
   onNext: () => void
@@ -69,15 +71,25 @@ const SignupForm = ({
     return null
   }
 
-  const onClickIdCheckBtn = () => {
-    checkId.mutate({ username: watch('username') })
+  const onClickIdCheckBtn = async () => {
+    try {
+      const response = await checkId.mutateAsync({
+        username: watch('username'),
+      })
 
-    if (checkId?.data?.code === '200 OK' && !checkId.isPending) {
-      setIdCheck(true)
-      alert(checkId?.data?.message)
-    } else {
-      setIdCheck(false)
-      alert(checkId?.data?.message)
+      if (response?.code === '200 OK') {
+        setIdCheck(true)
+        toast.success('사용 가능한 아이디입니다.')
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError
+
+      if (axiosError.response?.status === 409) {
+        setIdCheck(false)
+        toast.error('이미 사용중인 아이디입니다.')
+      } else {
+        toast.error('아이디 확인 중 오류가 발생했습니다.')
+      }
     }
   }
 
@@ -93,7 +105,7 @@ const SignupForm = ({
       !checkedState.checked2 ||
       !checkedState.checked3
     ) {
-      alert('필수 항목에 동의해주세요.')
+      toast.error('필수 동의 사항에 동의해주세요.')
       return
     }
 
@@ -102,11 +114,20 @@ const SignupForm = ({
       password === '' ||
       passwordConfirm === '' ||
       name === '' ||
-      schoolName === '' ||
-      !idCheck ||
-      !selectedImgName
+      schoolName === ''
     ) {
+      toast.error('필수 입력 사항을 입력해주세요.')
       return
+    }
+    if (!idCheck) {
+      toast.error('아이디 중복확인을 해주세요.')
+      return
+    }
+    if (!selectedImgName) {
+      {
+        toast.error('증명서를 업로드해주세요.')
+        return
+      }
     }
     onNext()
   }

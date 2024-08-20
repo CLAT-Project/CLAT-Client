@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Noto_Sans_KR } from 'next/font/google'
 import '../styles/global.css'
+import { Toaster } from 'react-hot-toast'
 
 const notoSansKR = Noto_Sans_KR({ subsets: ['latin'] })
 
@@ -22,7 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <TQueryProvider>
-        <body className={notoSansKR.className}>{children}</body>
+        <body className={notoSansKR.className}>
+          {children}
+          <Toaster />
+        </body>
       </TQueryProvider>
     </html>
   )

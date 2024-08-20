@@ -19,7 +19,7 @@ export const mutipartApi = axios.create({
 
 /**
  * @description 요청 인터셉터
- * @description 요청 시 accessToken을 헤더에 추가 
+ * @description 요청 시 accessToken을 헤더에 추가
  */
 Api.interceptors.request.use(
   (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
@@ -53,7 +53,8 @@ Api.interceptors.response.use(
       return Promise.reject(error)
     }
     config.sent = true // 무한 재요청 방지
-    const { accessToken } = await authApi.silentRefresh()
+    const { headers } = await authApi.silentRefresh()
+    const accessToken = headers.access
     if (accessToken) {
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', accessToken)
