@@ -4,7 +4,6 @@ import SockJS from 'sockjs-client';
 // WebSocket URL
 const SERVER_URL = `https://c-lat.site/ws`;
 
-
 const client = new Client({
   brokerURL: SERVER_URL,
   connectHeaders: {
