@@ -1,5 +1,5 @@
 export interface IChatMessag {
-  senderName: string;
-  message: string;
-  timeString: string;
+  senderName: string
+  message: string
+  timeString: string
 }
