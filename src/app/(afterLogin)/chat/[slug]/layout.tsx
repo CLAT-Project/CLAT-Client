@@ -6,7 +6,7 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body className="flex">
         <ChatSidebar />
-        <div className="w-full">
+        <div style={{ width: 'calc(100% - 315px)' }}>
           <ChatHeader />
           {children}
         </div>

@@ -1,22 +1,29 @@
 'use client'
 
-import ChatHeader from '@/components/chat/ChatHeader'
-import ChatSidebar from '@/components/chat/ChatSidebar'
+import ChatInput from '@/components/chat/ChatInput'
+import Message from '@/components/chat/Message'
 import { useChatMsgQuery } from '@/hooks/queries/useChatQuery'
 import { connect, disconnect, sendMessage } from '@/libs/websocket'
 import { IChatMessag } from '@/types/chat.types'
 import { useQueryClient } from '@tanstack/react-query'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+
+export interface ChatFormData {
+  message: string
+  anonymous: boolean
+}
 
 const Chat = () => {
   const queryClient = useQueryClient()
   const params = useParams<Params>()
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const { register, handleSubmit, reset, watch } = useForm<ChatFormData>()
 
-  const [senderName, setSenderName] = useState('')
-  const [message, setMessage] = useState('')
+  const message = watch('message')
+  const anonymous = watch('anonymous') // 익명 체크값
+  const [senderName, setSenderName] = useState('쥬')
   const [messages, setMessages] = useState<IChatMessag[]>([])
 
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
@@ -27,12 +34,11 @@ const Chat = () => {
         '/pub/chat/message',
         JSON.stringify({
           courseId: params.slug,
-          senderName,
+          senderName: senderName,
           message,
         }),
       )
       queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
-      setMessage('')
     } else {
       alert('Please enter your name and a message.')
     }
@@ -53,11 +59,7 @@ const Chat = () => {
     return () => {
       disconnect()
     }
-  }, [])
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [message])
 
   useEffect(() => {
     if (chatMsg) {
@@ -65,7 +67,20 @@ const Chat = () => {
     }
   }, [chatMsg])
 
-  return <div></div>
+  return (
+    <div
+      className="w-full overflow-y-scroll"
+      style={{ height: 'calc(90vh - 90px)' }}
+    >
+      <Message messages={messages} senderName={senderName} />
+      <ChatInput
+        handleSendMessage={handleSendMessage}
+        register={register}
+        reset={reset}
+        handleSubmit={handleSubmit}
+      />
+    </div>
+  )
 }
 
 export default Chat
