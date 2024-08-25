@@ -10,6 +10,7 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import './chat.css'
 
 export interface ChatFormData {
   message: string
@@ -69,8 +70,7 @@ const Chat = () => {
 
   return (
     <div
-      className="w-full overflow-y-scroll"
-      style={{ height: 'calc(90vh - 90px)' }}
+      className="w-full overflow-y-scroll chat-content-height"
     >
       <Message messages={messages} senderName={senderName} />
       <ChatInput

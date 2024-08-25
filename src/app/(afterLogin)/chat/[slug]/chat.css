@@ -1,0 +1,6 @@
+.chat-content-width {
+  width: calc(100% - 315px);
+}
+.chat-content-height {
+  height: calc(90vh - 90px);
+}

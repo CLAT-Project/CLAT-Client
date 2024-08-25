@@ -5,7 +5,7 @@ import {
   UseFormReset,
 } from 'react-hook-form'
 import Image from 'next/image'
-
+import '@/app/(afterLogin)/chat/[slug]/chat.css'
 interface ChatInputProps {
   reset: UseFormReset<ChatFormData>
   register: UseFormRegister<ChatFormData>
@@ -27,8 +27,7 @@ const ChatInput = ({
 
   return (
     <div
-      className="fixed bottom-0 right-0 h-[90px] w-full bg-white"
-      style={{ width: 'calc(100% - 315px)' }}
+      className="fixed bottom-0 right-0 h-[90px] w-full bg-white chat-content-width"
     >
       <form
         className="flex h-[90%] items-center justify-between px-[90px]"

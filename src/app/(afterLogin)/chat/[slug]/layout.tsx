@@ -1,17 +1,29 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import ChatHeader from '@/components/chat/ChatHeader'
 import ChatSidebar from '@/components/chat/ChatSidebar'
+import './chat.css'
 
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  if (!isClient) {
+    return null
+  }
+
   return (
-    <html lang="en">
-      <body className="flex">
-        <ChatSidebar />
-        <div style={{ width: 'calc(100% - 315px)' }}>
-          <ChatHeader />
-          {children}
-        </div>
-      </body>
-    </html>
+    <div className='flex'>
+      <ChatSidebar />
+      <div className='chat-content-width'>
+        <ChatHeader />
+        {children}
+      </div>
+    </div>
   )
 }
 
