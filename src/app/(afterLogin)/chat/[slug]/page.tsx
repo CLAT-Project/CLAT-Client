@@ -59,7 +59,7 @@ const Chat = () => {
     return () => {
       disconnect()
     }
-  }, [message])
+  }, [])
 
   useEffect(() => {
     if (chatMsg) {
