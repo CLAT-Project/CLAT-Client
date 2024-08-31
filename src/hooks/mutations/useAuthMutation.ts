@@ -2,7 +2,7 @@ import authApi from '@/apis/auth'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-//TODO : 인증번호 유효 입력 기간 설정
+// TODO : 인증번호 유효 입력 기간 설정
 export const useSigninMutation = <TData>({
   onSuccess,
   onError,
@@ -18,8 +18,8 @@ export const useSigninMutation = <TData>({
       username: string
       password: string
     }) => authApi.postSingin({ username, password }),
-    onSuccess: onSuccess,
-    onError: onError,
+    onSuccess,
+    onError,
   })
 }
 export const useSignupMutation = ({

@@ -27,19 +27,21 @@ const ImageUpload = ({ onChange, selectedImgName }: ImageUploadProps) => {
   return (
     <div className="relative flex items-center gap-5">
       <input
-        className={`hidden`}
+        className="hidden"
         type="file"
         accept="image/*"
         ref={imgRef}
         onChange={handleChange}
       />
       <div className="flex w-[540px] items-center justify-between">
-        <label className="required relative text-[14px]">증명서</label>
+        <div className="required relative text-[14px]">증명서</div>
         <p className="signup-input flex items-center">
           <span>{selectedImgName}</span>
         </p>
       </div>
       <div
+        role="button"
+        tabIndex={0}
         className="cursor-pointer rounded-[8px] bg-primary px-[23px] py-[7px] text-[14px] text-white"
         onClick={handleClick}
       >

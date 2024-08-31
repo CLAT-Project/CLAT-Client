@@ -72,9 +72,7 @@ const Login = () => {
                   {...register('id', {
                     required: true,
                   })}
-                  aria-invalid={
-                    isSubmitted ? (errors.id ? 'true' : 'false') : undefined
-                  }
+                  aria-invalid={isSubmitted && errors.id ? 'true' : 'false'}
                 />
               </div>
               <div className="input-with-password-icon">
@@ -86,13 +84,7 @@ const Login = () => {
                   {...register('password', {
                     required: true,
                   })}
-                  aria-invalid={
-                    isSubmitted
-                      ? errors.password
-                        ? 'true'
-                        : 'false'
-                      : undefined
-                  }
+                  aria-invalid={isSubmitted && errors.password ? 'true' : 'false'}
                 />
               </div>
             </div>

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import authApi from '@/apis/auth'
 import axios, { InternalAxiosRequestConfig } from 'axios'
 
@@ -27,6 +28,7 @@ Api.interceptors.request.use(
       const accessToken = localStorage.getItem('accessToken')
 
       if (accessToken) {
+        // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = `Bearer ${accessToken}`
       }
     }

@@ -16,12 +16,12 @@ const Message = ({ messages, senderName }: IMessageProps) => {
   return (
     <div className="relative flex w-full p-[47px] pb-0">
       <div className="flex h-full w-full flex-col gap-[31px]">
-        {messages.map((msg, index) => {
+        {messages.map((msg) => {
           const isMyMessage = msg.senderName === senderName
 
           return (
             <div
-              key={index + msg.message}
+              key={`${msg.senderName}-${msg.message}`}
               className={`flex flex-col ${isMyMessage ? 'items-end' : 'items-start'}`}
             >
               <p className="mb-[6px]">{msg.senderName}</p>

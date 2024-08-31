@@ -1,4 +1,3 @@
-import { ChatFormData } from '@/app/(afterLogin)/chat/[slug]/page'
 import {
   UseFormHandleSubmit,
   UseFormRegister,
@@ -6,6 +5,8 @@ import {
 } from 'react-hook-form'
 import Image from 'next/image'
 import '@/app/(afterLogin)/chat/[slug]/chat.css'
+import { ChatFormData } from '@/types/chat.types'
+
 interface ChatInputProps {
   reset: UseFormReset<ChatFormData>
   register: UseFormRegister<ChatFormData>
@@ -34,9 +35,6 @@ const ChatInput = ({
         onSubmit={handleSubmit(onSubmitMessage)}
       >
         <div className="flex w-[100px] gap-2 text-primary">
-          <label htmlFor="anonymous" className="text-[18px]">
-            익명
-          </label>
           <input
             type="checkbox"
             id="anonymous"
@@ -59,7 +57,7 @@ const ChatInput = ({
             height={45}
             className="cursor-pointer"
           />
-          <button>
+          <button type="submit">
             <Image
               src="/images/png/message-send.png"
               alt="file-send"

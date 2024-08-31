@@ -31,7 +31,7 @@ const ChatSidebar = () => {
       </div>
       <div className="flex justify-center py-[25px]">
         <div>
-          <div className="mb-[20px] h-[45px] w-[234px] rounded-18 bg-primary"></div>
+          <div className="mb-[20px] h-[45px] w-[234px] rounded-18 bg-primary" />
           <div className="flex flex-col items-end gap-[13px] pr-2">
             {ClASSLIST.map((item, index) => {
               return (
@@ -46,7 +46,7 @@ const ChatSidebar = () => {
                     />
                     <div
                       className={`absolute left-0 top-0 w-[3.74px] bg-white ${index === ClASSLIST.length - 1 ? 'h-[10px]' : 'h-[53px]'}`}
-                    ></div>
+                    />
                   </div>
                 </div>
               )

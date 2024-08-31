@@ -3,3 +3,8 @@ export interface IChatMessag {
   message: string
   timeString: string
 }
+
+export interface ChatFormData {
+  message: string
+  anonymous: boolean
+}

@@ -1,4 +1,4 @@
-import { Client, IMessage, Stomp } from '@stomp/stompjs'
+import { Client, IMessage } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 
 // WebSocket URL

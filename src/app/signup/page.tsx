@@ -46,7 +46,7 @@ const Signup = () => {
       username: watch('username'),
       password: watch('password'),
       schoolName: watch('schoolName'),
-      userType: userType,
+      userType,
     })
 
     if (selectedImgFile) {
