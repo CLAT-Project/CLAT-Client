@@ -22,8 +22,7 @@ const Chat = () => {
 
   const message = watch('message')
   const [senderName] = useState('쥬')
-  const [messages, setMessages] = useState<IChatMessag[]>([])
-
+  const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
 
   const handleSendMessage = () => {
@@ -43,16 +42,29 @@ const Chat = () => {
   }
 
   useEffect(() => {
-    // 웹소켓 연결 및 메시지 구독
     connect(params.slug, (m) => {
       const content = JSON.parse(m.body)
       const newMessage = {
+        messageId: content.messageId,
         senderName: content.senderName,
         message: content.message,
-        timestamp: content.timestamp,
+        timeStamp: content.timestamp,
+        imageUrl: content.imageUrl
       }
-      setMessages((prevMessages) => [...prevMessages, newMessage.message])
-    })
+      setMessages(prevMessages => {
+        if (!prevMessages) {
+          return {
+            courseName: "코스 이름",
+            roomName: "룸 이름",
+            messageFileResponseDTOS: [newMessage]
+          };
+        }
+        return {
+          ...prevMessages,
+          messageFileResponseDTOS: [...prevMessages.messageFileResponseDTOS, newMessage]
+        };
+      });
+    });
 
     return () => {
       disconnect()
@@ -69,7 +81,7 @@ const Chat = () => {
     <div
       className="w-full overflow-y-scroll chat-content-height"
     >
-      <Message messages={messages} senderName={senderName} />
+      {messages && <Message messages={messages} />}
       <ChatInput
         handleSendMessage={handleSendMessage}
         register={register}

@@ -8,7 +8,7 @@ const Welcome = ({ name }: WelcomeProps) => {
   const route = useRouter()
 
   const onClickHomeBtn = () => {
-    route.push('/')
+    route.push('/home')
   }
   const onClickLoginBtn = () => {
     route.push('/login')
