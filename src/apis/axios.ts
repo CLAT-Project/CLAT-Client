@@ -18,6 +18,14 @@ export const multipartApi = axios.create({
   withCredentials: true,
 })
 
+export const refreshApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+})
+
 /**
  * @description 요청 인터셉터
  * @description 요청 시 accessToken을 헤더에 추가

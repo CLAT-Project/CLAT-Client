@@ -30,7 +30,7 @@ const Chat = () => {
       sendMessage(
         '/pub/chat/message',
         JSON.stringify({
-          courseId: params.slug,
+          chatRoomId: params.slug,
           message,
         }),
       )

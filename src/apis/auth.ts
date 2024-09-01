@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-cycle
-import { Api, multipartApi } from '@/apis/axios'
+import { Api, multipartApi, refreshApi } from '@/apis/axios'
 
 /**
  * @description 로그인 요청
@@ -79,7 +79,7 @@ const postVerifyNum = async ({
  * @returns
  */
 const silentRefresh = async () => {
-  const { data, headers } = await Api.post(`reIssue`)
+  const { data, headers } = await refreshApi.post(`reIssue`)
   
   const accessToken = headers.access
 
