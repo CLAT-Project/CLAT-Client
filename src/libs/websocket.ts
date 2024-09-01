@@ -8,9 +8,7 @@ const client = new Client({
   brokerURL: SERVER_URL,
   connectHeaders: {
     Authorization:
-      typeof window !== 'undefined'
-        ? `Bearer ${localStorage.getItem('token')}`
-        : '',
+       `${localStorage.getItem('accessToken')}`
   },
   webSocketFactory: () => new SockJS(SERVER_URL),
   onConnect: (frame) => {

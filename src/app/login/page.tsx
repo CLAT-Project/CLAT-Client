@@ -25,7 +25,7 @@ const Login = () => {
 
   const signin = useSigninMutation({
     onSuccess: () => {
-      route.push('/')
+      route.push('/home')
     },
     onError: (error: any) => {
       setErrorMsg(error.response?.data.message ?? '로그인에 실패하였습니다.')

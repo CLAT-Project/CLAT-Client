@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import './chat.css'
 import toast from 'react-hot-toast'
 import useChatMsgQuery from '@/hooks/queries/useChatQuery'
+import ChatHeader from '@/components/chat/ChatHeader'
 
 
 
@@ -21,17 +22,15 @@ const Chat = () => {
   const { register, handleSubmit, reset, watch } = useForm<ChatFormData>()
 
   const message = watch('message')
-  const [senderName] = useState('쥬')
   const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
 
   const handleSendMessage = () => {
-    if (senderName && message) {
+    if (message) {
       sendMessage(
         '/pub/chat/message',
         JSON.stringify({
           courseId: params.slug,
-          senderName,
           message,
         }),
       )
@@ -40,7 +39,6 @@ const Chat = () => {
       toast.error('Please enter your name and a message.')
     }
   }
-
   useEffect(() => {
     connect(params.slug, (m) => {
       const content = JSON.parse(m.body)
@@ -78,17 +76,20 @@ const Chat = () => {
   }, [chatMsg])
 
   return (
-    <div
-      className="w-full overflow-y-scroll chat-content-height"
-    >
-      {messages && <Message messages={messages} />}
-      <ChatInput
-        handleSendMessage={handleSendMessage}
-        register={register}
-        reset={reset}
-        handleSubmit={handleSubmit}
-      />
-    </div>
+    <>
+      <ChatHeader className={chatMsg?.courseName || ''} />
+      <div
+        className="w-full overflow-y-scroll chat-content-height"
+      >
+        {messages && <Message messages={messages} />}
+        <ChatInput
+          handleSendMessage={handleSendMessage}
+          register={register}
+          reset={reset}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+    </>
   )
 }
 

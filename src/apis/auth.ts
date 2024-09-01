@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-cycle
-import { Api, mutipartApi } from '@/apis/axios'
+import { Api, multipartApi } from '@/apis/axios'
+import axios from 'axios'
 
 /**
  * @description 로그인 요청
@@ -33,7 +34,7 @@ const postSingin = async ({
  * @returns user name을 반환
  */
 const postSignup = async ({ formData }: { formData: FormData }) => {
-  const { data, headers } = await mutipartApi.post('/join', formData)
+  const { data, headers } = await multipartApi.post('/join', formData)
 
   const accessToken = headers.access
 
@@ -79,8 +80,10 @@ const postVerifyNum = async ({
  * @returns
  */
 const silentRefresh = async () => {
-  const { data, headers } = await Api.post('/reIssue')
-
+  const { data, headers } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/reIssue`,{
+    withCredentials: true
+  })
+  
   const accessToken = headers.access
 
   localStorage.setItem('accessToken', accessToken)

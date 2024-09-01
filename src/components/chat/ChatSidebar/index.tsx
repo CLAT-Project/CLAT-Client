@@ -25,17 +25,14 @@ const ClASSLIST = [
 // TODO : 데이터 형식에 맞게 수정
 const ChatSidebar = () => {
   return (
-    <div className="h-screen w-[315px] bg-[#BBC0D2]">
-      <div className="flex h-[69px] w-full items-center justify-center bg-[#8A91AC] text-[19px] font-extrabold text-white">
-        <p>강의 목록</p>
-      </div>
-      <div className="flex justify-center py-[25px]">
+    <div className="h-screen w-[315px] bg-[#A1B5DC]">
+      <div className="flex justify-center py-[31px]">
         <div>
           <div className="mb-[20px] h-[45px] w-[234px] rounded-18 bg-primary" />
           <div className="flex flex-col items-end gap-[13px] pr-2">
             {ClASSLIST.map((item, index) => {
               return (
-                <div className="relative flex h-[32px] w-[187px] items-center justify-center rounded-18 bg-white">
+                <div className="relative flex h-[32px] w-[187px] items-center justify-center rounded-18 bg-white" key={item.id}>
                   <p className="text-sm">{item.weekend}</p>
                   <div className="absolute -left-[10%] -top-1/2 translate-y-1/3">
                     <Image

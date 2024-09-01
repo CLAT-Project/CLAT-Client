@@ -10,7 +10,7 @@ export const Api = axios.create({
   withCredentials: true,
 })
 
-export const mutipartApi = axios.create({
+export const multipartApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'Content-Type': 'multipart/form-data',
@@ -28,11 +28,11 @@ Api.interceptors.request.use(
       const accessToken = localStorage.getItem('accessToken')
 
       if (accessToken) {
-        // eslint-disable-next-line no-param-reassign
-        config.headers.Authorization = `Bearer ${accessToken}`
+        // config.headers.Authorization = `Bearer ${accessToken}`
+        config.headers.access = `${accessToken}`
       }
     }
-
+ 
     return config
   },
   (error) => {
@@ -54,6 +54,12 @@ Api.interceptors.response.use(
     if (response?.status !== 401 || config.sent) {
       return Promise.reject(error)
     }
+    if (localStorage.getItem('retry') === 'true') {
+      localStorage.removeItem('retry');
+      return Promise.reject(error);
+    }
+    localStorage.setItem('retry', 'true');
+    
     config.sent = true // 무한 재요청 방지
     const { headers } = await authApi.silentRefresh()
     const accessToken = headers.access
@@ -61,7 +67,7 @@ Api.interceptors.response.use(
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', accessToken)
       }
-      config.headers.Authorization = `Bearer ${accessToken}`
+      config.headers.access = `${accessToken}`
     }
 
     return axios(config) // 재요청
