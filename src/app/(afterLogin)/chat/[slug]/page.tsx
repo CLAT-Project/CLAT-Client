@@ -2,20 +2,19 @@
 
 import ChatInput from '@/components/chat/ChatInput'
 import Message from '@/components/chat/Message'
-import { useChatMsgQuery } from '@/hooks/queries/useChatQuery'
 import { connect, disconnect, sendMessage } from '@/libs/websocket'
-import { IChatMessag } from '@/types/chat.types'
+import { ChatFormData, IChatMessag } from '@/types/chat.types'
 import { useQueryClient } from '@tanstack/react-query'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './chat.css'
+import toast from 'react-hot-toast'
+import useChatMsgQuery from '@/hooks/queries/useChatQuery'
+import ChatHeader from '@/components/chat/ChatHeader'
 
-export interface ChatFormData {
-  message: string
-  anonymous: boolean
-}
+
 
 const Chat = () => {
   const queryClient = useQueryClient()
@@ -23,44 +22,52 @@ const Chat = () => {
   const { register, handleSubmit, reset, watch } = useForm<ChatFormData>()
 
   const message = watch('message')
-  const anonymous = watch('anonymous') // 익명 체크값
-  const [senderName, setSenderName] = useState('쥬')
-  const [messages, setMessages] = useState<IChatMessag[]>([])
-
+  const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
 
   const handleSendMessage = () => {
-    if (senderName && message) {
+    if (message) {
       sendMessage(
         '/pub/chat/message',
         JSON.stringify({
           courseId: params.slug,
-          senderName: senderName,
           message,
         }),
       )
       queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
     } else {
-      alert('Please enter your name and a message.')
+      toast.error('Please enter your name and a message.')
     }
   }
-
   useEffect(() => {
-    // 웹소켓 연결 및 메시지 구독
-    connect(params.slug, (message) => {
-      const content = JSON.parse(message.body)
+    connect(params.slug, (m) => {
+      const content = JSON.parse(m.body)
       const newMessage = {
+        messageId: content.messageId,
         senderName: content.senderName,
         message: content.message,
-        timestamp: content.timestamp,
+        timeStamp: content.timestamp,
+        imageUrl: content.imageUrl
       }
-      setMessages((prevMessages) => [...prevMessages, newMessage.message])
-    })
+      setMessages(prevMessages => {
+        if (!prevMessages) {
+          return {
+            courseName: "코스 이름",
+            roomName: "룸 이름",
+            messageFileResponseDTOS: [newMessage]
+          };
+        }
+        return {
+          ...prevMessages,
+          messageFileResponseDTOS: [...prevMessages.messageFileResponseDTOS, newMessage]
+        };
+      });
+    });
 
     return () => {
       disconnect()
     }
-  }, [])
+  }, [params.slug])
 
   useEffect(() => {
     if (chatMsg) {
@@ -69,17 +76,20 @@ const Chat = () => {
   }, [chatMsg])
 
   return (
-    <div
-      className="w-full overflow-y-scroll chat-content-height"
-    >
-      <Message messages={messages} senderName={senderName} />
-      <ChatInput
-        handleSendMessage={handleSendMessage}
-        register={register}
-        reset={reset}
-        handleSubmit={handleSubmit}
-      />
-    </div>
+    <>
+      <ChatHeader className={chatMsg?.courseName || ''} />
+      <div
+        className="w-full overflow-y-scroll chat-content-height"
+      >
+        {messages && <Message messages={messages} />}
+        <ChatInput
+          handleSendMessage={handleSendMessage}
+          register={register}
+          reset={reset}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+    </>
   )
 }
 

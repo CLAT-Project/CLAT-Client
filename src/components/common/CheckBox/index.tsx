@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 
 interface ICheckBoxProps {
   label: string
@@ -10,17 +9,20 @@ interface ICheckBoxProps {
 }
 
 const CheckBox = ({ label, checked, onChange, keyProp }: ICheckBoxProps) => {
+  const id = `checkbox-${keyProp}`;
   return (
-    <label className="flex cursor-pointer items-center space-x-2">
+    <div className="flex items-center space-x-2">
       <input
+        id={id}
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked, keyProp)}
-        className="form-checkbox h-4 w-4"
       />
-      <span className="text-sm">{label}</span>
-    </label>
-  )
-}
+      <label htmlFor={id} className="cursor-pointer text-sm">
+        {label}
+      </label>
+    </div>
+  );
+};
 
 export default CheckBox

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import ChatHeader from '@/components/chat/ChatHeader'
 import ChatSidebar from '@/components/chat/ChatSidebar'
 import './chat.css'
 
@@ -20,7 +19,6 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
     <div className='flex'>
       <ChatSidebar />
       <div className='chat-content-width'>
-        <ChatHeader />
         {children}
       </div>
     </div>

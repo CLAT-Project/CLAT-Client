@@ -8,7 +8,7 @@ const Welcome = ({ name }: WelcomeProps) => {
   const route = useRouter()
 
   const onClickHomeBtn = () => {
-    route.push('/')
+    route.push('/home')
   }
   const onClickLoginBtn = () => {
     route.push('/login')
@@ -39,12 +39,14 @@ const Welcome = ({ name }: WelcomeProps) => {
       <div className="mx-auto mt-[60px] h-[1px] w-[60%] bg-black opacity-40" />
       <div className="mt-[67px] flex w-full justify-center gap-[34px]">
         <button
+          type="button"
           className="h-[55px] w-[171px] rounded-[9px] border border-primary"
           onClick={onClickHomeBtn}
         >
           메인화면
         </button>
         <button
+          type="button"
           className="h-[55px] w-[171px] rounded-[9px] bg-primary text-white"
           onClick={onClickLoginBtn}
         >

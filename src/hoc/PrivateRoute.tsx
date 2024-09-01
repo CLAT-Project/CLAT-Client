@@ -12,9 +12,9 @@ const PrivateRouter = ({ children }: { children: React.ReactNode }) => {
     if (!isAuthenticated) {
       router.push('/login')
     }
-  }, [isAuthenticated])
+  }, [isAuthenticated, router])
 
-  return isAuthenticated ? <>{children}</> : null
+  return isAuthenticated ? children : null
 }
 
 export default PrivateRouter

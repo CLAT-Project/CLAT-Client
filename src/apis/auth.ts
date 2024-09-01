@@ -1,4 +1,6 @@
-import { Api, mutipartApi } from '@/apis/axios'
+// eslint-disable-next-line import/no-cycle
+import { Api, multipartApi } from '@/apis/axios'
+import axios from 'axios'
 
 /**
  * @description 로그인 요청
@@ -12,22 +14,19 @@ const postSingin = async ({
   username: string
   password: string
 }) => {
-  try {
-    const { data, headers } = await Api.post(`/login`, {
-      username,
-      password,
-    })
+  const { data, headers } = await Api.post(`/login`, {
+    username,
+    password,
+  })
 
-    const accessToken = headers.access
+  const accessToken = headers.access
 
-    if (accessToken) {
-      localStorage.setItem('accessToken', accessToken)
-    }
-    return data
-  } catch (error) {
-    throw error
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken)
   }
+  return data
 }
+
 /**
  * @description 회원가입 요청
  * @description multipart/form-data 형식으로 요청
@@ -35,7 +34,7 @@ const postSingin = async ({
  * @returns user name을 반환
  */
 const postSignup = async ({ formData }: { formData: FormData }) => {
-  const { data, headers } = await mutipartApi.post('/join', formData)
+  const { data, headers } = await multipartApi.post('/join', formData)
 
   const accessToken = headers.access
 
@@ -81,17 +80,15 @@ const postVerifyNum = async ({
  * @returns
  */
 const silentRefresh = async () => {
-  try {
-    const { data, headers } = await Api.post('/reIssue')
+  const { data, headers } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/reIssue`,{
+    withCredentials: true
+  })
+  
+  const accessToken = headers.access
 
-    const accessToken = headers.access
+  localStorage.setItem('accessToken', accessToken)
 
-    localStorage.setItem('accessToken', accessToken)
-
-    return { data, headers }
-  } catch (error) {
-    throw error
-  }
+  return { data, headers }
 }
 /**
  * @description 중복 아이디 체크 요청

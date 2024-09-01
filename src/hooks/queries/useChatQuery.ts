@@ -1,8 +1,7 @@
 import chatApi from '@/apis/chat'
-import { IChatMessag } from '@/types/chat.types'
 import { useQuery } from '@tanstack/react-query'
 
-export const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
+const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
   return useQuery({
     queryKey: ['chatMsg'],
     queryFn: () => chatApi.getChatMessage(roomId),
@@ -10,3 +9,5 @@ export const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
     staleTime: 0,
   })
 }
+
+export default useChatMsgQuery
