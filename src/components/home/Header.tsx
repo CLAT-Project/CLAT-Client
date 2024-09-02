@@ -12,14 +12,19 @@ const Header = ({ onProfileClick }: { onProfileClick: () => void }) => {
     const fetchUserData = async () => {
       try {
         // 사용자 이름과 학교 이름을 API로부터 가져오는 가정
-        const response = await fetch('/api/user');
+        const response = await fetch('http://127.0.0.1:5000/api/members');
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
 
         const data = await response.json();
-        setUsername(data.username);  // 실제 데이터 키로 대체
-        setSchoolName(data.schoolName);  // 실제 데이터 키로 대체
+        const firstMember = data[1];
+        
+        if (firstMember) {
+          setUsername(firstMember.username);
+          setSchoolName(firstMember.school_name);
+        }
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
