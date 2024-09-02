@@ -1,5 +1,5 @@
 import { Api, multipartApi } from '@/apis/axios'
-import { IChatMessag } from '@/types/chat.types'
+import { IChatImageResponse, IChatMessag } from '@/types/chat.types'
 
 const getChatMessage = async (roomId: string) => {
 
@@ -9,7 +9,7 @@ const getChatMessage = async (roomId: string) => {
 
 }
 const postChatImageFile = async(images: FormData) => {
-  const response = await multipartApi.post('/api/image', images)
+  const response = await multipartApi.post<IChatImageResponse[]>('/api/image', images)
 
   return response.data
 }

@@ -6,7 +6,7 @@ import {
 import Image from 'next/image'
 import '@/app/(afterLogin)/chat/[slug]/chat.css'
 import { ChatFormData } from '@/types/chat.types'
-import { useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import chatApi from '@/apis/chat'
 import { sendMessage } from '@/libs/websocket'
 import { useQueryClient } from '@tanstack/react-query'
@@ -16,6 +16,8 @@ interface ChatInputProps {
   register: UseFormRegister<ChatFormData>
   handleSendMessage: () => void
   handleSubmit: UseFormHandleSubmit<ChatFormData, undefined>
+  chatRoomId: string;
+  setIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
 const ChatInput = ({
@@ -23,6 +25,8 @@ const ChatInput = ({
   register,
   handleSendMessage,
   handleSubmit,
+  chatRoomId,
+  setIsLoading
 }: ChatInputProps) => {
   const queryClient = useQueryClient()
   const imageRef = useRef<HTMLInputElement>(null)
@@ -43,22 +47,31 @@ const ChatInput = ({
     const { files } = e.target;
 
     if (files) {
+      setIsLoading(true);
       setImages(Array.from(files));
 
       const formData = new FormData();
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < files.length; i++) {
-        formData.append('images', files[0]);
+        formData.append('images', files[i]);
       }
 
-      await chatApi.postChatImageFile(formData)
+      const response = await chatApi.postChatImageFile(formData)
 
-      sendMessage(
+      await sendMessage(
         '/pub/chat/file',
-        'https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/a8a7dc03-5250-4769-bd17-b93edbf67bd7.png'
+        JSON.stringify({
+          chatRoomId,
+          fileImageDTOList: response
+        })
       )
     }
-    queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
+
+    setTimeout(() => {
+      queryClient.invalidateQueries({ queryKey: ['chatMsg'] });
+      setIsLoading(false); // 로딩 종료
+    }, 1000);
+
   }
 
 

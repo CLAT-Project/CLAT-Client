@@ -13,6 +13,7 @@ import './chat.css'
 import toast from 'react-hot-toast'
 import useChatMsgQuery from '@/hooks/queries/useChatQuery'
 import ChatHeader from '@/components/chat/ChatHeader'
+import { useUserClassQuery, useUserQuery } from '@/hooks/queries/useUserQuery'
 
 
 
@@ -23,8 +24,14 @@ const Chat = () => {
 
   const message = watch('message')
   const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
-  const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
+  const [isLoading, setIsLoading] = useState(false);
 
+  const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
+  const { data: userData } = useUserQuery()
+  const { data: userClassData } = useUserClassQuery()
+
+  // eslint-disable-next-line eqeqeq
+  const courseName = userClassData?.find((classItem) => classItem.chatRoomId == params.slug)?.courseName
   const handleSendMessage = () => {
     if (message) {
       sendMessage(
@@ -46,7 +53,7 @@ const Chat = () => {
         messageId: content.messageId,
         senderName: content.senderName,
         message: content.message,
-        timeStamp: content.timestamp,
+        timestamp: content.timestamp,
         imageUrl: content.imageUrl
       }
       setMessages(prevMessages => {
@@ -77,16 +84,18 @@ const Chat = () => {
 
   return (
     <>
-      <ChatHeader className={chatMsg?.courseName || ''} />
+      <ChatHeader className={courseName || ''} />
       <div
         className="w-full overflow-y-scroll chat-content-height"
       >
-        {messages && <Message messages={messages} />}
+        {messages && <Message messages={messages} isLoading={isLoading} userName={userData?.name} />}
         <ChatInput
           handleSendMessage={handleSendMessage}
           register={register}
           reset={reset}
           handleSubmit={handleSubmit}
+          chatRoomId={params.slug}
+          setIsLoading={setIsLoading}
         />
       </div>
     </>

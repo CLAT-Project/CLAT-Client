@@ -5,7 +5,7 @@ export interface IChatMessag {
     messageId: string;
     message: string;
     senderName: string;
-    timeStamp: string;
+    timestamp: string;
     imageUrl: string[]
   }[]
 }
@@ -13,4 +13,18 @@ export interface IChatMessag {
 export interface ChatFormData {
   message: string
   anonymous: boolean
+}
+
+export interface IChatImageResponse {
+  imageId: number;
+  imageUrl: string;
+}
+
+export interface IUserClassResponse {
+  chatRoomId: string;
+  courseName: string;
+  courseCode: string;
+  end_date: string;
+  room: string;
+  start_date: string;
 }
