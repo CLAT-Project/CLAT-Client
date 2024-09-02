@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import authApi from '@/apis/auth'
 import axios, { InternalAxiosRequestConfig } from 'axios'
 
@@ -9,10 +10,18 @@ export const Api = axios.create({
   withCredentials: true,
 })
 
-export const mutipartApi = axios.create({
+export const multipartApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
   headers: {
     'Content-Type': 'multipart/form-data',
+  },
+  withCredentials: true,
+})
+
+export const refreshApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 })
@@ -27,10 +36,11 @@ Api.interceptors.request.use(
       const accessToken = localStorage.getItem('accessToken')
 
       if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`
+        // config.headers.Authorization = `Bearer ${accessToken}`
+        config.headers.access = `${accessToken}`
       }
     }
-
+ 
     return config
   },
   (error) => {
@@ -52,6 +62,12 @@ Api.interceptors.response.use(
     if (response?.status !== 401 || config.sent) {
       return Promise.reject(error)
     }
+    if (localStorage.getItem('retry') === 'true') {
+      localStorage.removeItem('retry');
+      return Promise.reject(error);
+    }
+    localStorage.setItem('retry', 'true');
+    
     config.sent = true // 무한 재요청 방지
     const { headers } = await authApi.silentRefresh()
     const accessToken = headers.access
@@ -59,7 +75,7 @@ Api.interceptors.response.use(
       if (typeof window !== 'undefined') {
         localStorage.setItem('accessToken', accessToken)
       }
-      config.headers.Authorization = `Bearer ${accessToken}`
+      config.headers.access = `${accessToken}`
     }
 
     return axios(config) // 재요청

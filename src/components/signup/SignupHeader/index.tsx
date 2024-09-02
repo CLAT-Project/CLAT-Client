@@ -3,7 +3,7 @@ import './signupHeader.css'
 
 const SignupHeader = ({ currentStep }: { currentStep: number }) => {
   const getCircleStyle = (step: number) => ({
-    backgroundColor: currentStep == step ? '#2C75FF' : '#d9d9d9', // 파란색 또는 기본 회색
+    backgroundColor: currentStep === step ? '#2C75FF' : '#d9d9d9', // 파란색 또는 기본 회색
   })
 
   return (

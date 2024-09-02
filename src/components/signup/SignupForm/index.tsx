@@ -5,7 +5,7 @@ import InputField from '@/components/common/InputField'
 import ImageUpload from '@/components/signup/SignupForm/ImageUpload'
 import { useIdCheckMutation } from '@/hooks/mutations/useAuthMutation'
 import { AxiosError } from 'axios'
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import {
   FieldErrors,
   FieldValues,
@@ -124,10 +124,8 @@ const SignupForm = ({
       return
     }
     if (!selectedImgName) {
-      {
-        toast.error('증명서를 업로드해주세요.')
-        return
-      }
+      toast.error('증명서를 업로드해주세요.')
+      return
     }
     onNext()
   }
@@ -167,7 +165,7 @@ const SignupForm = ({
             label="아이디"
             type="text"
             placeholder="아이디를 입력해주세요."
-            isButton={true}
+            isButton
             buttonText="중복확인"
             name="username"
             register={register}
@@ -234,6 +232,7 @@ const SignupForm = ({
         </div>
         <div className="mt-[40px]">
           <button
+            type="button"
             className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white"
             onClick={() => onClickNextBtn()}
           >

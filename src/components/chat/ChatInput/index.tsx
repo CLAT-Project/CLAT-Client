@@ -1,4 +1,3 @@
-import { ChatFormData } from '@/app/(afterLogin)/chat/[slug]/page'
 import {
   UseFormHandleSubmit,
   UseFormRegister,
@@ -6,6 +5,12 @@ import {
 } from 'react-hook-form'
 import Image from 'next/image'
 import '@/app/(afterLogin)/chat/[slug]/chat.css'
+import { ChatFormData } from '@/types/chat.types'
+import { useRef, useState } from 'react'
+import chatApi from '@/apis/chat'
+import { sendMessage } from '@/libs/websocket'
+import { useQueryClient } from '@tanstack/react-query'
+
 interface ChatInputProps {
   reset: UseFormReset<ChatFormData>
   register: UseFormRegister<ChatFormData>
@@ -19,11 +24,43 @@ const ChatInput = ({
   handleSendMessage,
   handleSubmit,
 }: ChatInputProps) => {
+  const queryClient = useQueryClient()
+  const imageRef = useRef<HTMLInputElement>(null)
+  const [, setImages] = useState<File[]>([]);
 
-  const onSubmitMessage = () => {
+  const handleClick = () => {
+    if (imageRef.current) {
+      imageRef.current.click()
+    }
+  }
+
+  const onSubmitMessage = async () => {
     handleSendMessage()
     reset()
   }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+
+    if (files) {
+      setImages(Array.from(files));
+
+      const formData = new FormData();
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < files.length; i++) {
+        formData.append('images', files[0]);
+      }
+
+      await chatApi.postChatImageFile(formData)
+
+      sendMessage(
+        '/pub/chat/file',
+        'https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/a8a7dc03-5250-4769-bd17-b93edbf67bd7.png'
+      )
+    }
+    queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
+  }
+
 
   return (
     <div
@@ -33,17 +70,6 @@ const ChatInput = ({
         className="flex h-[90%] items-center justify-between px-[90px]"
         onSubmit={handleSubmit(onSubmitMessage)}
       >
-        <div className="flex w-[100px] gap-2 text-primary">
-          <label htmlFor="anonymous" className="text-[18px]">
-            익명
-          </label>
-          <input
-            type="checkbox"
-            id="anonymous"
-            {...register('anonymous')}
-            className=""
-          />
-        </div>
         <div className="w-full">
           <input
             type="text"
@@ -51,18 +77,20 @@ const ChatInput = ({
             className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
           />
         </div>
-        <div className="flex min-w-[120px] justify-center gap-2">
+        <div className="flex min-w-[120px] justify-center gap-2" >
           <Image
             src="/images/png/file-send.png"
             alt="file-send"
             width={45}
             height={45}
             className="cursor-pointer"
+            onClick={handleClick}
           />
-          <button>
+          <input type="file" accept='image/*' onChange={handleImageUpload} className='hidden' ref={imageRef} multiple />
+          <button type="submit">
             <Image
               src="/images/png/message-send.png"
-              alt="file-send"
+              alt="message-send"
               width={45}
               height={45}
               className="cursor-pointer"
@@ -78,3 +106,4 @@ const ChatInput = ({
 }
 
 export default ChatInput
+

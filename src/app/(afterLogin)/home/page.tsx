@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -110,3 +111,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

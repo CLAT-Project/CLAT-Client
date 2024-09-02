@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactHTMLElement, useRef } from 'react'
+import React, { ChangeEvent, useRef } from 'react'
 
 interface IVerificationCodeInputProps {
   digits?: number
@@ -15,7 +15,7 @@ const VerificationCodeInput = ({
     index: number,
     event: ChangeEvent<HTMLInputElement>,
   ) => {
-    const value = event.target.value
+    const { value } = event.target
 
     if (/^[0-9]$/.test(value)) {
       if (index < digits - 1) {

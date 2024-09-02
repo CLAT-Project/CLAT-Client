@@ -52,7 +52,7 @@ const VerifyForm = ({
     verifyEmail.mutate({ email: watch('email') })
   }
 
-  const onSubmitVerifyCode = (data: any) => {
+  const onSubmitVerifyCode = () => {
     const email = watch('email')
 
     verifyCode.mutate({
@@ -76,7 +76,7 @@ const VerifyForm = ({
             label="이메일"
             type="text"
             placeholder="이메일을 입력해주세요."
-            isButton={true}
+            isButton
             buttonText="인증번호 발송"
             register={register}
             errors={errors}
@@ -84,7 +84,7 @@ const VerifyForm = ({
           />
           <div className="mt-4 flex items-center gap-5">
             <div className="flex w-[540px] items-center justify-between">
-              <label className="required relative text-[14px]">인증번호</label>
+              <div className="required relative text-[14px]">인증번호</div>
               <VerificationCodeInput onChange={handleVerificationCodeChange} />
             </div>
             <div

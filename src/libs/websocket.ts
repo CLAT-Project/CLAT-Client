@@ -1,4 +1,4 @@
-import { Client, IMessage, Stomp } from '@stomp/stompjs'
+import { Client, IMessage } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 
 // WebSocket URL
@@ -8,9 +8,7 @@ const client = new Client({
   brokerURL: SERVER_URL,
   connectHeaders: {
     Authorization:
-      typeof window !== 'undefined'
-        ? `Bearer ${localStorage.getItem('token')}`
-        : '',
+       `${localStorage.getItem('accessToken')}`
   },
   webSocketFactory: () => new SockJS(SERVER_URL),
   onConnect: (frame) => {
