@@ -4,16 +4,10 @@
 import Link from 'next/link';
 import Calendar from '@/components/home/calendar';
 import { useState } from 'react';
+import { useUserClassQuery } from '@/hooks/queries/useUserQuery';
 
 const HomePage = () => {
-  const classes = [
-    { id: '1', name: 'Math 101' },
-    { id: '2', name: 'Science 201' },
-    { id: '3', name: 'History 301' },
-    { id: '4', name: 'Art 401' },
-    { id: '5', name: 'Physical Education 501' }
-  ];
-
+  const { data: userClassData } = useUserClassQuery()
   const [activeTab, setActiveTab] = useState('questions');
 
   return (
@@ -34,19 +28,19 @@ const HomePage = () => {
               // onClick={}
               className="w-full px-4 py-2  text-black rounded-md text-left"
             >
-             새 수업 들어가기 +
+              새 수업 들어가기 +
             </button>
           </div>
 
           <ul className="space-y-4">
-            {classes.map((classItem) => (
-              <li key={classItem.id} className="px-4 p-2 bg-white rounded border border-black text-left">
-              <Link href={`/chat/${classItem.id}`}>
-                {classItem.name}
-                <br />
-                <span className="text-xs text-black-500">트럼프</span>
-              </Link>
-            </li>
+            {userClassData?.map((classItem) => (
+              <li key={classItem.chatRoomId} className="px-4 p-2 bg-white rounded border border-black text-left">
+                <Link href={`/chat/${classItem.chatRoomId}`}>
+                  {classItem.courseName}
+                  <br />
+                  <span className="text-xs text-black-500">{classItem.courseCode}</span>
+                </Link>
+              </li>
             ))}
           </ul>
         </aside>
@@ -106,7 +100,7 @@ const HomePage = () => {
 
       </div>
     </div>
-    
+
   );
 };
 
