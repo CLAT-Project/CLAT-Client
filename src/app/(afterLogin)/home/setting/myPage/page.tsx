@@ -12,7 +12,7 @@ export default function MyPage() {
     email: '123456789@gmail.com',
     school: '@@@대학교',
   };
-
+  
   return (
     <div className="flex h-screen">
       {/* 사이드바 */}
