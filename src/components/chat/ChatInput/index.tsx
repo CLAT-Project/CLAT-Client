@@ -94,6 +94,7 @@ const ChatInput = ({
       }
     };
   }, [isLoading]);
+
   return (
     <div
       className="chat-content-width fixed bottom-0 right-0 h-[90px]  bg-white "

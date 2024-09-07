@@ -1,16 +1,19 @@
+import { useUserQuery } from '@/hooks/queries/useUserQuery'
 import Image from 'next/image'
 
 interface IChatHeaderProps {
   className: string
 }
 const ChatHeader = ({ className }: IChatHeaderProps) => {
+  const { data: userData } = useUserQuery()
+
   return (
     <div className="flex h-[69px] w-full items-center justify-between bg-white px-[40px] py-[14px]">
       <div className="flex items-center gap-[10px]">
         <Image src="/images/svg/logo.svg" alt="logo" width={41} height={41} />
         <div>
-          <p className="text-[20px] font-bold leading-6">단국대</p>
-          <p className="text-[13px] leading-4">천안캠</p>
+          <p className="text-[20px] font-bold leading-6">{userData?.schoolName}</p>
+          <p className="text-[13px] leading-4">{userData?.username}</p>
         </div>
       </div>
       <div>
