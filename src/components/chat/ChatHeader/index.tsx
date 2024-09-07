@@ -16,8 +16,9 @@ const ChatHeader = ({ className }: IChatHeaderProps) => {
       <div>
         <p className="text-[19px] font-bold">{className}</p>
       </div>
-      <div>
-        <Image src="/images/png/user.png" alt="user" width={40} height={40} className='border rounded-full' />
+      <div className='flex items-center gap-[12px]'>
+        <Image src="/images/svg/setting.svg" alt="setting" width={26} height={26} className='cursor-pointer' />
+        <Image src="/images/png/user.png" alt="user" width={40} height={40} className='border rounded-full cursor-pointer' />
       </div>
     </div>
   )

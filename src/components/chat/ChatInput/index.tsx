@@ -77,7 +77,7 @@ const ChatInput = ({
 
   return (
     <div
-      className="fixed bottom-0 right-0 h-[90px] w-full bg-white chat-content-width"
+      className="chat-content-width fixed bottom-0 right-0 h-[90px]  bg-white "
     >
       <form
         className="flex h-[90%] items-center justify-between px-[90px]"
