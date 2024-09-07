@@ -6,10 +6,11 @@ import {
 import Image from 'next/image'
 import '@/app/(afterLogin)/chat/[slug]/chat.css'
 import { ChatFormData } from '@/types/chat.types'
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 import chatApi from '@/apis/chat'
 import { sendMessage } from '@/libs/websocket'
 import { useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 interface ChatInputProps {
   reset: UseFormReset<ChatFormData>
@@ -18,6 +19,7 @@ interface ChatInputProps {
   handleSubmit: UseFormHandleSubmit<ChatFormData, undefined>
   chatRoomId: string;
   setIsLoading: Dispatch<SetStateAction<boolean>>
+  isLoading: boolean
 }
 
 const ChatInput = ({
@@ -26,7 +28,8 @@ const ChatInput = ({
   handleSendMessage,
   handleSubmit,
   chatRoomId,
-  setIsLoading
+  setIsLoading,
+  isLoading
 }: ChatInputProps) => {
   const queryClient = useQueryClient()
   const imageRef = useRef<HTMLInputElement>(null)
@@ -66,18 +69,35 @@ const ChatInput = ({
         })
       )
     }
-
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['chatMsg'] });
+
       setIsLoading(false); // 로딩 종료
+      toast.success('이미지 전송 완료')
     }, 1000);
 
   }
 
 
+  useEffect(() => {
+    let loadingToast: string | undefined;
+
+    if (isLoading) {
+      loadingToast = toast.loading('이미지 전송 중...');
+    } else if (loadingToast) {
+      toast.dismiss(loadingToast);
+      toast.success('이미지 전송 완료');
+    }
+    return () => {
+      if (loadingToast) {
+        toast.dismiss(loadingToast);
+      }
+    };
+  }, [isLoading]);
+
   return (
     <div
-      className="fixed bottom-0 right-0 h-[90px] w-full bg-white chat-content-width"
+      className="chat-content-width fixed bottom-0 right-0 h-[90px]  bg-white "
     >
       <form
         className="flex h-[90%] items-center justify-between px-[90px]"

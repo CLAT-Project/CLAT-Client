@@ -88,7 +88,7 @@ const Chat = () => {
       <div
         className="w-full overflow-y-scroll chat-content-height"
       >
-        {messages && <Message messages={messages} isLoading={isLoading} userName={userData?.name} />}
+        <Message messages={messages} isLoading={isLoading} userName={userData?.name} />
         <ChatInput
           handleSendMessage={handleSendMessage}
           register={register}
@@ -96,6 +96,7 @@ const Chat = () => {
           handleSubmit={handleSubmit}
           chatRoomId={params.slug}
           setIsLoading={setIsLoading}
+          isLoading={isLoading}
         />
       </div>
     </>

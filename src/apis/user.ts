@@ -3,7 +3,11 @@ import { IUserClassResponse } from "@/types/chat.types"
 import { IUserResponse } from "@/types/user.type"
 
 const getUserClass = async () => {
-  const response = await Api.get<IUserClassResponse[]>('/home')
+  const response = await Api.get<IUserClassResponse[]>('/home', {
+    params: {
+      term: '24-2'
+    }
+  })
 
   return response.data
 }
