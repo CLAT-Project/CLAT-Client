@@ -96,6 +96,7 @@ const Chat = () => {
           handleSubmit={handleSubmit}
           chatRoomId={params.slug}
           setIsLoading={setIsLoading}
+          isLoading={isLoading}
         />
       </div>
     </>

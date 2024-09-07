@@ -9,19 +9,6 @@ interface IMessageProps {
   userName?: string;
 }
 
-// function getImageContainerClass(imageCount: number): string {
-//   switch (imageCount) {
-//     case 1:
-//       return 'w-[404px] h-[204px]';
-//     case 2:
-//       return 'w-[404px] h-[204px]';
-//     case 3:
-//       return 'w-[404px] h-[304px]';
-//     default:
-//       return 'w-[404px] h-[404px]';
-//   }
-// }
-
 const Message = ({ messages, isLoading, userName }: IMessageProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
