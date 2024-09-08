@@ -72,7 +72,7 @@ const ChatInput = ({
     setTimeout(() => {
       queryClient.invalidateQueries({ queryKey: ['chatMsg'] });
 
-      setIsLoading(false); // 로딩 종료
+      setIsLoading(false);
       toast.success('이미지 전송 완료')
     }, 1000);
 
@@ -119,7 +119,7 @@ const ChatInput = ({
             className="cursor-pointer"
             onClick={handleClick}
           />
-          <input type="file" accept='image/*' onChange={handleImageUpload} className='hidden' ref={imageRef} multiple />
+          <input type="file" accept='file/*' onChange={handleImageUpload} className='hidden' ref={imageRef} multiple />
           <button type="submit">
             <Image
               src="/images/png/message-send.png"
