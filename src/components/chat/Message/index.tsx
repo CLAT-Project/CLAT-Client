@@ -52,6 +52,7 @@ const Message = ({ messages, isLoading, userName }: IMessageProps) => {
                       <div className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} w-[134px] h-[174px] z-50`}>
                         <MessagePopup
                           messageId={msg.messageId}
+                          message={msg.message}
                           onClose={() => setSelectedMessageId(null)}
                         />
                       </div>
