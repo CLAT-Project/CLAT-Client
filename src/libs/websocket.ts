@@ -2,7 +2,7 @@ import { Client, IMessage } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 
 // WebSocket URL
-const SERVER_URL = `https://c-lat.site/ws`
+const SERVER_URL = `https://clat.duckdns.org/ws`
 
 const client = new Client({
   brokerURL: SERVER_URL,

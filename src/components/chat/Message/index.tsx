@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { IChatMessag } from '@/types/chat.types'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import formatTime from '@/utils/time';
 import ImageLayout from '@/components/chat/ImageLayout';
+import MessagePopup from '@/components/chat/MessagePopup';
 
 interface IMessageProps {
   messages?: IChatMessag
@@ -12,10 +13,16 @@ interface IMessageProps {
 
 const Message = ({ messages, isLoading, userName }: IMessageProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [selectedMessageId, setSelectedMessageId] = useState<string | null>(null);
 
   const getFileName = (url: string) => {
     return url.split('/').pop() || 'download.pdf';
   };
+
+  const handlePopupToggle = (msgId: string) => {
+    setSelectedMessageId(prevId => prevId === msgId ? null : msgId);
+  };
+
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -31,15 +38,24 @@ const Message = ({ messages, isLoading, userName }: IMessageProps) => {
           return (
             <div
               key={msg.messageId + msg.message}
-              className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'} `}
+              className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'}  `}
+
             >
               <p className="mb-[8px] mr-2">{msg.senderName}</p>
-              <div className={`flex items-end gap-[3px] ${isMessager ? 'flex-row-reverse' : ''}   `}  >
+              <div className={`flex items-end gap-[3px] ${isMessager ? 'flex-row-reverse' : ''}   `} >
                 {msg.message &&
-                  <div className="inline-block  rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px] relative w-1/2">
+                  <div className=" relative rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]  max-w-[600px] cursor-pointer" onClick={() => handlePopupToggle(msg.messageId)}>
                     <div className="flex items-center ">
                       <p className="w-full text-[16px] break-words">{msg.message}</p>
                     </div>
+                    {selectedMessageId === msg.messageId && (
+                      <div className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} w-[134px] h-[174px] z-50`}>
+                        <MessagePopup
+                          messageId={msg.messageId}
+                          onClose={() => setSelectedMessageId(null)}
+                        />
+                      </div>
+                    )}
                   </div>
                 }
 
