@@ -13,9 +13,21 @@ const postChatImageFile = async(images: FormData) => {
 
   return response.data
 }
+
+const postChatRoom = async (payload: {
+  roomName: string,
+  courseId: number,
+  week: number,
+}) => {
+  const response = await Api.post('/chatRoom', payload)
+
+  return response.data
+}
+
 const chatApi = {
   getChatMessage,
   postChatImageFile,
+  postChatRoom,
 }
 
 export default chatApi

@@ -21,7 +21,11 @@ export interface IChatImageResponse {
 }
 
 export interface IUserClassResponse {
-  chatRoomId: string;
+  chatRooms: {
+    chatRoomId: number;
+    week: number;
+  }[];
+  courseId: number;
   courseName: string;
   courseCode: string;
   end_date: string;

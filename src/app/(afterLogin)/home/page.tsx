@@ -1,18 +1,92 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable react/button-has-type */
 
 'use client';
 
-import Link from 'next/link';
+import Image from 'next/image';
 import Calendar from '@/components/home/calendar';
 import { useState } from 'react';
 import { useUserClassQuery } from '@/hooks/queries/useUserQuery';
+import useUser from '@/hooks/common/useUser';
+import { useRouter } from 'next/navigation';
+import { IUserClassResponse } from '@/types/chat.types';
+import Modal from '@/components/common/Modal';
+import useCreateChatRoomMutation from '@/hooks/mutations/useChatMutation';
 
 const HomePage = () => {
+  const router = useRouter();
+
+  const { isProfessor } = useUser()
   const { data: userClassData } = useUserClassQuery()
+  const createChatRoom = useCreateChatRoomMutation()
+
   const [activeTab, setActiveTab] = useState('questions');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState<IUserClassResponse | null>(null);
+  const [chatRoomName, setChatRoomName] = useState('');
+  const [classWeek, setClassWeek] = useState('');
+
+
+
+  const onClickClass = (classItem: IUserClassResponse) => {
+    if (isProfessor && classItem.chatRooms?.length === 0) {
+      setSelectedClass(classItem);
+      setIsModalOpen(true);
+    } else {
+      const lastChatRoom = classItem.chatRooms?.[classItem.chatRooms.length - 1];
+      if (lastChatRoom) {
+        router.push(`/chat/${lastChatRoom.chatRoomId}`);
+      }
+    }
+  }
+
+  const onClickPlus = (classItem: IUserClassResponse) => {
+    if (isProfessor) {
+      setIsModalOpen(true)
+      setSelectedClass(classItem)
+    }
+  }
+  const handleCreateChatRoom = () => {
+    createChatRoom.mutate({
+      roomName: chatRoomName,
+      courseId: selectedClass?.courseId ?? 0,
+      week: Number(classWeek)
+    })
+    setIsModalOpen(false);
+    setChatRoomName('');
+    setClassWeek('');
+  }
 
   return (
 
     <div className="flex h-screen">
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <h2 className="text-lg font-bold mb-4">새 채팅방 생성</h2>
+          <input
+            type="text"
+            placeholder="채팅방 이름"
+            value={chatRoomName}
+            onChange={(e) => setChatRoomName(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="수업 주차"
+            value={classWeek}
+            onChange={(e) => setClassWeek(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <button
+            onClick={handleCreateChatRoom}
+            className="w-full p-2 bg-blue-500 text-white rounded"
+          >
+            생성
+          </button>
+        </Modal>
+      )}
+
       {/* 콘텐츠 영역 */}
       <div className="flex flex-1">
         {/* 왼쪽 수업 목록 */}
@@ -23,23 +97,32 @@ const HomePage = () => {
             </select>
           </div>
 
-          <div className="mb-4 space-y-4 p-2 rounded border border-black">
+          {/* <div className="mb-4 space-y-4 p-2 rounded border border-black">
             <button
               // onClick={}
               className="w-full px-4 py-2  text-black rounded-md text-left"
             >
               새 수업 들어가기 +
             </button>
-          </div>
+          </div> */}
 
           <ul className="space-y-4">
             {userClassData?.map((classItem) => (
-              <li key={classItem.chatRoomId} className="px-4 p-2 bg-white rounded border border-black text-left">
-                <Link href={`/chat/${classItem.chatRoomId}`}>
-                  {classItem.courseName}
-                  <br />
-                  <span className="text-xs text-black-500">{classItem.courseCode}</span>
-                </Link>
+              <li key={classItem.courseCode} className="px-4 p-2 bg-white rounded border border-black text-left cursor-pointer flex justify-between items-center"
+              >
+                <div className='flex flex-col gap-2 w-full' onClick={() => {
+                  onClickClass(classItem)
+                }}>
+                  <p>
+                    {classItem.courseName}
+                  </p>
+                  <span className="text-xs text-black-500">{classItem.room}</span>
+                </div>
+                {isProfessor &&
+                  <div onClick={() => onClickPlus(classItem)} className='border z-10'>
+                    <Image src="/images/svg/plus.svg" alt="plus" width={26} height={26} />
+                  </div>
+                }
               </li>
             ))}
           </ul>

@@ -11,7 +11,8 @@ export const useUserClassQuery = () => {
 export const useUserQuery = () => {
   return useQuery({
     queryKey: ['user'],
-    queryFn: userApi.getUser    
+    queryFn: userApi.getUser,    
+    staleTime: 1000 * 60 * 10
   })
 }
 
