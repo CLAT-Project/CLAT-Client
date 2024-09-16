@@ -16,11 +16,9 @@ const ChatLayout = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <div className='flex'>
+    <div className="flex">
       <ChatSidebar />
-      <div className='chat-content-width'>
-        {children}
-      </div>
+      <div className="chat-content-width">{children}</div>
     </div>
   )
 }

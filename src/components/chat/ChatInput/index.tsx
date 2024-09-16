@@ -17,7 +17,7 @@ interface ChatInputProps {
   register: UseFormRegister<ChatFormData>
   handleSendMessage: () => void
   handleSubmit: UseFormHandleSubmit<ChatFormData, undefined>
-  chatRoomId: string;
+  chatRoomId: string
   setIsLoading: Dispatch<SetStateAction<boolean>>
   isLoading: boolean
 }
@@ -29,11 +29,11 @@ const ChatInput = ({
   handleSubmit,
   chatRoomId,
   setIsLoading,
-  isLoading
+  isLoading,
 }: ChatInputProps) => {
   const queryClient = useQueryClient()
   const imageRef = useRef<HTMLInputElement>(null)
-  const [, setImages] = useState<File[]>([]);
+  const [, setImages] = useState<File[]>([])
 
   const handleClick = () => {
     if (imageRef.current) {
@@ -47,16 +47,16 @@ const ChatInput = ({
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
+    const { files } = e.target
 
     if (files) {
-      setIsLoading(true);
-      setImages(Array.from(files));
+      setIsLoading(true)
+      setImages(Array.from(files))
 
-      const formData = new FormData();
+      const formData = new FormData()
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < files.length; i++) {
-        formData.append('images', files[i]);
+        formData.append('images', files[i])
       }
 
       const response = await chatApi.postChatImageFile(formData)
@@ -65,40 +65,36 @@ const ChatInput = ({
         '/pub/chat/file',
         JSON.stringify({
           chatRoomId,
-          fileImageDTOList: response
-        })
+          fileImageDTOList: response,
+        }),
       )
     }
     setTimeout(() => {
-      queryClient.invalidateQueries({ queryKey: ['chatMsg'] });
+      queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
 
-      setIsLoading(false);
+      setIsLoading(false)
       toast.success('이미지 전송 완료')
-    }, 1000);
-
+    }, 1000)
   }
 
-
   useEffect(() => {
-    let loadingToast: string | undefined;
+    let loadingToast: string | undefined
 
     if (isLoading) {
-      loadingToast = toast.loading('이미지 전송 중...');
+      loadingToast = toast.loading('이미지 전송 중...')
     } else if (loadingToast) {
-      toast.dismiss(loadingToast);
-      toast.success('이미지 전송 완료');
+      toast.dismiss(loadingToast)
+      toast.success('이미지 전송 완료')
     }
     return () => {
       if (loadingToast) {
-        toast.dismiss(loadingToast);
+        toast.dismiss(loadingToast)
       }
-    };
-  }, [isLoading]);
+    }
+  }, [isLoading])
 
   return (
-    <div
-      className="chat-content-width fixed bottom-0 right-0 h-[90px]  bg-white "
-    >
+    <div className="chat-content-width fixed bottom-0 right-0 h-[90px] bg-white">
       <form
         className="flex h-[90%] items-center justify-between px-[90px]"
         onSubmit={handleSubmit(onSubmitMessage)}
@@ -110,7 +106,7 @@ const ChatInput = ({
             className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
           />
         </div>
-        <div className="flex min-w-[120px] justify-center gap-2" >
+        <div className="flex min-w-[120px] justify-center gap-2">
           <Image
             src="/images/png/file-send.png"
             alt="file-send"
@@ -119,7 +115,14 @@ const ChatInput = ({
             className="cursor-pointer"
             onClick={handleClick}
           />
-          <input type="file" accept='file/*' onChange={handleImageUpload} className='hidden' ref={imageRef} multiple />
+          <input
+            type="file"
+            accept="file/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            ref={imageRef}
+            multiple
+          />
           <button type="submit">
             <Image
               src="/images/png/message-send.png"
@@ -139,4 +142,3 @@ const ChatInput = ({
 }
 
 export default ChatInput
-

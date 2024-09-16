@@ -1,14 +1,14 @@
-import chatApi from "@/apis/chat"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import toast from "react-hot-toast"
+import chatApi from '@/apis/chat'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
-const useCreateChatRoomMutation = ( ) => {
+const useCreateChatRoomMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (payload: {
-      courseId: number,
-      roomName: string,
+      courseId: number
+      roomName: string
       week: number
     }) => chatApi.postChatRoom(payload),
     onSuccess: () => {
@@ -17,8 +17,8 @@ const useCreateChatRoomMutation = ( ) => {
     },
     onError: (error: any) => {
       toast.error(error.response.data.message)
-    }
+    },
   })
 }
 
-export default useCreateChatRoomMutation;
+export default useCreateChatRoomMutation

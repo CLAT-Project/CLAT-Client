@@ -28,7 +28,9 @@ const InputField = ({
   return (
     <div className="relative flex items-center gap-5">
       <div className="flex w-[540px] items-center justify-between">
-        <label htmlFor={name} className="required relative text-[14px]">{label}</label>
+        <label htmlFor={name} className="required relative text-[14px]">
+          {label}
+        </label>
         <input
           id={name}
           className={`signup-input ${errors?.[name] ? 'border-red-500' : ''}`}

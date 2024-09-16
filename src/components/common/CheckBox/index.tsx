@@ -1,6 +1,5 @@
 'use client'
 
-
 interface ICheckBoxProps {
   label: string
   checked: boolean
@@ -9,7 +8,7 @@ interface ICheckBoxProps {
 }
 
 const CheckBox = ({ label, checked, onChange, keyProp }: ICheckBoxProps) => {
-  const id = `checkbox-${keyProp}`;
+  const id = `checkbox-${keyProp}`
   return (
     <div className="flex items-center space-x-2">
       <input
@@ -22,7 +21,7 @@ const CheckBox = ({ label, checked, onChange, keyProp }: ICheckBoxProps) => {
         {label}
       </label>
     </div>
-  );
-};
+  )
+}
 
 export default CheckBox

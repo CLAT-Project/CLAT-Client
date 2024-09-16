@@ -15,8 +15,6 @@ import useChatMsgQuery from '@/hooks/queries/useChatQuery'
 import ChatHeader from '@/components/chat/ChatHeader'
 import { useUserClassQuery, useUserQuery } from '@/hooks/queries/useUserQuery'
 
-
-
 const Chat = () => {
   const queryClient = useQueryClient()
   const params = useParams<Params>()
@@ -24,14 +22,16 @@ const Chat = () => {
 
   const message = watch('message')
   const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
   const { data: userData } = useUserQuery()
   const { data: userClassData } = useUserClassQuery()
 
   // eslint-disable-next-line eqeqeq
-  const courseName = userClassData?.find((classItem) => classItem.chatRoomId == params.slug)?.courseName
+  const courseName = userClassData?.find((classItem) =>
+    classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId == params.slug),
+  )?.courseName
   const handleSendMessage = () => {
     if (message) {
       sendMessage(
@@ -54,22 +54,25 @@ const Chat = () => {
         senderName: content.senderName,
         message: content.message,
         timestamp: content.timestamp,
-        imageUrl: content.imageUrl
+        imageUrl: content.imageUrl,
       }
-      setMessages(prevMessages => {
+      setMessages((prevMessages) => {
         if (!prevMessages) {
           return {
-            courseName: "코스 이름",
-            roomName: "룸 이름",
-            messageFileResponseDTOS: [newMessage]
-          };
+            courseName: '코스 이름',
+            roomName: '룸 이름',
+            messageFileResponseDTOS: [newMessage],
+          }
         }
         return {
           ...prevMessages,
-          messageFileResponseDTOS: [...prevMessages.messageFileResponseDTOS, newMessage]
-        };
-      });
-    });
+          messageFileResponseDTOS: [
+            ...prevMessages.messageFileResponseDTOS,
+            newMessage,
+          ],
+        }
+      })
+    })
 
     return () => {
       disconnect()
@@ -85,10 +88,12 @@ const Chat = () => {
   return (
     <>
       <ChatHeader className={courseName || ''} />
-      <div
-        className="w-full overflow-y-scroll chat-content-height"
-      >
-        <Message messages={messages} isLoading={isLoading} userName={userData?.name} />
+      <div className="chat-content-height w-full overflow-y-scroll">
+        <Message
+          messages={messages}
+          isLoading={isLoading}
+          userName={userData?.name}
+        />
         <ChatInput
           handleSendMessage={handleSendMessage}
           register={register}
