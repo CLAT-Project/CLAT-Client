@@ -1,11 +1,11 @@
 export interface IChatMessag {
-  courseName: string;
-  roomName: string;
+  courseName: string
+  roomName: string
   messageFileResponseDTOS: {
-    messageId: string;
-    message: string;
-    senderName: string;
-    timestamp: string;
+    messageId: string
+    message: string
+    senderName: string
+    timestamp: string
     imageUrl: string[]
   }[]
 }
@@ -16,15 +16,19 @@ export interface ChatFormData {
 }
 
 export interface IChatImageResponse {
-  imageId: number;
-  imageUrl: string;
+  imageId: number
+  imageUrl: string
 }
 
 export interface IUserClassResponse {
-  chatRoomId: string;
-  courseName: string;
-  courseCode: string;
-  end_date: string;
-  room: string;
-  start_date: string;
+  chatRooms: {
+    chatRoomId: number
+    week: number
+  }[]
+  courseId: number
+  courseName: string
+  courseCode: string
+  end_date: string
+  room: string
+  start_date: string
 }

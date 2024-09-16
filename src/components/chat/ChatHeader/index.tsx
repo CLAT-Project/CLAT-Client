@@ -12,16 +12,30 @@ const ChatHeader = ({ className }: IChatHeaderProps) => {
       <div className="flex items-center gap-[10px]">
         <Image src="/images/svg/logo.svg" alt="logo" width={41} height={41} />
         <div>
-          <p className="text-[20px] font-bold leading-6">{userData?.schoolName}</p>
+          <p className="text-[20px] font-bold leading-6">
+            {userData?.schoolName}
+          </p>
           <p className="text-[13px] leading-4">{userData?.username}</p>
         </div>
       </div>
       <div>
         <p className="text-[19px] font-bold">{className}</p>
       </div>
-      <div className='flex items-center gap-[12px]'>
-        <Image src="/images/svg/setting.svg" alt="setting" width={26} height={26} className='cursor-pointer' />
-        <Image src="/images/png/user.png" alt="user" width={40} height={40} className='border rounded-full cursor-pointer' />
+      <div className="flex items-center gap-[12px]">
+        <Image
+          src="/images/svg/setting.svg"
+          alt="setting"
+          width={26}
+          height={26}
+          className="cursor-pointer"
+        />
+        <Image
+          src="/images/png/user.png"
+          alt="user"
+          width={40}
+          height={40}
+          className="cursor-pointer rounded-full border"
+        />
       </div>
     </div>
   )

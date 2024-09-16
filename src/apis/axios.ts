@@ -40,7 +40,7 @@ Api.interceptors.request.use(
         config.headers.access = `${accessToken}`
       }
     }
- 
+
     return config
   },
   (error) => {
@@ -63,11 +63,11 @@ Api.interceptors.response.use(
       return Promise.reject(error)
     }
     if (localStorage.getItem('retry') === 'true') {
-      localStorage.removeItem('retry');
-      return Promise.reject(error);
+      localStorage.removeItem('retry')
+      return Promise.reject(error)
     }
-    localStorage.setItem('retry', 'true');
-    
+    localStorage.setItem('retry', 'true')
+
     config.sent = true // 무한 재요청 방지
     const { headers } = await authApi.silentRefresh()
     const accessToken = headers.access

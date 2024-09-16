@@ -80,7 +80,7 @@ const postVerifyNum = async ({
  */
 const silentRefresh = async () => {
   const { data, headers } = await refreshApi.post(`reIssue`)
-  
+
   const accessToken = headers.access
 
   localStorage.setItem('accessToken', accessToken)

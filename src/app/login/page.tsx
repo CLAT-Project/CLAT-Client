@@ -84,7 +84,9 @@ const Login = () => {
                   {...register('password', {
                     required: true,
                   })}
-                  aria-invalid={isSubmitted && errors.password ? 'true' : 'false'}
+                  aria-invalid={
+                    isSubmitted && errors.password ? 'true' : 'false'
+                  }
                 />
               </div>
             </div>

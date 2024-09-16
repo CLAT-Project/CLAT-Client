@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+import { useState } from 'react'
 // import { useBookmarks } from '@/components/home/collect/bookmark/bookmarkProvider';
-import NavigationBar from '@/components/home/navigationBar';
+import NavigationBar from '@/components/home/navigationBar'
 
 const BookmarksPage = () => {
   // const { bookmarks, removeBookmark } = useBookmarks();
-  const [semester, setSemester] = useState('2024-1');
-  const [category, setCategory] = useState('사진과 구도');
+  const [semester, setSemester] = useState('2024-1')
+  const [category, setCategory] = useState('사진과 구도')
 
   return (
     <div className="flex h-screen space-x-4">
@@ -15,14 +15,14 @@ const BookmarksPage = () => {
       <NavigationBar />
 
       {/* 오른쪽 콘텐츠 영역 */}
-      <main className="flex-1 p-6 h-4/5 border border-black rounded-lg overflow-y-auto">
-        <div className="flex justify-between mb-4 border-b border-gray-300 pb-2">
+      <main className="h-4/5 flex-1 overflow-y-auto rounded-lg border border-black p-6">
+        <div className="mb-4 flex justify-between border-b border-gray-300 pb-2">
           <h1 className="text-2xl font-bold">북마크 모아보기</h1>
           <div className="flex space-x-2">
             <select
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
-              className="p-2 border rounded"
+              className="rounded border p-2"
             >
               <option value="2024-1">24년도 1학기</option>
               <option value="2024-2">24년도 2학기</option>
@@ -30,7 +30,7 @@ const BookmarksPage = () => {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="p-2 border rounded"
+              className="rounded border p-2"
             >
               <option value="사진과 구도">사진과 구도</option>
               <option value="디자인 이론">디자인 이론</option>
@@ -66,7 +66,7 @@ const BookmarksPage = () => {
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default BookmarksPage;
+export default BookmarksPage
