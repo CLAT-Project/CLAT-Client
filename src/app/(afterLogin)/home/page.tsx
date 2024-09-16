@@ -13,11 +13,12 @@ import { useRouter } from 'next/navigation'
 import { IUserClassResponse } from '@/types/chat.types'
 import Modal from '@/components/common/Modal'
 import useCreateChatRoomMutation from '@/hooks/mutations/useChatMutation'
+import toast from 'react-hot-toast'
 
 const HomePage = () => {
   const router = useRouter()
 
-  const { isProfessor } = useUser()
+  const { isProfessor, isStudent } = useUser()
   const { data: userClassData } = useUserClassQuery()
   const createChatRoom = useCreateChatRoomMutation()
 
@@ -35,6 +36,10 @@ const HomePage = () => {
       setIsModalOpen(true)
     } else {
       const lastChatRoom = classItem.chatRooms?.[classItem.chatRooms.length - 1]
+      if (isStudent && classItem.chatRooms?.length === 0) {
+        toast.error('생성된 수업채팅이 없습니다.')
+        return;
+      }
       if (lastChatRoom) {
         router.push(`/chat/${lastChatRoom.chatRoomId}`)
       }
