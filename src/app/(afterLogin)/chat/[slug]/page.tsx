@@ -30,7 +30,7 @@ const Chat = () => {
 
   // eslint-disable-next-line eqeqeq
   const courseName = userClassData?.find((classItem) =>
-    classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId == params.slug),
+    classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId === params.slug),
   )?.courseName
   const handleSendMessage = () => {
     if (message) {
