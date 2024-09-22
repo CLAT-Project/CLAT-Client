@@ -13,7 +13,7 @@ import './chat.css'
 import toast from 'react-hot-toast'
 import ChatHeader from '@/components/chat/ChatHeader'
 import { useUserClassQuery, useUserQuery } from '@/hooks/queries/useUserQuery'
-import { useChatMsgQuery } from '@/hooks/queries/useChatQuery'
+import { useChatMsgQuery, useChatRoomIsAuthQuery } from '@/hooks/queries/useChatQuery'
 import useUser from '@/hooks/common/useUser'
 import ChatAuth from '@/components/chat/ChatAuth'
 
@@ -27,12 +27,13 @@ const Chat = () => {
   const message = watch('message')
   const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(false)
-  const [isAuth, setIsAuth] = useState(true)
+  const [isAuth, setIsAuth] = useState(false)
   const [isAnswering, setIsAnswering] = useState(false)
 
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
   const { data: userData } = useUserQuery()
   const { data: userClassData } = useUserClassQuery()
+  const { data: chatRoomIsAuth } = useChatRoomIsAuthQuery(Number(params.slug))
 
   const courseName = userClassData?.find((classItem) =>
     classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId === params.slug),
@@ -111,9 +112,14 @@ const Chat = () => {
     }
   }, [isProfessor])
 
+  useEffect(() => {
+    if (chatRoomIsAuth?.passWorldEnter) {
+      setIsAuth(true)
+    }
+  }, [chatRoomIsAuth])
   return (
     <>
-      <ChatHeader className={courseName || ''} />
+      <ChatHeader className={courseName || ''} roomId={params.slug} />
       {isAuth || isProfessor ?
         <div className="chat-content-height w-full overflow-y-scroll">
           <Message

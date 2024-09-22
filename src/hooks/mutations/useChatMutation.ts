@@ -40,9 +40,15 @@ export const usePostChatMemoMutation = () => {
   })
 }
 
-export const usePostChatAuthMutation = () => {
-
+export const usePostChatAuthMutation = ({
+  onSuccessCallback
+}: {
+  onSuccessCallback: () => void
+}) => {
   return useMutation({
     mutationFn: (payload: { chatRoomId: number, roomKey: string }) => chatApi.postChatAuth(payload),
+    onSuccess: () => {
+      onSuccessCallback()
+    },
   })
 }
