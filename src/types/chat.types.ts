@@ -38,3 +38,11 @@ export interface IChatMemoResponse {
   messageId: number
   memoId: number
 }
+
+export interface IChatRoomInfoResponse {
+  courseName: string
+  chatRoomName: string;
+  creationTime: string;
+  roomKey: number
+  week: number
+}
