@@ -26,7 +26,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
   const [showMessagePopup, setShowMessagePopup] = useState(false)
   const [memoContent, setMemoContent] = useState('')
 
-  const { data: chatMemo, refetch: refetchChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
+  const { data: chatMemo, refetch: refetchChatMemo, isLoading: isLoadingChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
   const { data: chatMemoList } = useChatMemoListQuery(chatRoomId)
 
   const onClickMemo = (messageId: number) => {
@@ -97,7 +97,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                         </p>
                       </div>
 
-                      {isMemoedMessage && (
+                      {isMemoedMessage && !isLoadingChatMemo && (
                         <div
                           className={`absolute -top-[10px] bg-[#FF9900] w-[22px] h-[22px] rounded-full ${isMessager ? 'sender' : 'receiver'}`}
                           onClick={(e) => {
