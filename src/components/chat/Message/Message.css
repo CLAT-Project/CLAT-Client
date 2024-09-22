@@ -1,0 +1,16 @@
+.eachMsg {
+  position: absolute;
+  top: -10px;
+  width: 22px;
+  height: 22px;
+  background-color: #ff9900;
+  border-radius: 50%;
+}
+
+.sender {
+  left: -8px;
+}
+
+.receiver {
+  right: -10px;
+}

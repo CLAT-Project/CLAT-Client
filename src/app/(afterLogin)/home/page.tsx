@@ -12,8 +12,8 @@ import useUser from '@/hooks/common/useUser'
 import { useRouter } from 'next/navigation'
 import { IUserClassResponse } from '@/types/chat.types'
 import Modal from '@/components/common/Modal'
-import useCreateChatRoomMutation from '@/hooks/mutations/useChatMutation'
 import toast from 'react-hot-toast'
+import { useCreateChatRoomMutation } from '@/hooks/mutations/useChatMutation'
 
 const HomePage = () => {
   const router = useRouter()
