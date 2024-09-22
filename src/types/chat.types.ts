@@ -2,7 +2,7 @@ export interface IChatMessag {
   courseName: string
   roomName: string
   messageFileResponseDTOS: {
-    messageId: string
+    messageId: number
     message: string
     senderName: string
     timestamp: string
@@ -31,4 +31,10 @@ export interface IUserClassResponse {
   end_date: string
   room: string
   start_date: string
+}
+
+export interface IChatMemoResponse {
+  memo: string
+  messageId: number
+  memoId: number
 }

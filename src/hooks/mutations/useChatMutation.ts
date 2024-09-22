@@ -2,7 +2,7 @@ import chatApi from '@/apis/chat'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-const useCreateChatRoomMutation = () => {
+export const useCreateChatRoomMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -20,5 +20,29 @@ const useCreateChatRoomMutation = () => {
     },
   })
 }
+export const usePostChatMemoMutation = () => {
+  const queryClient = useQueryClient()
 
-export default useCreateChatRoomMutation
+  return useMutation({
+    mutationFn: (payload: {
+      messageId: number,
+      chatRoomId: number,
+      memo: string,
+    }) => chatApi.postChatMemo(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatMessage'] })
+      queryClient.invalidateQueries({ queryKey: ['chatMemoList'] })
+      toast.success('메모 저장 성공')
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
+  })
+}
+
+export const usePostChatAuthMutation = () => {
+
+  return useMutation({
+    mutationFn: (payload: { chatRoomId: number, roomKey: string }) => chatApi.postChatAuth(payload),
+  })
+}

@@ -1,5 +1,5 @@
 import { Api, multipartApi } from '@/apis/axios'
-import { IChatImageResponse, IChatMessag } from '@/types/chat.types'
+import { IChatImageResponse, IChatMemoResponse, IChatMessag } from '@/types/chat.types'
 
 const getChatMessage = async (roomId: string) => {
   const response = await Api.get<IChatMessag>(`/chatRoom/${roomId}`)
@@ -25,10 +25,42 @@ const postChatRoom = async (payload: {
   return response.data
 }
 
+const postChatMemo = async (payload: {
+  messageId: number,
+  chatRoomId: number,
+  memo: string,
+}) => {
+  const response = await Api.post('/chat/memo', payload)
+
+  return response.data
+}
+
+const getChatMemo = async (messageId: number) => {
+  const response = await Api.get(`/memo/${messageId}`)
+
+  return response.data
+}
+
+const postChatAuth = async (payload: { chatRoomId: number, roomKey: string }) => {
+  const response = await Api.post('/chatRoom/validation', payload)
+
+  return response.data
+}
+
+const getChatMemoList = async (chatRoomId: number) => {
+  const response = await Api.get<IChatMemoResponse[]>(`/memo/findAll/${chatRoomId}`)
+
+  return response.data
+}
+
 const chatApi = {
   getChatMessage,
   postChatImageFile,
   postChatRoom,
+  postChatMemo,
+  getChatMemo,
+  postChatAuth,
+  getChatMemoList
 }
 
 export default chatApi
