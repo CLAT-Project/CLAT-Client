@@ -22,7 +22,7 @@ export default function HomeLayout({
       <Header onProfileClick={toggleProfilePanel} />
       <main className="flex-1 p-8">
         {/* <BookmarkProvider> */}
-        {children}
+          {children}
         {/* </BookmarkProvider> */}
       </main>
       <ProfilePanel isOpen={isProfileOpen} onClose={toggleProfilePanel} />

@@ -1,39 +1,74 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import NavigationBar from '@/components/home/navigationBar'
+import NavigationBar from '@/components/home/navigationBar';
 
 const serviceUsageRulesPage = () => {
+
   return (
-    <div className="flex h-screen space-x-4">
-      <NavigationBar />
+    <div className="flex h-screen ">
+     
+     <div className="w-1/4 px-4">
+        <NavigationBar />
+      </div>
 
-      <main className="h-4/5 flex-1 overflow-y-auto rounded-lg border border-black p-6">
-        <h1 className="mb-8 border-b border-black p-4 text-2xl font-bold">
-          서비스이용규칙
-        </h1>
+      <main className="flex-1 p-6 h-4/5 border border-black rounded-lg overflow-y-auto custom-scrollbar">
+        <h1 className="text-4xl font-bold p-4 mb-8 border-b-2 border-7B7B7B">서비스 이용규칙 안내</h1>
 
-        <h3 className="font-bold">서비스 이용 규칙 안내</h3>
         <div className="space-y-4">
           <p>
-            국군의 조직과 편성은 법률로 정한다. 국가유공자·상이군경 및
-            전몰군경의 유가족은 법률이 정하는 바에 의하여 우선적으로 근로의
-            기회를 부여받는다. 대법원에 대법관을 둔다. 다만, 법률이 정하는 바에
-            의하여 대법관이 아닌 법관을 둘 수 있다. 근로조건의 기준은 인간의
-            존엄성을 보장하도록 법률로 정한다.
+            서비스 이용규칙은 누구나 기분 좋게 참여할 수 있는 서비스를 만들기 위해 제정되었습니다. 서비스 내 모든 서비스는 서비스 이용규칙에 의해 운영되므로 이용자는 서비스 이용 전 반드시 모든 내용을 숙지하여야 합니다.
           </p>
-          &nbsp;
           <p>
-            국가안전보장에 관련되는 대외정책·군사정책과 국내정책의 수립에 관하여
-            국무회의의 심의에 앞서 대통령의 자문에 응하기 위하여
-            국가안전보장회의를 둔다. 농업생산성의 제고와 농지의 합리적인 이용을
-            위하거나 불가피한 사정으로 발생하는 농지의 임대차와 위탁경영은
-            법률이 정하는 바에 의하여 인정된다.
+            방송통신심의위원회의 정보통신에 관한 심의규정, 현행 법률, 서비스 이용약관 및 서비스 이용규칙을 위반하거나 사회 통념 및 관련 법령을 기준으로 타 이용자에게 악영향을 끼치는 경우, 채팅이 삭제되고 서비스 이용이 일정 기간 제한될 수 있습니다.
+          </p>
+          <p>
+            서비스 이용규칙은 불법 행위, 각종 차별 및 혐오, 사회적 갈등 조장, 타인의 권리 침해, 다른 이용자에게 불쾌감을 주는 행위, 서비스 유출 행위, 시스템 장애를 유발하는 비정상 행위 등 서비스 분위기 형성과 운영에 악영향을 미치는 행위들을 제한하기 위해 지속적으로 개정됩니다. 중대한 변경 사항이 있는 경우에는 공지사항을 통해 고지하므로 반드시 확인해주시기 바랍니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>서비스 운영 시스템</h3>
+          <p>
+            서비스 운영 시스템은 서비스 이용약관 및 서비스 이용규칙 위반을 빠르게 감지하고 조치하기 위해 도입되었습니다. 또한, 현행 법률에 따른 청소년유해매체물, 권리 침해, 비정상적인 이용 등의 규칙 위반 행위에 대해 선제적으로 필터링하여 대응할 수 있도록, AI 기반으로 시스템을 지속적으로 발전시키고 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>유출 방지 시스템</h3>
+          <p>
+            유출 방지 시스템은 채팅 및 자료를 외부로 유출하는 행위를 실시간으로 감지하고 조치하기 위해 도입되었습니다. 서비스의 채팅을 복사, 스크린샷 촬영하여 외부 사이트, 대화방에 게시하거나 타인에게 관련 내용을 공유하거나, 게시판, 시간표, 강의평가를 크롤링하는 등 유출이 적발될 경우 서비스 이용이 제한되거나 영구적으로 서비스 이용계약이 해지될 수 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>금지 행위</h3>
+          <p>
+            이용자 보호 및 원활한 서비스 제공을 위해 다음과 같은 행위를 금지하고 있습니다:
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>국제 평화 및 질서를 해할 우려가 있는 행위</li>
+            <li>헌법에 위배되거나 국가 존립을 해하는 행위</li>
+            <li>범죄 목적 행위 및 법령에 위반되는 행위</li>
+            <li>성적 수치심을 유발하는 행위</li>
+            <li>폭력성, 잔혹성, 혐오성을 조장하는 행위</li>
+            <li>사회적 소외계층을 비하하는 행위</li>
+            <li>타인의 권리를 침해하는 행위</li>
+          </ul>
+
+          <h3 className='font-bold text-xl'>채팅방 관리자 제도</h3>
+          <p>
+            채팅방 관리자는 자신이 관리중인 채팅방에서 참여자를 관리할 수 있으며, 관리자 권한을 양도하거나 다른 참여자를 차단할 수 없습니다. 채팅방 관리자가 탈퇴 시, 가장 오래된 참여자가 관리자 권한을 자동으로 양도받습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>전기통신사업법에 따른 불법촬영물 유통 금지</h3>
+          <p>
+            팀은 전기통신사업법에 따른 불법촬영물 등의 유해정보를 차단하기 위한 조치를 취하고 있습니다. 불법촬영물이 적발될 경우 서비스 이용이 제한되며, 법률에 따라 처벌받을 수 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>기타</h3>
+          <p>
+            서비스 이용규칙은 쾌적한 서비스 운영을 위해 주기적으로 업데이트됩니다. 팀은 이용자가 서비스 이용규칙을 숙지하지 않아 발생하는 피해에 대해 책임을 지지 않습니다.
           </p>
         </div>
       </main>
-    </div>
-  )
-}
 
-export default serviceUsageRulesPage
+
+    </div>
+  );
+};
+
+export default serviceUsageRulesPage;

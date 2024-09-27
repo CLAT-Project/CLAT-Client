@@ -1,39 +1,49 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import NavigationBar from '@/components/home/navigationBar'
+import NavigationBar from '@/components/home/navigationBar';
 
 const youthProtectionPolicyPage = () => {
   return (
-    <div className="flex h-screen space-x-4">
-      <NavigationBar />
+    <div className="flex h-screen ">
+     
+      <div className="w-1/4 px-4">
+       <NavigationBar />
+      </div>
 
-      <main className="h-4/5 flex-1 overflow-y-auto rounded-lg border border-black p-6">
-        <h1 className="border-7B7B7B mb-8 border-b-2 p-4 text-2xl font-bold">
-          청소년 보호 정책
-        </h1>
+      <main className="flex-1 p-6 h-4/5 border border-black rounded-lg overflow-y-auto custom-scrollbar">
+        <h1 className="text-4xl font-bold p-4 mb-8 border-b-2 border-7B7B7B">청소년 보호 정책</h1>
 
-        <h3 className="font-bold">청소년 보호 정책</h3>
         <div className="space-y-4">
+          <h3 className='font-bold text-xl'>청소년 보호 정책 안내</h3>
           <p>
-            국군의 조직과 편성은 법률로 정한다. 국가유공자·상이군경 및
-            전몰군경의 유가족은 법률이 정하는 바에 의하여 우선적으로 근로의
-            기회를 부여받는다. 대법원에 대법관을 둔다. 다만, 법률이 정하는 바에
-            의하여 대법관이 아닌 법관을 둘 수 있다. 근로조건의 기준은 인간의
-            존엄성을 보장하도록 법률로 정한다.
+            청소년 보호 정책은 클랫팀 이하 ( "팀" 이라 합니다)가 『정보통신망 이용촉진 및 정보보호 등에 관한 법률』에 근거하여 유해정보 및 유해환경으로부터 청소년을 보호하기 위함을 목적으로 합니다.
           </p>
-          &nbsp;
+
+          <h3 className='font-bold text-xl'>1. 청소년 보호를 위한 목표 및 기본원칙</h3>
           <p>
-            국가안전보장에 관련되는 대외정책·군사정책과 국내정책의 수립에 관하여
-            국무회의의 심의에 앞서 대통령의 자문에 응하기 위하여
-            국가안전보장회의를 둔다. 농업생산성의 제고와 농지의 합리적인 이용을
-            위하거나 불가피한 사정으로 발생하는 농지의 임대차와 위탁경영은
-            법률이 정하는 바에 의하여 인정된다.
+            팀은 청소년이 안전한 환경에서 서비스를 이용하며 건전한 인격체로 성장할 수 있도록 최선의 노력을 다하고 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>2. 유해정보에 대한 청소년 접근제한 및 관리조치</h3>
+          <p>
+            팀은 청소년이 아무런 제한장치 없이 청소년 유해정보에 노출되지 않도록 게시물 검수 및 신고 시스템과 게시물 신고센터를 운영하고 있습니다. 또한, 불법촬영물, 청소년유해매체물 등 성적 도의관념에 반하는 행위를 커뮤니티 이용규칙에 의거하여 엄격하게 금지하고 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>3. 청소년 보호를 위한 교육</h3>
+          <p>
+            팀은 관련된 임직원을 대상으로 청소년 보호 관련 법령 및 보호정책, 유해정보 발견 시 대처 방법, 위반사항 처리에 대한 보고 절차 등을 교육하고 있습니다.
+          </p>
+
+          <h3 className='font-bold text-xl'>4. 유해정보로 인한 피해상담 및 고충처리</h3>
+          <p>
+            팀은 청소년 유해정보로 인한 피해상담 및 고충처리를 위한 전문인력을 배치하여 그 피해가 확산되지 않도록 하고 있습니다. 이용자는 "청소년보호 책임자 및 담당자의 지정 현황"을 참고하여 피해상담 및 고충처리를 요청할 수 있습니다.
           </p>
         </div>
       </main>
-    </div>
-  )
-}
 
-export default youthProtectionPolicyPage
+
+    </div>
+  );
+};
+
+export default youthProtectionPolicyPage;
