@@ -31,7 +31,6 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
     }
   }
 
-
   const handleTextareaClick = (e: React.MouseEvent) => {
     e.stopPropagation()
   }
@@ -50,7 +49,7 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
   }, [onClose])
 
   return (
-    <div ref={popupRef} className={`z-50 w-full h-full flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[21px] py-[20px] shadow-lg   `}>
+    <div ref={popupRef} className="z-50 w-full h-full flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[21px] py-[20px] shadow-lg">
       <textarea
         className="w-full h-full bg-[#F5F5F5] rounded-[10px]  focus:outline-none active:outline-none text-sm resize-none"
         value={memo}

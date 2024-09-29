@@ -1,13 +1,13 @@
 import Image from 'next/image'
 
 interface ImageLayoutProps {
-  images: string[]
+  images?: string[]
 }
 
-const SingleImage = ({ image }: { image: string }) => (
+const SingleImage = ({ image }: { image?: string }) => (
   <div className="z-10 flex items-center justify-center border border-[#363d5540]">
     <Image
-      src={image}
+      src={image || ''}
       alt="message"
       width={400}
       height={400}
@@ -16,15 +16,15 @@ const SingleImage = ({ image }: { image: string }) => (
   </div>
 )
 
-const DoubleImage = ({ images }: { images: string[] }) => (
+const DoubleImage = ({ images }: { images?: string[] }) => (
   <div className="flex gap-[10px]">
-    {images.map((image) => (
+    {images?.map((image) => (
       <div
         key={image}
-        className="h-[150px] w-[150px] border border-[#363d5540]"
+        className=" w-[150px] border border-[#363d5540]"
       >
         <Image
-          src={image}
+          src={image || ''}
           alt="message"
           width={400}
           height={400}
@@ -35,11 +35,11 @@ const DoubleImage = ({ images }: { images: string[] }) => (
   </div>
 )
 
-const TripleImage = ({ images }: { images: string[] }) => (
+const TripleImage = ({ images }: { images?: string[] }) => (
   <div className="flex justify-between gap-[10px]">
     <div className="h-[173px] w-[91px] border border-[#363d5540]">
       <Image
-        src={images[0]}
+        src={images?.[0] || ''}
         alt="message"
         width={400}
         height={400}
@@ -47,13 +47,13 @@ const TripleImage = ({ images }: { images: string[] }) => (
       />
     </div>
     <div className="flex flex-col gap-[6px]">
-      {images.slice(1).map((image) => (
+      {images?.slice(1).map((image) => (
         <div
           key={image}
           className="h-[82px] w-[195px] border border-[#363d5540]"
         >
           <Image
-            src={image}
+            src={image || ''}
             alt="message"
             width={400}
             height={400}
@@ -65,12 +65,12 @@ const TripleImage = ({ images }: { images: string[] }) => (
   </div>
 )
 
-const QuadImage = ({ images }: { images: string[] }) => (
+const QuadImage = ({ images }: { images?: string[] }) => (
   <div className="grid grid-cols-2 gap-[10px]">
-    {images.map((image) => (
+    {images?.map((image) => (
       <div key={image} className="h-[82px] w-[153px] border border-[#363d5540]">
         <Image
-          src={image}
+          src={image || ''}
           alt="message"
           width={400}
           height={400}
@@ -81,16 +81,16 @@ const QuadImage = ({ images }: { images: string[] }) => (
   </div>
 )
 
-const PentaImage = ({ images }: { images: string[] }) => (
+const PentaImage = ({ images }: { images?: string[] }) => (
   <div className="flex gap-[10px]">
     <div className="flex flex-col gap-[10px]">
-      {images.slice(0, 2).map((image) => (
+      {images?.slice(0, 2).map((image) => (
         <div
           key={image}
           className="h-[97px] w-[154px] border border-[#363d5540]"
         >
           <Image
-            src={image}
+            src={image || ''}
             alt="message"
             width={400}
             height={400}
@@ -100,13 +100,13 @@ const PentaImage = ({ images }: { images: string[] }) => (
       ))}
     </div>
     <div className="flex flex-col gap-[10px]">
-      {images.slice(2, 5).map((image) => (
+      {images?.slice(2, 5).map((image) => (
         <div
           key={image}
           className="h-[62px] w-[154px] border border-[#363d5540]"
         >
           <Image
-            src={image}
+            src={image || ''}
             alt="message"
             width={400}
             height={400}
@@ -119,7 +119,7 @@ const PentaImage = ({ images }: { images: string[] }) => (
 )
 
 const ImageLayout = ({ images }: ImageLayoutProps) => {
-  switch (images.length) {
+  switch (images?.length) {
     case 1:
       return <SingleImage image={images[0]} />
     case 2:
@@ -131,7 +131,7 @@ const ImageLayout = ({ images }: ImageLayoutProps) => {
     case 5:
       return <PentaImage images={images} />
     default:
-      return <PentaImage images={images.slice(0, 5)} />
+      return <PentaImage images={images?.slice(0, 5) || []} />
   }
 }
 

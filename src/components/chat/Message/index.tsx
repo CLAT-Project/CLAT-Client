@@ -72,7 +72,6 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
 
 
       setMemoContent(memoContents)
-
     }
 
   }, [messages, chatMemoList])
@@ -102,10 +101,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                       className={`relative max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px] `}
                       onClick={() => handlePopupToggle(msg.messageId)}
                     >
-                      <div className="flex items-center"
-
-
-                      >
+                      <div className="flex items-center">
                         <p className="w-full break-words text-[16px]">
                           {msg.message}
                         </p>
@@ -149,10 +145,10 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                     </div>
                   )}
 
-                  {msg.imageUrl?.length > 0 &&
-                    (msg.imageUrl[0].slice(-3).toLowerCase() === 'pdf' ? (
+                  {msg?.imageUrl?.length > 0 &&
+                    (msg?.imageUrl[0]?.slice(-3).toLowerCase() === 'pdf' ? (
                       <a
-                        href={msg.imageUrl[0]}
+                        href={msg?.imageUrl[0]}
                         download
                         target="_blank"
                         rel="noopener noreferrer"
@@ -174,7 +170,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                       </a>
                     ) : (
                       <div className="relative flex h-[248px] w-[404px] items-center justify-center rounded-[21px] bg-primary">
-                        <ImageLayout images={msg.imageUrl} />
+                        <ImageLayout images={msg?.imageUrl} />
                       </div>
                     ))}
 
