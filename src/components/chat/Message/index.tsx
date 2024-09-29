@@ -24,17 +24,22 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
   const [memoedMessageIds, setMemoedMessageIds] = useState<number[]>([])
   const [showMemoPopup, setShowMemoPopup] = useState(false)
   const [showMessagePopup, setShowMessagePopup] = useState(false)
-  const [memoContent, setMemoContent] = useState('')
+  const [memoContent, setMemoContent] = useState<{ [key: number]: string }>({})
 
-  const { data: chatMemo, refetch: refetchChatMemo, isLoading: isLoadingChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
+  const { data: chatMemo, refetch: refetchChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
   const { data: chatMemoList } = useChatMemoListQuery(chatRoomId)
 
-  const onClickMemo = (messageId: number) => {
-    refetchChatMemo()
-    setMemoMessageId(messageId)
-    setMemoContent(chatMemo?.memo)
+  const onClickMemo = async (messageId: number) => {
+    setMemoMessageId(messageId);
     setShowMemoPopup(true);
     setShowMessagePopup(false);
+    await refetchChatMemo();
+    if (chatMemo) {
+      setMemoContent(prevContent => ({
+        ...prevContent,
+        [messageId]: chatMemo.memo
+      }));
+    }
   }
 
   const getFileName = (url: string) => {
@@ -60,7 +65,16 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
         .filter(msg => chatMemoList.some(memo => memo.messageId === msg.messageId))
         .map(msg => msg.messageId)
       setMemoedMessageIds(memoedIds)
+
+      const memoContents = Object.fromEntries(
+        chatMemoList.map(memo => [memo.messageId, memo.memo])
+      )
+
+
+      setMemoContent(memoContents)
+
     }
+
   }, [messages, chatMemoList])
 
   useEffect(() => {
@@ -68,7 +82,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
   }, [messages])
 
   return (
-    <div className="relative flex w-full p-[47px] pb-0">
+    <div className="relative flex w-full p-[47px] pb-0" >
       <div className="flex h-full w-full flex-col gap-[31px]">
         {isLoading && <div>Loading</div>}
         {messages?.messageFileResponseDTOS.map((msg) => {
@@ -97,7 +111,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                         </p>
                       </div>
 
-                      {isMemoedMessage && !isLoadingChatMemo && (
+                      {isMemoedMessage && (
                         <div
                           className={`absolute -top-[10px] bg-[#FF9900] w-[22px] h-[22px] rounded-full ${isMessager ? 'sender' : 'receiver'}`}
                           onClick={(e) => {
@@ -115,6 +129,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                             message={msg.message}
                             messageId={msg.messageId}
                             onMemoClick={handleMemoClick}
+                            isMessager={isMessager}
                           />
                         </div>
                       )}
@@ -124,7 +139,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                           <MemoPopup
                             messageId={msg.messageId}
                             chatRoomId={chatRoomId}
-                            memoContent={memoContent}
+                            memoContent={memoContent?.[msg.messageId] || ''}
                             onClose={() => {
                               setShowMemoPopup(false)
                             }}
@@ -173,7 +188,7 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
         })}
         <div ref={messagesEndRef} />
       </div>
-    </div>
+    </div >
   )
 }
 

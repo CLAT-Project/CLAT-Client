@@ -17,6 +17,7 @@ export const useChatMemoQuery = (messageId: number) => {
     queryFn: () => chatApi.getChatMemo(messageId),
     enabled: !!messageId,
     staleTime: 0,
+    gcTime: 0,
   })
 }
 
@@ -27,10 +28,11 @@ export const useChatMemoListQuery = (chatRoomId: number) => {
   })
 }
 
-export const useChatRoomInfoQuery = (chatRoomId: number) => {
+export const useChatRoomInfoQuery = (chatRoomId: number, isProfessor: boolean) => {
   return useQuery({
     queryKey: ['chatRoomInfo', chatRoomId],
-    queryFn: () => chatApi.getChatRoomInfo(chatRoomId)
+    queryFn: () => chatApi.getChatRoomInfo(chatRoomId),
+    enabled: isProfessor,
   })
 }
 

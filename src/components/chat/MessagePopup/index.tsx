@@ -5,9 +5,10 @@ interface MessagePopupProps {
   message: string
   messageId: number
   onMemoClick: (messageId: number) => void;
+  isMessager: boolean;
 }
 
-const MessagePopup = ({ message, messageId, onMemoClick }: MessagePopupProps) => {
+const MessagePopup = ({ message, messageId, onMemoClick, isMessager }: MessagePopupProps) => {
 
   const handleCopy = async () => {
     try {
@@ -65,13 +66,18 @@ const MessagePopup = ({ message, messageId, onMemoClick }: MessagePopupProps) =>
       <div className="w-[100%] rounded-[10px] transition-colors duration-200 hover:bg-[#DDDDDD]">
         <p className="px-[10px]">북마크</p>
       </div>
-      <div className="my-[7px] h-[0.2px] w-[100px] bg-[#A1A1A1]" />
-      <div
-        className="w-[100%] rounded-[10px] transition-colors duration-200 hover:bg-[#DDDDDD]"
-        onClick={handleMemoClick}
-      >
-        <p className="px-[10px]">메모하기</p>
-      </div>
+      {isMessager ? (
+        <>
+          <div className="my-[7px] h-[0.2px] w-[100px] bg-[#A1A1A1]" />
+
+          <div
+            className="w-[100%] rounded-[10px] transition-colors duration-200 hover:bg-[#DDDDDD]"
+            onClick={handleMemoClick}
+          >
+            <p className="px-[10px]">메모하기</p>
+          </div>
+        </>
+      ) : null}
     </div>
   )
 }

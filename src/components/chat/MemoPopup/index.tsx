@@ -6,7 +6,7 @@ interface MemoPopupProps {
   messageId: number
   onClose: () => void
   chatRoomId: number;
-  memoContent: string | null;
+  memoContent?: string;
 }
 
 const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupProps) => {

@@ -7,7 +7,7 @@ import { ChatFormData, IChatMessag } from '@/types/chat.types'
 import { useQueryClient } from '@tanstack/react-query'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './chat.css'
 import toast from 'react-hot-toast'
@@ -58,12 +58,10 @@ const Chat = () => {
           message,
         }),
       )
-      queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
+      // queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
     } else {
       toast.error('Please enter your name and a message.')
     }
-
-
   }
 
 
