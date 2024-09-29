@@ -7,6 +7,8 @@ export interface IChatMessag {
     senderName: string
     timestamp: string
     imageUrl: string[]
+    answerId?: number
+    answer: string
   }[]
 }
 

@@ -20,6 +20,8 @@ interface ChatInputProps {
   chatRoomId: string
   setIsLoading: Dispatch<SetStateAction<boolean>>
   isLoading: boolean
+  isAnswering: boolean
+  setAnswer: Dispatch<SetStateAction<string>>
 }
 
 const ChatInput = ({
@@ -30,6 +32,8 @@ const ChatInput = ({
   chatRoomId,
   setIsLoading,
   isLoading,
+  isAnswering,
+  setAnswer,
 }: ChatInputProps) => {
   const queryClient = useQueryClient()
   const imageRef = useRef<HTMLInputElement>(null)
@@ -100,11 +104,21 @@ const ChatInput = ({
         onSubmit={handleSubmit(onSubmitMessage)}
       >
         <div className="w-full">
-          <input
-            type="text"
-            {...register('message', { required: true })}
-            className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
-          />
+          {isAnswering ? (
+            <input
+              type="text"
+              onChange={(e) => setAnswer(e.target.value)}
+              className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
+              placeholder="메시지를 입력하세요..."
+            />
+          ) : (
+            <input
+              type="text"
+              {...register('message', { required: true })}
+              className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
+              placeholder="답변을 입력하세요..."
+            />
+          )}
         </div>
         <div className="flex min-w-[120px] justify-center gap-2">
           <Image

@@ -14,7 +14,7 @@ const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
   const { isProfessor } = useUser()
 
   const { data: userData } = useUserQuery()
-  const { data: chatRoomInfo } = useChatRoomInfoQuery(Number(roomId))
+  const { data: chatRoomInfo } = useChatRoomInfoQuery(Number(roomId), isProfessor)
 
   const handleSettingClick = () => {
     setShowPopup(!showPopup);
