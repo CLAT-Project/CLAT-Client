@@ -4,7 +4,6 @@ import ChatInput from '@/components/chat/ChatInput'
 import Message from '@/components/chat/Message'
 import { connect, disconnect, sendMessage } from '@/libs/websocket'
 import { ChatFormData, IChatMessag } from '@/types/chat.types'
-import { useQueryClient } from '@tanstack/react-query'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -16,11 +15,12 @@ import { useUserClassQuery, useUserQuery } from '@/hooks/queries/useUserQuery'
 import { useChatMsgQuery, useChatRoomIsAuthQuery } from '@/hooks/queries/useChatQuery'
 import useUser from '@/hooks/common/useUser'
 import ChatAuth from '@/components/chat/ChatAuth'
+import { useQueryClient } from '@tanstack/react-query'
 
 const Chat = () => {
-  const queryClient = useQueryClient()
   const params = useParams<Params>()
   const { isProfessor } = useUser()
+  const queryClient = useQueryClient()
 
   const { register, handleSubmit, reset, watch } = useForm<ChatFormData>()
 
@@ -28,7 +28,9 @@ const Chat = () => {
   const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
-  const [isAnswering, setIsAnswering] = useState(false)
+  const [isAnswering, setIsAnswering] = useState(true)
+  const [answer, setAnswer] = useState('')
+  const [answerMessageId, setAnswerMessageId] = useState(0)
 
   const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
   const { data: userData } = useUserQuery()
@@ -39,14 +41,20 @@ const Chat = () => {
     classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId === params.slug),
   )?.courseName
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (isAnswering) {
-      sendMessage(`/pub/chat/answer`, JSON.stringify({
-        messageId: 4,
-        chatRoomId: 2,
-        answer: '정답입니다.',
-      }))
-      queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
+      try {
+        await sendMessage(`/pub/chat/answer`, JSON.stringify({
+          messageId: answerMessageId,
+          chatRoomId: params.slug,
+          answer,
+        }));
+        setAnswer('');
+        setAnswerMessageId(0);
+      } finally {
+        setIsAnswering(false);
+        queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
+      }
       return;
     }
 
@@ -80,14 +88,20 @@ const Chat = () => {
           return {
             courseName: '코스 이름',
             roomName: '룸 이름',
-            messageFileResponseDTOS: [newMessage],
+            messageFileResponseDTOS: [{
+              ...newMessage,
+              answer: '',
+            }],
           }
         }
         return {
           ...prevMessages,
           messageFileResponseDTOS: [
             ...prevMessages.messageFileResponseDTOS,
-            newMessage,
+            {
+              ...newMessage,
+              answer: '', // 기본 answer 값 추가
+            },
           ],
         }
       })
@@ -122,9 +136,12 @@ const Chat = () => {
         <div className="chat-content-height w-full overflow-y-scroll">
           <Message
             messages={messages}
-            isLoading={isLoading}
             userName={userData?.name}
             chatRoomId={Number(params.slug)}
+            setIsAnswering={setIsAnswering}
+            setAnswer={setAnswer}
+            setAnswerMessageId={setAnswerMessageId}
+            isAnswering={isAnswering}
           />
           <ChatInput
             handleSendMessage={handleSendMessage}
@@ -134,6 +151,8 @@ const Chat = () => {
             chatRoomId={params.slug}
             setIsLoading={setIsLoading}
             isLoading={isLoading}
+            isAnswering={isAnswering}
+            setAnswer={setAnswer}
           />
         </div>
         :

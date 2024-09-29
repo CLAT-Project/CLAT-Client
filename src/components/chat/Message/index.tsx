@@ -3,78 +3,37 @@ import { IChatMessag } from '@/types/chat.types'
 import { useEffect, useRef, useState } from 'react'
 import formatTime from '@/utils/time'
 import ImageLayout from '@/components/chat/ImageLayout'
-import MessagePopup from '@/components/chat/MessagePopup'
-import { useChatMemoListQuery, useChatMemoQuery } from '@/hooks/queries/useChatQuery'
 import './Message.css'
-import MemoPopup from '@/components/chat/MemoPopup'
+import MessageItem from '@/components/chat/MessageItem'
+import { sendMessage } from '@/libs/websocket'
 
 interface IMessageProps {
   messages?: IChatMessag
-  isLoading: boolean
   userName?: string
   chatRoomId: number;
+  setIsAnswering: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnswer: React.Dispatch<React.SetStateAction<string>>;
+  setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>;
+  isAnswering: boolean;
 }
 
-const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) => {
+const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, setAnswerMessageId, isAnswering }: IMessageProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [selectedMessageId, setSelectedMessageId] = useState<number | null>(
-    null,
-  )
-  const [memoMessageId, setMemoMessageId] = useState<number>();
   const [memoedMessageIds, setMemoedMessageIds] = useState<number[]>([])
-  const [showMemoPopup, setShowMemoPopup] = useState(false)
-  const [showMessagePopup, setShowMessagePopup] = useState(false)
-  const [memoContent, setMemoContent] = useState<{ [key: number]: string }>({})
 
-  const { data: chatMemo, refetch: refetchChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
-  const { data: chatMemoList } = useChatMemoListQuery(chatRoomId)
-
-  const onClickMemo = async (messageId: number) => {
-    setMemoMessageId(messageId);
-    setShowMemoPopup(true);
-    setShowMessagePopup(false);
-    await refetchChatMemo();
-    if (chatMemo) {
-      setMemoContent(prevContent => ({
-        ...prevContent,
-        [messageId]: chatMemo.memo
-      }));
-    }
-  }
+  const handleSwipe = (messageId: number, message: string) => {
+    setIsAnswering(true);
+    sendMessage(`/pub/chat/answer`, JSON.stringify({
+      messageId,
+      chatRoomId,
+      answer: message,
+    }));
+  };
 
   const getFileName = (url: string) => {
     return url.split('/').pop() || 'download.pdf'
   }
 
-  const handleMemoClick = (msgId: number) => {
-    setMemoMessageId(msgId);
-    setShowMemoPopup(true);
-    setShowMessagePopup(false);
-    setMemoContent('')
-  };
-
-
-  const handlePopupToggle = (msgId: number) => {
-    setSelectedMessageId((prevId) => (prevId === msgId ? null : msgId))
-    setShowMessagePopup(!showMessagePopup)
-  }
-
-  useEffect(() => {
-    if (messages && chatMemoList) {
-      const memoedIds = messages.messageFileResponseDTOS
-        .filter(msg => chatMemoList.some(memo => memo.messageId === msg.messageId))
-        .map(msg => msg.messageId)
-      setMemoedMessageIds(memoedIds)
-
-      const memoContents = Object.fromEntries(
-        chatMemoList.map(memo => [memo.messageId, memo.memo])
-      )
-
-
-      setMemoContent(memoContents)
-    }
-
-  }, [messages, chatMemoList])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -83,7 +42,6 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
   return (
     <div className="relative flex w-full p-[47px] pb-0" >
       <div className="flex h-full w-full flex-col gap-[31px]">
-        {isLoading && <div>Loading</div>}
         {messages?.messageFileResponseDTOS.map((msg) => {
           const isMessager = msg.senderName === userName
           const isMemoedMessage = memoedMessageIds.includes(msg.messageId)
@@ -97,54 +55,39 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
               <div className={`flex items-end gap-[10px] ${isMessager ? 'flex-row-reverse' : ''} w-full`}>
                 <div className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'} max-w-[70%]`}>
                   {msg.message && (
-                    <div
-                      className={`relative max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px] `}
-                      onClick={() => handlePopupToggle(msg.messageId)}
-                    >
-                      <div className="flex items-center">
-                        <p className="w-full break-words text-[16px]">
-                          {msg.message}
-                        </p>
-                      </div>
-
-                      {isMemoedMessage && (
-                        <div
-                          className={`absolute -top-[10px] bg-[#FF9900] w-[22px] h-[22px] rounded-full ${isMessager ? 'sender' : 'receiver'}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onClickMemo(msg.messageId);
-                          }}
-                        />
-                      )}
-
-                      {showMessagePopup && selectedMessageId === msg.messageId && (
-                        <div
-                          className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} z-50 h-[174px] w-[134px]`}
-                        >
-                          <MessagePopup
-                            message={msg.message}
-                            messageId={msg.messageId}
-                            onMemoClick={handleMemoClick}
-                            isMessager={isMessager}
-                          />
-                        </div>
-                      )}
-
-                      {showMemoPopup && memoMessageId === msg.messageId && (
-                        <div className={`absolute z-50 -top-1/2 w-[351px] h-[174px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} ml-2 mr-2`}>
-                          <MemoPopup
-                            messageId={msg.messageId}
-                            chatRoomId={chatRoomId}
-                            memoContent={memoContent?.[msg.messageId] || ''}
-                            onClose={() => {
-                              setShowMemoPopup(false)
-                            }}
-                          />
-                        </div>
-                      )}
+                    <div className={`flex items-end gap-2 ${isMessager ? 'flex-row-reverse' : ''}`}>
+                      <MessageItem
+                        msg={{ messageId: msg.messageId, message: msg.message, answerId: msg.answerId, answer: msg.answer }}
+                        isMessager={isMessager}
+                        handleSwipe={(messageId, message) => handleSwipe(Number(messageId), message)}
+                        isMemoedMessage={isMemoedMessage}
+                        chatRoomId={chatRoomId}
+                        setMemoedMessageIds={setMemoedMessageIds}
+                        messages={messages}
+                        setAnswering={setIsAnswering}
+                        setAnswer={setAnswer}
+                        setAnswerMessageId={setAnswerMessageId}
+                        isAnswering={isAnswering}
+                      />
+                      <p className="text-[14px] mb-4 text-[#959595]">
+                        {formatTime(msg.timestamp)}
+                      </p>
                     </div>
                   )}
-
+                  {msg.answerId && (
+                    <div className="relative mt-0 max-w-[600px] ml-10">
+                      {isMessager ? (
+                        <Image src="/images/png/answer2.png" alt="arrow" width={20} height={20} className="absolute  top-[-10px] right-[14px] w-7" />
+                      ) : (
+                        <Image src="/images/png/answer.png" alt="arrow" width={20} height={20} className="absolute top-[-10px] left-[-24px] w-7" />
+                      )}
+                      <div className={`relative bg-[#BBC0D2] rounded-[21px] mt-5 py-[10px] pl-[18px] pr-[33px] ${isMessager ? 'mr-12' : 'ml-4'}`}>
+                        <p className="text-[16px]">
+                          {msg.answer}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                   {msg?.imageUrl?.length > 0 &&
                     (msg?.imageUrl[0]?.slice(-3).toLowerCase() === 'pdf' ? (
                       <a
@@ -175,9 +118,6 @@ const Message = ({ messages, isLoading, userName, chatRoomId }: IMessageProps) =
                     ))}
 
                 </div>
-                <p className="w-18 text-[14px] text-[#959595]">
-                  {formatTime(msg.timestamp)}
-                </p>
               </div>
             </div>
           )
