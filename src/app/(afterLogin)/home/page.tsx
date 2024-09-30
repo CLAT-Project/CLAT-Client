@@ -66,28 +66,61 @@ const HomePage = () => {
   return (
     <div className="flex h-screen">
       {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <h2 className="mb-4 text-lg font-bold">새 채팅방 생성</h2>
-          <input
-            type="text"
-            placeholder="채팅방 이름"
-            value={chatRoomName}
-            onChange={(e) => setChatRoomName(e.target.value)}
-            className="mb-4 w-full rounded border p-2"
-          />
-          <input
-            type="text"
-            placeholder="수업 주차"
-            value={classWeek}
-            onChange={(e) => setClassWeek(e.target.value)}
-            className="mb-4 w-full rounded border p-2"
-          />
-          <button
-            onClick={handleCreateChatRoom}
-            className="w-full rounded bg-blue-500 p-2 text-white"
-          >
-            생성
-          </button>
+        <Modal>
+          <div className='w-[658px] h-[412px] border border-black rounded-[20px] bg-white'>
+            <div className="flex justify-end p-[18px]">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                type="button"
+                aria-label="close"
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className='flex flex-col gap-[34px] my-[64px]'>
+              <div className="flex justify-between items-center  mx-[122px]">
+                <p>채팅방 이름</p>
+                <input
+                  type="text"
+                  placeholder="채팅방 이름"
+                  value={chatRoomName}
+                  onChange={(e) => setChatRoomName(e.target.value)}
+                  className="  border-b border-black p-2"
+                />
+              </div>
+              <div className="flex justify-between items-center   mx-[122px]">
+                <p>수업 주차</p>
+                <input
+                  type="text"
+                  placeholder="수업 주차"
+                  value={classWeek}
+                  onChange={(e) => setClassWeek(e.target.value)}
+                  className="  border-b border-black p-2"
+                />
+              </div>
+            </div>
+            <div className="flex justify-center items-center">
+              <button
+                onClick={handleCreateChatRoom}
+                className="w-[155px] h-[40px] rounded bg-primary p-2 text-white"
+              >
+                채팅방 만들기
+              </button>
+            </div>
+          </div>
         </Modal>
       )}
 
