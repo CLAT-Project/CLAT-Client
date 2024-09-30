@@ -99,6 +99,12 @@ const postCheckId = async ({ username }: { username: string }) => {
 
   return data
 }
+const postLogout = async () => {
+  const { data } = await Api.post('/logout')
+
+  localStorage.removeItem('accessToken')
+  return data
+}
 const authApi = {
   postSingin,
   postSignup,
@@ -106,6 +112,7 @@ const authApi = {
   postVerifyNum,
   silentRefresh,
   postCheckId,
+  postLogout,
 }
 
 export default authApi
