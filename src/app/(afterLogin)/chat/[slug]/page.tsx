@@ -12,7 +12,10 @@ import './chat.css'
 import toast from 'react-hot-toast'
 import ChatHeader from '@/components/chat/ChatHeader'
 import { useUserClassQuery, useUserQuery } from '@/hooks/queries/useUserQuery'
-import { useChatMsgQuery, useChatRoomIsAuthQuery } from '@/hooks/queries/useChatQuery'
+import {
+  useChatMsgQuery,
+  useChatRoomIsAuthQuery,
+} from '@/hooks/queries/useChatQuery'
 import useUser from '@/hooks/common/useUser'
 import ChatAuth from '@/components/chat/ChatAuth'
 import { useQueryClient } from '@tanstack/react-query'
@@ -44,18 +47,21 @@ const Chat = () => {
   const handleSendMessage = async () => {
     if (isAnswering) {
       try {
-        await sendMessage(`/pub/chat/answer`, JSON.stringify({
-          messageId: answerMessageId,
-          chatRoomId: params.slug,
-          answer,
-        }));
-        setAnswer('');
-        setAnswerMessageId(0);
+        await sendMessage(
+          `/pub/chat/answer`,
+          JSON.stringify({
+            messageId: answerMessageId,
+            chatRoomId: params.slug,
+            answer,
+          }),
+        )
+        setAnswer('')
+        setAnswerMessageId(0)
       } finally {
-        setIsAnswering(false);
+        setIsAnswering(false)
         queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
       }
-      return;
+      return
     }
 
     if (message) {
@@ -72,7 +78,6 @@ const Chat = () => {
     }
   }
 
-
   useEffect(() => {
     connect(params.slug, (m) => {
       const content = JSON.parse(m.body)
@@ -88,10 +93,12 @@ const Chat = () => {
           return {
             courseName: '코스 이름',
             roomName: '룸 이름',
-            messageFileResponseDTOS: [{
-              ...newMessage,
-              answer: '',
-            }],
+            messageFileResponseDTOS: [
+              {
+                ...newMessage,
+                answer: '',
+              },
+            ],
           }
         }
         return {
@@ -132,7 +139,7 @@ const Chat = () => {
   return (
     <>
       <ChatHeader className={courseName || ''} roomId={params.slug} />
-      {isAuth || isProfessor ?
+      {isAuth || isProfessor ? (
         <div className="chat-content-height w-full overflow-y-scroll">
           <Message
             messages={messages}
@@ -155,9 +162,9 @@ const Chat = () => {
             setAnswer={setAnswer}
           />
         </div>
-        :
+      ) : (
         <ChatAuth chatRoomId={params.slug} setIsAuth={setIsAuth} />
-      }
+      )}
     </>
   )
 }

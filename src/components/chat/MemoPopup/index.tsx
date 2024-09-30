@@ -5,11 +5,16 @@ import { useEffect, useRef, useState } from 'react'
 interface MemoPopupProps {
   messageId: number
   onClose: () => void
-  chatRoomId: number;
-  memoContent?: string;
+  chatRoomId: number
+  memoContent?: string
 }
 
-const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupProps) => {
+const MemoPopup = ({
+  messageId,
+  onClose,
+  chatRoomId,
+  memoContent,
+}: MemoPopupProps) => {
   const [memo, setMemo] = useState(memoContent ?? '')
   const popupRef = useRef<HTMLDivElement>(null)
 
@@ -26,8 +31,8 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSaveMemo();
+      e.preventDefault()
+      handleSaveMemo()
     }
   }
 
@@ -37,7 +42,10 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
         onClose()
       }
     }
@@ -49,9 +57,12 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
   }, [onClose])
 
   return (
-    <div ref={popupRef} className="z-50 w-full h-full flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[21px] py-[20px] shadow-lg">
+    <div
+      ref={popupRef}
+      className="z-50 flex h-full w-full flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[21px] py-[20px] shadow-lg"
+    >
       <textarea
-        className="w-full h-full bg-[#F5F5F5] rounded-[10px]  focus:outline-none active:outline-none text-sm resize-none"
+        className="h-full w-full resize-none rounded-[10px] bg-[#F5F5F5] text-sm focus:outline-none active:outline-none"
         value={memo}
         onChange={(e) => setMemo(e.target.value)}
         onClick={handleTextareaClick}
@@ -59,10 +70,10 @@ const MemoPopup = ({ messageId, onClose, chatRoomId, memoContent }: MemoPopupPro
         maxLength={300}
         onKeyDown={handleKeyDown}
       />
-      <div className="text-right w-full text-sm text-gray-500">
+      <div className="w-full text-right text-sm text-gray-500">
         {memo?.length}/300
       </div>
-    </div >
+    </div>
   )
 }
 

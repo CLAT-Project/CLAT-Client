@@ -3,9 +3,7 @@ import React, { ChangeEvent, useRef } from 'react'
 interface IVerificationCodeInputProps {
   digits?: number
   onChange: (value: string, index: number) => void
-  onComplete?: (data: {
-    roomKey: string;
-  }) => void
+  onComplete?: (data: { roomKey: string }) => void
   roomKey?: string
 }
 
@@ -13,7 +11,7 @@ const VerificationCodeInput = ({
   digits = 6,
   onChange,
   onComplete,
-  roomKey
+  roomKey,
 }: IVerificationCodeInputProps) => {
   const inputsRef = useRef<HTMLInputElement[]>([])
 
@@ -33,8 +31,10 @@ const VerificationCodeInput = ({
     onChange(value, index)
   }
 
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ) => {
     if (e.key === 'Enter' && index === digits - 1) {
       onComplete?.({ roomKey: roomKey || '' })
     } else if (

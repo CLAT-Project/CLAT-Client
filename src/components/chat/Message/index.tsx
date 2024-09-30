@@ -10,37 +10,47 @@ import { sendMessage } from '@/libs/websocket'
 interface IMessageProps {
   messages?: IChatMessag
   userName?: string
-  chatRoomId: number;
-  setIsAnswering: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnswer: React.Dispatch<React.SetStateAction<string>>;
-  setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>;
-  isAnswering: boolean;
+  chatRoomId: number
+  setIsAnswering: React.Dispatch<React.SetStateAction<boolean>>
+  setAnswer: React.Dispatch<React.SetStateAction<string>>
+  setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>
+  isAnswering: boolean
 }
 
-const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, setAnswerMessageId, isAnswering }: IMessageProps) => {
+const Message = ({
+  messages,
+  userName,
+  chatRoomId,
+  setIsAnswering,
+  setAnswer,
+  setAnswerMessageId,
+  isAnswering,
+}: IMessageProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [memoedMessageIds, setMemoedMessageIds] = useState<number[]>([])
 
   const handleSwipe = (messageId: number, message: string) => {
-    setIsAnswering(true);
-    sendMessage(`/pub/chat/answer`, JSON.stringify({
-      messageId,
-      chatRoomId,
-      answer: message,
-    }));
-  };
+    setIsAnswering(true)
+    sendMessage(
+      `/pub/chat/answer`,
+      JSON.stringify({
+        messageId,
+        chatRoomId,
+        answer: message,
+      }),
+    )
+  }
 
   const getFileName = (url: string) => {
     return url.split('/').pop() || 'download.pdf'
   }
-
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
   return (
-    <div className="relative flex w-full p-[47px] pb-0" >
+    <div className="relative flex w-full p-[47px] pb-0">
       <div className="flex h-full w-full flex-col gap-[31px]">
         {messages?.messageFileResponseDTOS.map((msg) => {
           const isMessager = msg.senderName === userName
@@ -52,14 +62,27 @@ const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, se
               className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'} w-full`}
             >
               <p className="mb-[8px] mr-2">{msg.senderName}</p>
-              <div className={`flex items-end gap-[10px] ${isMessager ? 'flex-row-reverse' : ''} w-full`}>
-                <div className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'} max-w-[70%]`}>
+              <div
+                className={`flex items-end gap-[10px] ${isMessager ? 'flex-row-reverse' : ''} w-full`}
+              >
+                <div
+                  className={`flex flex-col ${isMessager ? 'items-end' : 'items-start'} max-w-[70%]`}
+                >
                   {msg.message && (
-                    <div className={`flex items-end gap-2 ${isMessager ? 'flex-row-reverse' : ''}`}>
+                    <div
+                      className={`flex items-end gap-2 ${isMessager ? 'flex-row-reverse' : ''}`}
+                    >
                       <MessageItem
-                        msg={{ messageId: msg.messageId, message: msg.message, answerId: msg.answerId, answer: msg.answer }}
+                        msg={{
+                          messageId: msg.messageId,
+                          message: msg.message,
+                          answerId: msg.answerId,
+                          answer: msg.answer,
+                        }}
                         isMessager={isMessager}
-                        handleSwipe={(messageId, message) => handleSwipe(Number(messageId), message)}
+                        handleSwipe={(messageId, message) =>
+                          handleSwipe(Number(messageId), message)
+                        }
                         isMemoedMessage={isMemoedMessage}
                         chatRoomId={chatRoomId}
                         setMemoedMessageIds={setMemoedMessageIds}
@@ -69,22 +92,34 @@ const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, se
                         setAnswerMessageId={setAnswerMessageId}
                         isAnswering={isAnswering}
                       />
-                      <p className="text-[14px] mb-4 text-[#959595]">
+                      <p className="mb-4 text-[14px] text-[#959595]">
                         {formatTime(msg.timestamp)}
                       </p>
                     </div>
                   )}
                   {msg.answerId && (
-                    <div className="relative mt-0 max-w-[600px] ml-10">
+                    <div className="relative ml-10 mt-0 max-w-[600px]">
                       {isMessager ? (
-                        <Image src="/images/png/answer2.png" alt="arrow" width={20} height={20} className="absolute  top-[-10px] right-[14px] w-7" />
+                        <Image
+                          src="/images/png/answer2.png"
+                          alt="arrow"
+                          width={20}
+                          height={20}
+                          className="absolute right-[14px] top-[-10px] w-7"
+                        />
                       ) : (
-                        <Image src="/images/png/answer.png" alt="arrow" width={20} height={20} className="absolute top-[-10px] left-[-24px] w-7" />
+                        <Image
+                          src="/images/png/answer.png"
+                          alt="arrow"
+                          width={20}
+                          height={20}
+                          className="absolute left-[-24px] top-[-10px] w-7"
+                        />
                       )}
-                      <div className={`relative bg-[#BBC0D2] rounded-[21px] mt-5 py-[10px] pl-[18px] pr-[33px] ${isMessager ? 'mr-12' : 'ml-4'}`}>
-                        <p className="text-[16px]">
-                          {msg.answer}
-                        </p>
+                      <div
+                        className={`relative mt-5 rounded-[21px] bg-[#BBC0D2] py-[10px] pl-[18px] pr-[33px] ${isMessager ? 'mr-12' : 'ml-4'}`}
+                      >
+                        <p className="text-[16px]">{msg.answer}</p>
                       </div>
                     </div>
                   )}
@@ -116,7 +151,6 @@ const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, se
                         <ImageLayout images={msg?.imageUrl} />
                       </div>
                     ))}
-
                 </div>
               </div>
             </div>
@@ -124,7 +158,7 @@ const Message = ({ messages, userName, chatRoomId, setIsAnswering, setAnswer, se
         })}
         <div ref={messagesEndRef} />
       </div>
-    </div >
+    </div>
   )
 }
 

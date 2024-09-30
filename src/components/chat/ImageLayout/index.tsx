@@ -19,10 +19,7 @@ const SingleImage = ({ image }: { image?: string }) => (
 const DoubleImage = ({ images }: { images?: string[] }) => (
   <div className="flex gap-[10px]">
     {images?.map((image) => (
-      <div
-        key={image}
-        className=" w-[150px] border border-[#363d5540]"
-      >
+      <div key={image} className="w-[150px] border border-[#363d5540]">
         <Image
           src={image || ''}
           alt="message"

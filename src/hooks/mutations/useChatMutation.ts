@@ -25,9 +25,9 @@ export const usePostChatMemoMutation = () => {
 
   return useMutation({
     mutationFn: (payload: {
-      messageId: number,
-      chatRoomId: number,
-      memo: string,
+      messageId: number
+      chatRoomId: number
+      memo: string
     }) => chatApi.postChatMemo(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chatMessage'] })
@@ -41,12 +41,13 @@ export const usePostChatMemoMutation = () => {
 }
 
 export const usePostChatAuthMutation = ({
-  onSuccessCallback
+  onSuccessCallback,
 }: {
   onSuccessCallback: () => void
 }) => {
   return useMutation({
-    mutationFn: (payload: { chatRoomId: number, roomKey: string }) => chatApi.postChatAuth(payload),
+    mutationFn: (payload: { chatRoomId: number; roomKey: string }) =>
+      chatApi.postChatAuth(payload),
     onSuccess: () => {
       onSuccessCallback()
     },

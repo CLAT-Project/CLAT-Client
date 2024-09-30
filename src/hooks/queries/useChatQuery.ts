@@ -10,7 +10,6 @@ export const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
   })
 }
 
-
 export const useChatMemoQuery = (messageId: number) => {
   return useQuery({
     queryKey: ['chatMemo', messageId],
@@ -24,11 +23,14 @@ export const useChatMemoQuery = (messageId: number) => {
 export const useChatMemoListQuery = (chatRoomId: number) => {
   return useQuery({
     queryKey: ['chatMemoList', chatRoomId],
-    queryFn: () => chatApi.getChatMemoList(chatRoomId)
+    queryFn: () => chatApi.getChatMemoList(chatRoomId),
   })
 }
 
-export const useChatRoomInfoQuery = (chatRoomId: number, isProfessor: boolean) => {
+export const useChatRoomInfoQuery = (
+  chatRoomId: number,
+  isProfessor: boolean,
+) => {
   return useQuery({
     queryKey: ['chatRoomInfo', chatRoomId],
     queryFn: () => chatApi.getChatRoomInfo(chatRoomId),
@@ -39,6 +41,6 @@ export const useChatRoomInfoQuery = (chatRoomId: number, isProfessor: boolean) =
 export const useChatRoomIsAuthQuery = (chatRoomId: number) => {
   return useQuery({
     queryKey: ['chatRoomIsAuth', chatRoomId],
-    queryFn: () => chatApi.getChatRoomIsAuth(chatRoomId)
+    queryFn: () => chatApi.getChatRoomIsAuth(chatRoomId),
   })
 }

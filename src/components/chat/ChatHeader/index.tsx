@@ -1,25 +1,27 @@
-import ChatRoomInfoPopup from '@/components/chat/ChatRoomInfoPopup';
-import useUser from '@/hooks/common/useUser';
-import { useChatRoomInfoQuery } from '@/hooks/queries/useChatQuery';
+import ChatRoomInfoPopup from '@/components/chat/ChatRoomInfoPopup'
+import useUser from '@/hooks/common/useUser'
+import { useChatRoomInfoQuery } from '@/hooks/queries/useChatQuery'
 import { useUserQuery } from '@/hooks/queries/useUserQuery'
 import Image from 'next/image'
-import { useState } from 'react';
+import { useState } from 'react'
 
 interface IChatHeaderProps {
   className: string
-  roomId: string;
+  roomId: string
 }
 const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false)
   const { isProfessor } = useUser()
 
   const { data: userData } = useUserQuery()
-  const { data: chatRoomInfo } = useChatRoomInfoQuery(Number(roomId), isProfessor)
+  const { data: chatRoomInfo } = useChatRoomInfoQuery(
+    Number(roomId),
+    isProfessor,
+  )
 
   const handleSettingClick = () => {
-    setShowPopup(!showPopup);
-  };
-
+    setShowPopup(!showPopup)
+  }
 
   return (
     <>
