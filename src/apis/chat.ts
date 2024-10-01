@@ -76,6 +76,16 @@ const getChatRoomIsAuth = async (chatRoomId: number) => {
 
   return response.data
 }
+
+const putModifyMemo = async (payload: {
+  messageId: number
+  memoContent: string
+}) => {
+  const response = await Api.put('/memo', payload)
+
+  return response.data
+}
+
 const chatApi = {
   getChatMessage,
   postChatImageFile,
@@ -86,6 +96,7 @@ const chatApi = {
   getChatMemoList,
   getChatRoomInfo,
   getChatRoomIsAuth,
+  putModifyMemo,
 }
 
 export default chatApi

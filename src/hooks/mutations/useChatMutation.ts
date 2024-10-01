@@ -53,3 +53,20 @@ export const usePostChatAuthMutation = ({
     },
   })
 }
+
+export const usePutModifyMemoMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (payload: { messageId: number; memoContent: string }) =>
+      chatApi.putModifyMemo(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['chatMemoList'] })
+      toast.success('메모 수정 성공')
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
+  })
+}
+
