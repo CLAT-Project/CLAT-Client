@@ -5,7 +5,6 @@ import formatTime from '@/utils/time'
 import ImageLayout from '@/components/chat/ImageLayout'
 import './Message.css'
 import MessageItem from '@/components/chat/MessageItem'
-import { sendMessage } from '@/libs/websocket'
 
 interface IMessageProps {
   messages?: IChatMessag
@@ -28,18 +27,6 @@ const Message = ({
 }: IMessageProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [memoedMessageIds, setMemoedMessageIds] = useState<number[]>([])
-
-  const handleSwipe = (messageId: number, message: string) => {
-    setIsAnswering(true)
-    sendMessage(
-      `/pub/chat/answer`,
-      JSON.stringify({
-        messageId,
-        chatRoomId,
-        answer: message,
-      }),
-    )
-  }
 
   const getFileName = (url: string) => {
     return url.split('/').pop() || 'download.pdf'
@@ -80,14 +67,12 @@ const Message = ({
                           answer: msg.answer,
                         }}
                         isMessager={isMessager}
-                        handleSwipe={(messageId, message) =>
-                          handleSwipe(Number(messageId), message)
-                        }
+
                         isMemoedMessage={isMemoedMessage}
                         chatRoomId={chatRoomId}
                         setMemoedMessageIds={setMemoedMessageIds}
                         messages={messages}
-                        setAnswering={setIsAnswering}
+                        setIsAnswering={setIsAnswering}
                         setAnswer={setAnswer}
                         setAnswerMessageId={setAnswerMessageId}
                         isAnswering={isAnswering}

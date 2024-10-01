@@ -1,14 +1,13 @@
+/* eslint-disable eqeqeq */
 import { useUserClassQuery } from '@/hooks/queries/useUserQuery'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 
-// TODO : 데이터 형식에 맞게 수정
 const ChatSidebar = () => {
-  const { data: userClassData } = useUserClassQuery()
+  const { data: userClassData } = useUserClassQuery({ term: '24-2' })
   const params = useParams<Params>()
   const router = useRouter()
-  // eslint-disable-next-line eqeqeq
   const matchingClass = userClassData?.find((classItem) =>
     classItem.chatRooms.find((chatRoom) => chatRoom.chatRoomId == params.slug),
   )
@@ -35,9 +34,8 @@ const ChatSidebar = () => {
               const isActive = item.roomId == params.slug
               return (
                 <div
-                  className={`relative flex h-[32px] w-[187px] cursor-pointer items-center justify-center rounded-18 ${
-                    isActive ? 'bg-white text-primary' : 'bg-white text-black'
-                  }`}
+                  className={`relative flex h-[32px] w-[187px] cursor-pointer items-center justify-center rounded-18 ${isActive ? 'bg-white text-primary' : 'bg-white text-black'
+                    }`}
                   key={item.roomId}
                   onClick={() => handleWeekClick(item.roomId)}
                 >

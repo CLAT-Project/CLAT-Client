@@ -25,7 +25,7 @@ const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
 
   return (
     <>
-      <div className="flex h-[69px] w-full items-center justify-between bg-white px-[40px] py-[14px]">
+      <div className="flex h-[69px] w-full items-center justify-between bg-white px-[40px] py-[14px] -z-10">
         <div className="flex items-center gap-[10px]">
           <Image src="/images/svg/logo.svg" alt="logo" width={41} height={41} />
           <div>
@@ -61,7 +61,6 @@ const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
       {showPopup && (
         <ChatRoomInfoPopup
           chatRoomInfo={chatRoomInfo}
-          onClose={() => setShowPopup(false)}
         />
       )}
     </>

@@ -18,11 +18,10 @@ interface IMessageItemProps {
   }
   messages: IChatMessag
   isMessager: boolean
-  handleSwipe: (messageId: number, message: string) => void
   isMemoedMessage: boolean
   chatRoomId: number
   setMemoedMessageIds: React.Dispatch<React.SetStateAction<number[]>>
-  setAnswering: React.Dispatch<React.SetStateAction<boolean>>
+  setIsAnswering: React.Dispatch<React.SetStateAction<boolean>>
   setAnswer: React.Dispatch<React.SetStateAction<string>>
   setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>
   isAnswering: boolean
@@ -31,18 +30,19 @@ interface IMessageItemProps {
 const MessageItem = ({
   msg,
   isMessager,
-  handleSwipe,
   isMemoedMessage,
   chatRoomId,
   setMemoedMessageIds,
   messages,
-  setAnswering,
+  setIsAnswering,
   setAnswer,
   setAnswerMessageId,
   isAnswering,
 }: IMessageItemProps) => {
   const x = useMotionValue(0)
-  const background = useTransform(x, [0, 50], ['#fff', '#c8d5ec'])
+  const background = useTransform(x, [0, 50], ['#fff', '#c8d5ec'], {
+    clamp: false,
+  })
 
   const [isDragging, setIsDragging] = useState(false)
   const [memoMessageId, setMemoMessageId] = useState<number>()
@@ -58,8 +58,10 @@ const MessageItem = ({
   const { data: chatMemoList } = useChatMemoListQuery(chatRoomId)
 
   const handlePopupToggle = (msgId: number) => {
-    setSelectedMessageId((prevId) => (prevId === msgId ? null : msgId))
-    setShowMessagePopup(!showMessagePopup)
+    if (!isDragging) {
+      setSelectedMessageId((prevId) => (prevId === msgId ? null : msgId))
+      setShowMessagePopup(!showMessagePopup)
+    }
   }
 
   const onClickMemo = async (messageId: number) => {
@@ -89,6 +91,16 @@ const MessageItem = ({
   }, [isAnswering, x])
 
   useEffect(() => {
+    const unsubscribe = x.onChange((value) => {
+      if (value === 0 && isAnswering) {
+        setIsAnswering(false)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [x, setIsAnswering, isAnswering])
+
+  useEffect(() => {
     if (messages && chatMemoList) {
       const memoedIds = messages.messageFileResponseDTOS
         .filter((msg) =>
@@ -108,7 +120,7 @@ const MessageItem = ({
   return (
     <div className="relative mb-4">
       <motion.div
-        className={`relative z-50 max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]`}
+        className="relative z-10 max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]"
         onClick={() => handlePopupToggle(Number(msg.messageId))}
         style={{ x, background }}
         drag="x"
@@ -117,7 +129,7 @@ const MessageItem = ({
         onDragStart={() => setIsDragging(true)}
         onDrag={(event, info) => {
           if (isDragging && info.offset.x < 50 && !isMessager) {
-            setAnswering(true)
+            setIsAnswering(true)
             setAnswer(msg.message) // 메시지 내용을 답변으로 설정
             setAnswerMessageId(msg.messageId) // 메시지 ID를 답변 메시지 ID로 설정
           }
@@ -126,13 +138,10 @@ const MessageItem = ({
           setIsDragging(false)
           if (info.offset.x < 50 && !isMessager) {
             if (isAnswering) {
-              handleSwipe(msg.messageId, msg.message)
-              x.set(50) // 드래그된 위치에 고정
+              x.set(50)
             } else {
-              x.set(0) // isAnswering이 false이면 원위치로
+              x.set(0)
             }
-          } else {
-            x.set(0) // 충분히 드래그되지 않았다면 원위치로
           }
         }}
       >
@@ -152,7 +161,7 @@ const MessageItem = ({
 
         {showMessagePopup && selectedMessageId === msg.messageId && (
           <div
-            className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} z-50 h-[174px] w-[134px]`}
+            className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} z-[99999] h-[174px] w-[134px]`}
           >
             <MessagePopup
               message={msg.message}

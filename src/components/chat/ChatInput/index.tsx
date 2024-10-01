@@ -109,14 +109,14 @@ const ChatInput = ({
               type="text"
               onChange={(e) => setAnswer(e.target.value)}
               className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
-              placeholder="메시지를 입력하세요..."
+              placeholder="답변를 입력하세요..."
             />
           ) : (
             <input
               type="text"
               {...register('message', { required: true })}
               className="h-[38px] w-full rounded-[21px] bg-[#EFEFEF] px-5"
-              placeholder="답변을 입력하세요..."
+              placeholder="메세지를 입력하세요..."
             />
           )}
         </div>

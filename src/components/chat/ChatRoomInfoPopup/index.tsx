@@ -3,15 +3,13 @@ import React from 'react'
 
 interface ChatRoomInfoPopupProps {
   chatRoomInfo?: IChatRoomInfoResponse
-  onClose: () => void
 }
 
 const ChatRoomInfoPopup = ({
   chatRoomInfo,
-  onClose,
 }: ChatRoomInfoPopupProps) => {
   return (
-    <div className="fixed right-10 top-20 z-10 flex h-[665px] w-[577px] flex-col justify-between rounded-[20px] border border-[#7889A9] bg-white px-[60px] pb-[35px] pt-[79px]">
+    <div className="fixed right-10 top-20  flex h-[665px] w-[577px] flex-col justify-between rounded-[20px] border border-[#7889A9] bg-white px-[60px] pb-[35px] pt-[79px] z-30">
       <div className="flex flex-col gap-[60px]">
         <div className="flex">
           <p className="w-[190px]">채팅방 이름</p>

@@ -31,7 +31,7 @@ const MessagePopup = ({
   }
 
   return (
-    <div className="relative z-50 flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg">
+    <div className="relative  flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg">
       <div className="flex w-full items-center justify-center gap-[4px]">
         <Image
           src="/images/png/heart.png"
