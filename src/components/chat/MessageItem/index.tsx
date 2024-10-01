@@ -120,7 +120,7 @@ const MessageItem = ({
   return (
     <div className="relative mb-4">
       <motion.div
-        className="relative z-10 max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]"
+        className="relative z-10 max-w-[600px] min-h-[47px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]"
         onClick={() => handlePopupToggle(Number(msg.messageId))}
         style={{ x, background }}
         drag="x"

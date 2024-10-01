@@ -77,6 +77,41 @@ const Message = ({
                         setAnswerMessageId={setAnswerMessageId}
                         isAnswering={isAnswering}
                       />
+                      <div className='mb-4 flex gap-2'>
+                        <div className='w-[82px] h-[36px] bg-[#efefef] rounded-[20px]'>
+                          <div className='flex items-center justify-center h-full gap-2'>
+                            <Image
+                              src="/images/png/heart.png"
+                              alt="heart"
+                              width={26}
+                              height={26}
+                            />
+                            <p className='text-[18px]'>25</p>
+                          </div>
+                        </div>
+                        <div className='w-[82px] h-[36px] bg-[#efefef] rounded-[20px]'>
+                          <div className='flex items-center justify-center h-full gap-2'>
+                            <Image
+                              src="/images/png/crying.png"
+                              alt="heart"
+                              width={26}
+                              height={26}
+                            />
+                            <p className='text-[18px]'>12</p>
+                          </div>
+                        </div>
+                        <div className='w-[82px] h-[36px] bg-[#efefef] rounded-[20px]'>
+                          <div className='flex items-center justify-center h-full gap-2'>
+                            <Image
+                              src="/images/png/good.png"
+                              alt="heart"
+                              width={26}
+                              height={26}
+                            />
+                            <p className='text-[18px]'>10</p>
+                          </div>
+                        </div>
+                      </div>
                       <p className="mb-4 text-[14px] text-[#959595]">
                         {formatTime(msg.timestamp)}
                       </p>
