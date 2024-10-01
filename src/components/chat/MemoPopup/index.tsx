@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import { usePostChatMemoMutation } from '@/hooks/mutations/useChatMutation'
+import { usePostChatMemoMutation, usePutModifyMemoMutation } from '@/hooks/mutations/useChatMutation'
 import { useEffect, useRef, useState } from 'react'
 
 interface MemoPopupProps {
@@ -29,10 +29,20 @@ const MemoPopup = ({
     onClose()
   }
 
+  const modifyMemoMutation = usePutModifyMemoMutation()
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSaveMemo()
+
+      if (memoContent) {
+        modifyMemoMutation.mutate({
+          messageId: Number(messageId),
+          memoContent: memo,
+        })
+      } else {
+        handleSaveMemo()
+      }
     }
   }
 

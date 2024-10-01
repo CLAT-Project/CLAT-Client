@@ -1,6 +1,6 @@
 import VerificationCodeInput from '@/components/signup/VerifyForm/VerificationCodeInput'
 import { usePostChatAuthMutation } from '@/hooks/mutations/useChatMutation'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 interface IChatAuthProps {
@@ -12,11 +12,8 @@ const ChatAuth = ({ chatRoomId, setIsAuth }: IChatAuthProps) => {
 
   const postChatAuthMutation = usePostChatAuthMutation({
     onSuccessCallback: () => {
-      setIsAuth(true)
-      toast.success('인증에 성공했습니다.')
     },
   })
-
   const onChange = (value: string, index: number) => {
     setRoomKey((prevKey) => {
       const newKey = prevKey.split('')
@@ -32,6 +29,13 @@ const ChatAuth = ({ chatRoomId, setIsAuth }: IChatAuthProps) => {
       toast.error('올바른 4자리 숫자를 입력해주세요.')
     }
   }
+
+  useEffect(() => {
+    if (postChatAuthMutation.data?.flag) {
+      setIsAuth(true)
+      toast.success('인증에 성공했습니다.')
+    }
+  }, [postChatAuthMutation.data])
 
   return (
     <div className="flex h-[90vh] flex-col items-center justify-center">
