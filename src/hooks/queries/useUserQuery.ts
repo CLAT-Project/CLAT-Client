@@ -1,10 +1,10 @@
 import userApi from '@/apis/user'
 import { useQuery } from '@tanstack/react-query'
 
-export const useUserClassQuery = () => {
+export const useUserClassQuery = ({ term }: { term: string }) => {
   return useQuery({
-    queryKey: ['userClass'],
-    queryFn: userApi.getUserClass,
+    queryKey: ['userClass', term],
+    queryFn: () => userApi.getUserClass({ term }),
   })
 }
 

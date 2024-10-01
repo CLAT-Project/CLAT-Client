@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import authApi from '@/apis/auth'
+import { reconnectWithNewToken } from '@/libs/websocket'
 import axios, { InternalAxiosRequestConfig } from 'axios'
 
 export const Api = axios.create({
@@ -77,6 +78,14 @@ Api.interceptors.response.use(
       }
       config.headers.access = `${accessToken}`
     }
+
+    // 토큰 재발급 후 WebSocket 재연결
+      const currentRoomId = localStorage.getItem('currentRoomId')
+      if (currentRoomId) {
+        reconnectWithNewToken(currentRoomId, (message) => {
+          console.log('Received message:ㅇㅁㄴㅇ', message)
+        })
+      }
 
     return axios(config) // 재요청
   },

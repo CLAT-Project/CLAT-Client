@@ -2,10 +2,10 @@ import { Api } from '@/apis/axios'
 import { IUserClassResponse } from '@/types/chat.types'
 import { IUserResponse } from '@/types/user.type'
 
-const getUserClass = async () => {
+const getUserClass = async ({ term }: { term: string }) => {
   const response = await Api.get<IUserClassResponse[]>('/home', {
     params: {
-      term: '24-2',
+      term,
     },
   })
 

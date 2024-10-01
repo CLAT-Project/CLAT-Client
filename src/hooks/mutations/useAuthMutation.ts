@@ -1,5 +1,6 @@
 import authApi from '@/apis/auth'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
 // TODO : 인증번호 유효 입력 기간 설정
@@ -75,5 +76,18 @@ export const useIdCheckMutation = () => {
   return useMutation({
     mutationFn: ({ username }: { username: string }) =>
       authApi.postCheckId({ username }),
+  })
+}
+
+export const useLogoutMutation = () => {
+  const router = useRouter()
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => authApi.postLogout(),
+    onSuccess: () => {
+      router.push('/login')
+      queryClient.clear()
+    },
   })
 }

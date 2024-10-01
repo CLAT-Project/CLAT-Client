@@ -10,25 +10,29 @@ export const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
   })
 }
 
-
 export const useChatMemoQuery = (messageId: number) => {
   return useQuery({
     queryKey: ['chatMemo', messageId],
     queryFn: () => chatApi.getChatMemo(messageId),
     enabled: !!messageId,
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
   })
 }
 
 export const useChatMemoListQuery = (chatRoomId: number) => {
   return useQuery({
     queryKey: ['chatMemoList', chatRoomId],
-    queryFn: () => chatApi.getChatMemoList(chatRoomId)
+    queryFn: () => chatApi.getChatMemoList(chatRoomId),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
   })
 }
 
-export const useChatRoomInfoQuery = (chatRoomId: number, isProfessor: boolean) => {
+export const useChatRoomInfoQuery = (
+  chatRoomId: number,
+  isProfessor: boolean,
+) => {
   return useQuery({
     queryKey: ['chatRoomInfo', chatRoomId],
     queryFn: () => chatApi.getChatRoomInfo(chatRoomId),
@@ -39,6 +43,6 @@ export const useChatRoomInfoQuery = (chatRoomId: number, isProfessor: boolean) =
 export const useChatRoomIsAuthQuery = (chatRoomId: number) => {
   return useQuery({
     queryKey: ['chatRoomIsAuth', chatRoomId],
-    queryFn: () => chatApi.getChatRoomIsAuth(chatRoomId)
+    queryFn: () => chatApi.getChatRoomIsAuth(chatRoomId),
   })
 }

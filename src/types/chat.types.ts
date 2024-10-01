@@ -43,8 +43,8 @@ export interface IChatMemoResponse {
 
 export interface IChatRoomInfoResponse {
   courseName: string
-  chatRoomName: string;
-  creationTime: string;
+  chatRoomName: string
+  creationTime: string
   roomKey: number
   week: number
 }

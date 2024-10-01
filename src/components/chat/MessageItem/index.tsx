@@ -1,93 +1,117 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import MemoPopup from '@/components/chat/MemoPopup';
-import MessagePopup from '@/components/chat/MessagePopup';
-import { useChatMemoListQuery, useChatMemoQuery } from '@/hooks/queries/useChatQuery';
-import { IChatMessag } from '@/types/chat.types';
+import MemoPopup from '@/components/chat/MemoPopup'
+import MessagePopup from '@/components/chat/MessagePopup'
+import {
+  useChatMemoListQuery,
+  useChatMemoQuery,
+} from '@/hooks/queries/useChatQuery'
+import { IChatMessag } from '@/types/chat.types'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
 interface IMessageItemProps {
   msg: {
-    messageId: number;
-    message: string;
-    answerId?: number;
-    answer: string;
-  };
-  messages: IChatMessag;
-  isMessager: boolean;
-  handleSwipe: (messageId: number, message: string) => void
-  isMemoedMessage: boolean;
-  chatRoomId: number;
-  setMemoedMessageIds: React.Dispatch<React.SetStateAction<number[]>>;
-  setAnswering: React.Dispatch<React.SetStateAction<boolean>>;
-  setAnswer: React.Dispatch<React.SetStateAction<string>>;
-  setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>;
-  isAnswering: boolean;
+    messageId: number
+    message: string
+    answerId?: number
+    answer: string
+  }
+  messages: IChatMessag
+  isMessager: boolean
+  isMemoedMessage: boolean
+  chatRoomId: number
+  setMemoedMessageIds: React.Dispatch<React.SetStateAction<number[]>>
+  setIsAnswering: React.Dispatch<React.SetStateAction<boolean>>
+  setAnswer: React.Dispatch<React.SetStateAction<string>>
+  setAnswerMessageId: React.Dispatch<React.SetStateAction<number>>
+  isAnswering: boolean
 }
 
-const MessageItem = ({ msg, isMessager, handleSwipe, isMemoedMessage, chatRoomId, setMemoedMessageIds, messages, setAnswering, setAnswer, setAnswerMessageId, isAnswering }: IMessageItemProps) => {
-  const x = useMotionValue(0);
-  const background = useTransform(
-    x,
-    [0, 50],
-    ["#fff", "#c8d5ec"]
-  );
+const MessageItem = ({
+  msg,
+  isMessager,
+  isMemoedMessage,
+  chatRoomId,
+  setMemoedMessageIds,
+  messages,
+  setIsAnswering,
+  setAnswer,
+  setAnswerMessageId,
+  isAnswering,
+}: IMessageItemProps) => {
+  const x = useMotionValue(0)
+  const background = useTransform(x, [0, 50], ['#fff', '#c8d5ec'], {
+    clamp: false,
+  })
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [memoMessageId, setMemoMessageId] = useState<number>();
+  const [isDragging, setIsDragging] = useState(false)
+  const [memoMessageId, setMemoMessageId] = useState<number>()
   const [memoContent, setMemoContent] = useState<{ [key: number]: string }>({})
   const [showMemoPopup, setShowMemoPopup] = useState(false)
   const [showMessagePopup, setShowMessagePopup] = useState(false)
   const [selectedMessageId, setSelectedMessageId] = useState<number | null>(
     null,
   )
-  const { data: chatMemo, refetch: refetchChatMemo } = useChatMemoQuery(memoMessageId ?? 0)
+  const { data: chatMemo, refetch: refetchChatMemo } = useChatMemoQuery(
+    memoMessageId ?? 0,
+  )
   const { data: chatMemoList } = useChatMemoListQuery(chatRoomId)
 
   const handlePopupToggle = (msgId: number) => {
-    setSelectedMessageId((prevId) => (prevId === msgId ? null : msgId))
-    setShowMessagePopup(!showMessagePopup)
+    if (!isDragging) {
+      setSelectedMessageId((prevId) => (prevId === msgId ? null : msgId))
+      setShowMessagePopup(!showMessagePopup)
+    }
   }
 
   const onClickMemo = async (messageId: number) => {
-    setMemoMessageId(messageId);
-    setShowMemoPopup(true);
-    setShowMessagePopup(false);
-    await refetchChatMemo();
+    setMemoMessageId(messageId)
+    setShowMemoPopup(true)
+    setShowMessagePopup(false)
+    await refetchChatMemo()
     if (chatMemo) {
-      setMemoContent(prevContent => ({
+      setMemoContent((prevContent) => ({
         ...prevContent,
-        [messageId]: chatMemo.memo
-      }));
+        [messageId]: chatMemo.memo,
+      }))
     }
   }
 
-
   const handleMemoClick = (msgId: number) => {
-    setMemoMessageId(msgId);
-    setShowMemoPopup(true);
-    setShowMessagePopup(false);
+    setMemoMessageId(msgId)
+    setShowMemoPopup(true)
+    setShowMessagePopup(false)
     setMemoContent('')
-  };
+  }
 
   useEffect(() => {
     if (!isAnswering) {
-      x.set(0);
+      x.set(0)
     }
-  }, [isAnswering, x]);
+  }, [isAnswering, x])
 
+  useEffect(() => {
+    const unsubscribe = x.onChange((value) => {
+      if (value === 0 && isAnswering) {
+        setIsAnswering(false)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [x, setIsAnswering, isAnswering])
 
   useEffect(() => {
     if (messages && chatMemoList) {
       const memoedIds = messages.messageFileResponseDTOS
-        .filter(msg => chatMemoList.some(memo => memo.messageId === msg.messageId))
-        .map(msg => msg.messageId)
+        .filter((msg) =>
+          chatMemoList.some((memo) => memo.messageId === msg.messageId),
+        )
+        .map((msg) => msg.messageId)
       setMemoedMessageIds(memoedIds)
 
       const memoContents = Object.fromEntries(
-        chatMemoList.map(memo => [memo.messageId, memo.memo])
+        chatMemoList.map((memo) => [memo.messageId, memo.memo]),
       )
-
 
       setMemoContent(memoContents)
     }
@@ -96,7 +120,7 @@ const MessageItem = ({ msg, isMessager, handleSwipe, isMemoedMessage, chatRoomId
   return (
     <div className="relative mb-4">
       <motion.div
-        className={`relative max-w-[600px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px] z-50 `}
+        className="relative z-10 max-w-[600px] min-h-[47px] cursor-pointer rounded-[21px] border border-[#363D55] py-[10px] pl-[18px] pr-[33px]"
         onClick={() => handlePopupToggle(Number(msg.messageId))}
         style={{ x, background }}
         drag="x"
@@ -105,44 +129,39 @@ const MessageItem = ({ msg, isMessager, handleSwipe, isMemoedMessage, chatRoomId
         onDragStart={() => setIsDragging(true)}
         onDrag={(event, info) => {
           if (isDragging && info.offset.x < 50 && !isMessager) {
-            setAnswering(true);
-            setAnswer(msg.message); // 메시지 내용을 답변으로 설정
-            setAnswerMessageId(msg.messageId); // 메시지 ID를 답변 메시지 ID로 설정
+            setIsAnswering(true)
+            setAnswer(msg.message) // 메시지 내용을 답변으로 설정
+            setAnswerMessageId(msg.messageId) // 메시지 ID를 답변 메시지 ID로 설정
           }
         }}
         onDragEnd={(event, info) => {
-          setIsDragging(false);
+          setIsDragging(false)
           if (info.offset.x < 50 && !isMessager) {
             if (isAnswering) {
-              handleSwipe(msg.messageId, msg.message);
-              x.set(50); // 드래그된 위치에 고정
+              x.set(50)
             } else {
-              x.set(0); // isAnswering이 false이면 원위치로
+              x.set(0)
             }
-          } else {
-            x.set(0); // 충분히 드래그되지 않았다면 원위치로
           }
         }}
       >
         <div className="flex items-center">
-          <p className="w-full break-words text-[16px]">
-            {msg.message}
-          </p>
+          <p className="w-full break-words text-[16px]">{msg.message}</p>
         </div>
 
         {isMemoedMessage && (
           <div
-            className={`absolute -top-[10px] bg-[#FF9900] w-[22px] h-[22px] rounded-full ${isMessager ? 'sender' : 'receiver'}`}
+            className={`absolute -top-[10px] h-[22px] w-[22px] rounded-full bg-[#FF9900] ${isMessager ? 'sender' : 'receiver'}`}
             onClick={(e) => {
-              e.stopPropagation();
-              onClickMemo(msg.messageId);
+              e.stopPropagation()
+              onClickMemo(msg.messageId)
             }}
           />
         )}
 
         {showMessagePopup && selectedMessageId === msg.messageId && (
           <div
-            className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} z-50 h-[174px] w-[134px]`}
+            className={`absolute -top-[110px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} z-[99999] h-[174px] w-[134px]`}
           >
             <MessagePopup
               message={msg.message}
@@ -154,7 +173,9 @@ const MessageItem = ({ msg, isMessager, handleSwipe, isMemoedMessage, chatRoomId
         )}
 
         {showMemoPopup && memoMessageId === msg.messageId && (
-          <div className={`absolute z-50 -top-1/2 w-[351px] h-[174px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} ml-2 mr-2`}>
+          <div
+            className={`absolute -top-1/2 z-50 h-[174px] w-[351px] ${isMessager ? 'right-[106%]' : 'left-[106%]'} ml-2 mr-2`}
+          >
             <MemoPopup
               messageId={msg.messageId}
               chatRoomId={chatRoomId}
@@ -167,7 +188,7 @@ const MessageItem = ({ msg, isMessager, handleSwipe, isMemoedMessage, chatRoomId
         )}
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default MessageItem;
+export default MessageItem

@@ -1,29 +1,31 @@
-import ChatRoomInfoPopup from '@/components/chat/ChatRoomInfoPopup';
-import useUser from '@/hooks/common/useUser';
-import { useChatRoomInfoQuery } from '@/hooks/queries/useChatQuery';
+import ChatRoomInfoPopup from '@/components/chat/ChatRoomInfoPopup'
+import useUser from '@/hooks/common/useUser'
+import { useChatRoomInfoQuery } from '@/hooks/queries/useChatQuery'
 import { useUserQuery } from '@/hooks/queries/useUserQuery'
 import Image from 'next/image'
-import { useState } from 'react';
+import { useState } from 'react'
 
 interface IChatHeaderProps {
   className: string
-  roomId: string;
+  roomId: string
 }
 const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false)
   const { isProfessor } = useUser()
 
   const { data: userData } = useUserQuery()
-  const { data: chatRoomInfo } = useChatRoomInfoQuery(Number(roomId), isProfessor)
+  const { data: chatRoomInfo } = useChatRoomInfoQuery(
+    Number(roomId),
+    isProfessor,
+  )
 
   const handleSettingClick = () => {
-    setShowPopup(!showPopup);
-  };
-
+    setShowPopup(!showPopup)
+  }
 
   return (
     <>
-      <div className="flex h-[69px] w-full items-center justify-between bg-white px-[40px] py-[14px]">
+      <div className="flex h-[69px] w-full items-center justify-between bg-white px-[40px] py-[14px] -z-10">
         <div className="flex items-center gap-[10px]">
           <Image src="/images/svg/logo.svg" alt="logo" width={41} height={41} />
           <div>
@@ -59,7 +61,6 @@ const ChatHeader = ({ className, roomId }: IChatHeaderProps) => {
       {showPopup && (
         <ChatRoomInfoPopup
           chatRoomInfo={chatRoomInfo}
-          onClose={() => setShowPopup(false)}
         />
       )}
     </>

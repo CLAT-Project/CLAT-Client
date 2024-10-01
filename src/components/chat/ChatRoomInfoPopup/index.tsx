@@ -1,15 +1,16 @@
-import { IChatRoomInfoResponse } from '@/types/chat.types';
-import React from 'react';
+import { IChatRoomInfoResponse } from '@/types/chat.types'
+import React from 'react'
 
 interface ChatRoomInfoPopupProps {
-  chatRoomInfo?: IChatRoomInfoResponse;
-  onClose: () => void;
+  chatRoomInfo?: IChatRoomInfoResponse
 }
 
-const ChatRoomInfoPopup = ({ chatRoomInfo, onClose }: ChatRoomInfoPopupProps) => {
+const ChatRoomInfoPopup = ({
+  chatRoomInfo,
+}: ChatRoomInfoPopupProps) => {
   return (
-    <div className="fixed top-20 right-10 w-[577px] h-[665px] border border-[#7889A9] bg-white z-10 rounded-[20px] pt-[79px] pb-[35px] px-[60px] flex flex-col justify-between">
-      <div className="flex flex-col gap-[60px] ">
+    <div className="fixed right-10 top-20  flex h-[665px] w-[577px] flex-col justify-between rounded-[20px] border border-[#7889A9] bg-white px-[60px] pb-[35px] pt-[79px] z-30">
+      <div className="flex flex-col gap-[60px]">
         <div className="flex">
           <p className="w-[190px]">채팅방 이름</p>
           <p>{chatRoomInfo?.chatRoomName}</p>
@@ -27,14 +28,19 @@ const ChatRoomInfoPopup = ({ chatRoomInfo, onClose }: ChatRoomInfoPopupProps) =>
           <p>2021.06.28 / 14:00</p>
         </div>
         <div>
-          <p className='text-red-600'>채팅방 삭제</p>
+          <p className="text-red-600">채팅방 삭제</p>
         </div>
-      </div >
-      <div className='flex justify-end'>
-        <button type='button' className='w-[105px] h-[47px] rounded-[14px] border border-primary text-primary'>수정 완료</button>
       </div>
-    </div >
-  );
-};
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="h-[47px] w-[105px] rounded-[14px] border border-primary text-primary"
+        >
+          수정 완료
+        </button>
+      </div>
+    </div>
+  )
+}
 
-export default ChatRoomInfoPopup;
+export default ChatRoomInfoPopup

@@ -21,6 +21,9 @@ const createClient = () => {
     debug: (str) => {
       console.log(new Date(), str)
     },
+    onStompError: (frame) => {
+      console.log('STOMP Error: ', frame)
+    },
   })
 }
 
@@ -71,5 +74,6 @@ export const reconnectWithNewToken = (
   onMessage: (message: IMessage) => void,
 ) => {
   disconnect()
+  console.log('reconnectWithNewToken')
   initializeAndConnect(roomId, onMessage)
 }

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useLogoutMutation } from '@/hooks/mutations/useAuthMutation'
+import { useUserQuery } from '@/hooks/queries/useUserQuery'
 
 interface Notification {
   id: number
@@ -27,6 +29,9 @@ const ProfilePanel = ({
     { id: 7, message: 'at 3 PM', read: false },
   ])
 
+  const logoutMutation = useLogoutMutation()
+  const { data: userData } = useUserQuery()
+
   return (
     <div
       className={`fixed right-0 top-0 h-3/4 w-1/4 transform bg-slate-500 bg-opacity-70 p-4 text-white ${isOpen ? 'rounded-l-lg-costum translate-x-0' : 'translate-x-full'} transition-transform duration-300`}
@@ -39,10 +44,11 @@ const ProfilePanel = ({
       <div className="mb-4 flex items-center justify-end border-b border-white pb-4">
         <div className="mr-4 text-right">
           <h6 className="text-xs">어서오세요!</h6>
-          <h5 className="mt-1 text-sm">username님</h5>
+          <h5 className="mt-1 text-sm">{userData?.name}님</h5>
           <button
+            type="button"
             className="mt-1 text-xs"
-            onClick={() => console.log('Logout')}
+            onClick={() => logoutMutation.mutate()}
           >
             Logout
           </button>

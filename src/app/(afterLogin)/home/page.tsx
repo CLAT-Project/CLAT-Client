@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/button-has-type */
@@ -19,7 +20,10 @@ const HomePage = () => {
   const router = useRouter()
 
   const { isProfessor, isStudent } = useUser()
-  const { data: userClassData } = useUserClassQuery()
+  const [selectedTerm, setSelectedTerm] = useState('24-2')
+  const { data: userClassData } = useUserClassQuery({
+    term: selectedTerm,
+  })
   const createChatRoom = useCreateChatRoomMutation()
 
   const [activeTab, setActiveTab] = useState('questions')
@@ -29,6 +33,7 @@ const HomePage = () => {
   )
   const [chatRoomName, setChatRoomName] = useState('')
   const [classWeek, setClassWeek] = useState('')
+  const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   const onClickClass = (classItem: IUserClassResponse) => {
     if (isProfessor && classItem.chatRooms?.length === 0) {
@@ -38,7 +43,7 @@ const HomePage = () => {
       const lastChatRoom = classItem.chatRooms?.[classItem.chatRooms.length - 1]
       if (isStudent && classItem.chatRooms?.length === 0) {
         toast.error('생성된 수업채팅이 없습니다.')
-        return;
+        return
       }
       if (lastChatRoom) {
         router.push(`/chat/${lastChatRoom.chatRoomId}`)
@@ -52,6 +57,11 @@ const HomePage = () => {
       setSelectedClass(classItem)
     }
   }
+
+  const toggleSelect = () => {
+    setIsSelectOpen(!isSelectOpen)
+  }
+
   const handleCreateChatRoom = () => {
     createChatRoom.mutate({
       roomName: chatRoomName,
@@ -63,31 +73,69 @@ const HomePage = () => {
     setClassWeek('')
   }
 
+  const handleTermSelect = (term: string) => {
+    setSelectedTerm(term)
+    setIsSelectOpen(false)
+  }
+
   return (
     <div className="flex h-screen">
       {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <h2 className="mb-4 text-lg font-bold">새 채팅방 생성</h2>
-          <input
-            type="text"
-            placeholder="채팅방 이름"
-            value={chatRoomName}
-            onChange={(e) => setChatRoomName(e.target.value)}
-            className="mb-4 w-full rounded border p-2"
-          />
-          <input
-            type="text"
-            placeholder="수업 주차"
-            value={classWeek}
-            onChange={(e) => setClassWeek(e.target.value)}
-            className="mb-4 w-full rounded border p-2"
-          />
-          <button
-            onClick={handleCreateChatRoom}
-            className="w-full rounded bg-blue-500 p-2 text-white"
-          >
-            생성
-          </button>
+        <Modal>
+          <div className="h-[412px] w-[658px] rounded-[20px] border border-black bg-white">
+            <div className="flex justify-end p-[18px]">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                type="button"
+                aria-label="close"
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="h-6 w-6 text-primary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="my-[64px] flex flex-col gap-[34px]">
+              <div className="mx-[122px] flex items-center justify-between">
+                <p>채팅방 이름</p>
+                <input
+                  type="text"
+                  placeholder="채팅방 이름"
+                  value={chatRoomName}
+                  onChange={(e) => setChatRoomName(e.target.value)}
+                  className="border-b border-black p-2"
+                />
+              </div>
+              <div className="mx-[122px] flex items-center justify-between">
+                <p>수업 주차</p>
+                <input
+                  type="text"
+                  placeholder="수업 주차"
+                  value={classWeek}
+                  onChange={(e) => setClassWeek(e.target.value)}
+                  className="border-b border-black p-2"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={handleCreateChatRoom}
+                className="h-[40px] w-[155px] rounded bg-primary p-2 text-white"
+              >
+                채팅방 만들기
+              </button>
+            </div>
+          </div>
         </Modal>
       )}
 
@@ -95,10 +143,33 @@ const HomePage = () => {
       <div className="flex flex-1">
         {/* 왼쪽 수업 목록 */}
         <aside className="w-1/2 bg-white p-4 pr-8">
-          <div className="mb-4">
-            <select className="rounded border p-2">
-              <option value="2024-2">24년도 2학기</option>
-            </select>
+          <div className="mb-4 flex items-center gap-3 relative">
+            <div
+              onClick={toggleSelect}
+              className="flex h-[44px] w-[149px] items-center justify-between rounded-[50px] border border-black px-4 cursor-pointer"
+            >
+              <p className="text-black  w-full text-center">
+                {selectedTerm === '24-2' ? '24년도 2학기' :
+                  selectedTerm === '24-1' ? '24년도 1학기' :
+                    selectedTerm === '23-2' ? '23년도 2학기' : '23년도 1학기'}
+              </p>
+            </div>
+            <Image
+              src="/images/png/arrow-bottom.png"
+              onClick={toggleSelect}
+              alt="arrow"
+              width={32}
+              height={32}
+              className={`transition-transform ${isSelectOpen ? 'rotate-180' : ''} cursor-pointer`}
+            />
+            {isSelectOpen && (
+              <ul className="absolute top-full left-0 w-[149px] bg-white border border-black rounded-[10px] mt-1 z-10 overflow-hidden">
+                <li onClick={() => handleTermSelect('24-2')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">24년도 2학기</li>
+                <li onClick={() => handleTermSelect('24-1')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">24년도 1학기</li>
+                <li onClick={() => handleTermSelect('23-2')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">23년도 2학기</li>
+                <li onClick={() => handleTermSelect('23-1')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">23년도 1학기</li>
+              </ul>
+            )}
           </div>
 
           {/* <div className="mb-4 space-y-4 p-2 rounded border border-black">

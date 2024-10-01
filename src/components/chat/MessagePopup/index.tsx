@@ -4,12 +4,16 @@ import toast from 'react-hot-toast'
 interface MessagePopupProps {
   message: string
   messageId: number
-  onMemoClick: (messageId: number) => void;
-  isMessager: boolean;
+  onMemoClick: (messageId: number) => void
+  isMessager: boolean
 }
 
-const MessagePopup = ({ message, messageId, onMemoClick, isMessager }: MessagePopupProps) => {
-
+const MessagePopup = ({
+  message,
+  messageId,
+  onMemoClick,
+  isMessager,
+}: MessagePopupProps) => {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message)
@@ -23,12 +27,11 @@ const MessagePopup = ({ message, messageId, onMemoClick, isMessager }: MessagePo
   }
 
   const handleMemoClick = () => {
-    onMemoClick(messageId);
+    onMemoClick(messageId)
   }
 
-
   return (
-    <div className="z-50 flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg relative">
+    <div className="relative  flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg">
       <div className="flex w-full items-center justify-center gap-[4px]">
         <Image
           src="/images/png/heart.png"
