@@ -15,8 +15,8 @@ export const useChatMemoQuery = (messageId: number) => {
     queryKey: ['chatMemo', messageId],
     queryFn: () => chatApi.getChatMemo(messageId),
     enabled: !!messageId,
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
   })
 }
 
@@ -24,6 +24,8 @@ export const useChatMemoListQuery = (chatRoomId: number) => {
   return useQuery({
     queryKey: ['chatMemoList', chatRoomId],
     queryFn: () => chatApi.getChatMemoList(chatRoomId),
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
   })
 }
 

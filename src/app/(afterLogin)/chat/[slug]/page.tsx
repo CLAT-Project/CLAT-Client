@@ -8,7 +8,7 @@ import { connect, disconnect, sendMessage } from '@/libs/websocket'
 import { ChatFormData, IChatMessag } from '@/types/chat.types'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useParams } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import './chat.css'
 import toast from 'react-hot-toast'
@@ -144,6 +144,13 @@ const Chat = () => {
   useEffect(() => {
     setCurrentAnswer(answer)
   }, [isAnswering])
+
+  useEffect(() => {
+    localStorage.setItem('currentRoomId', params.slug)
+    return () => {
+      localStorage.removeItem('currentRoomId')
+    }
+  }, [params.slug])
 
   return (
     <>
