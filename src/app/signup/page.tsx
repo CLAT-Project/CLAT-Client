@@ -55,7 +55,7 @@ const Signup = () => {
     const blob = new Blob([dataString], { type: 'application/json' })
 
     if (dataString) {
-      formData.append('joinDto', blob)
+      formData.append('joinReqDTO', blob)
     }
 
     if (status === true) {
