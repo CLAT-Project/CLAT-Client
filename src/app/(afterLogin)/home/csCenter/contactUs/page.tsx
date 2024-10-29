@@ -2,33 +2,33 @@
 
 import { useEffect, useState } from 'react'
 import NavigationBar from '@/components/home/navigationBar'
+import { Api } from '@/apis/axios'
 
-interface FAQ {
-  faq_id: number
+interface FAQPost {
+  createdDate: string
+  lastModifiedDate: string
+  id: number
   title: string
   description: string
   comment: string
-  created_date: string
-  last_modified_date: string
 }
 
 const ContactUsPage = () => {
-  const [faqItems, setFaqItems] = useState<FAQ[]>([])
+  const [faqItems, setFaqItems] = useState<FAQPost[]>([])
 
   // FAQ 데이터 가져오기
   useEffect(() => {
-    const fetchData = async () => {
+    const getFAQPosts = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/help/faq') // 여기에 실제 API 엔드포인트를 넣으세요
+        const { data } = await Api.get<FAQPost[]>('/help/faq') // 여기에 실제 API 엔드포인트를 넣으세요
         // const response = await fetch('/help/faq');
-        const data = await response.json()
         setFaqItems(data)
       } catch (error) {
         console.error('Error fetching FAQ data:', error)
       }
     }
 
-    fetchData()
+    getFAQPosts()
   }, [])
 
   return (
@@ -45,14 +45,25 @@ const ContactUsPage = () => {
             자주 묻는 질문
           </h1>
 
-          <div className="space-y-4">
-            {faqItems.map((item) => (
-              <div key={item.faq_id} className="border-b border-gray-300 py-4">
-                <p className="text-lg font-medium">{item.title}</p>
+          <ul className="space-y-4">
+            {faqItems.slice(0, 7).map((item) => (
+              <div className="border-b border-gray-300 py-4">
+                <p>
+                  {new Date(item.createdDate).toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false, // 24시간 형식
+                  })}
+                </p>
+                <p className="text-lg font-medium">{item.description}</p>
                 <p className="mt-2 text-gray-700">{item.comment}</p>
               </div>
             ))}
-          </div>
+          </ul>
         </main>
 
         {/* 푸터 */}
@@ -62,11 +73,12 @@ const ContactUsPage = () => {
               찾으시는 질문이 없나요? 고객센터에 직접 문의해보세요.
             </p>
             <button
+              type="button"
               className="w-full rounded-lg bg-blue-500 py-3 text-center text-white"
               style={{ margin: '5 auto' }}
-              onClick={() =>
-                (window.location.href = '/home/csCenter/contactUs/inquiry')
-              }
+              onClick={() => {
+                window.location.href = '/home/csCenter/contactUs/inquiry'
+              }}
             >
               문의 접수 창으로 이동하기
             </button>
