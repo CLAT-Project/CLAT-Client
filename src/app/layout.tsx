@@ -24,14 +24,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode
+  modal: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <TQueryProvider>
         <body className={notoSansKR.className}>
           {children}
+          {modal}
           <Toaster />
         </body>
       </TQueryProvider>
