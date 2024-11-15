@@ -105,6 +105,44 @@ const postLogout = async () => {
   localStorage.removeItem('accessToken')
   return data
 }
+
+// 삭제하는 요청만 담당
+const postDelete = async ({
+  username,
+  password,
+}: {
+  username: string
+  password: string
+}) => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  if (!accessToken) {
+    throw new Error('로그인 정보가 없습니다. 다시 로그인 해주세요.')
+  }
+
+  // 헤더에 accessToken 포함하여 요청 보내기
+  try {
+    const response = await Api.post(
+      '/delete',
+      { username, password },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    )
+
+    return response.data
+  } catch (error: any) {
+    // 에러가 발생하면 콘솔에 출력하고 사용자에게 알림
+    console.error('탈퇴 요청 중 오류 발생:', error)
+    throw new Error(
+      error.response?.data?.message ||
+        '탈퇴 요청에 실패했습니다. 다시 시도해주세요.',
+    )
+  }
+}
+
 const authApi = {
   postSingin,
   postSignup,
@@ -113,6 +151,7 @@ const authApi = {
   silentRefresh,
   postCheckId,
   postLogout,
+  postDelete,
 }
 
 export default authApi

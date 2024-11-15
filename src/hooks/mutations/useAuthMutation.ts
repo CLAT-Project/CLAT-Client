@@ -23,6 +23,7 @@ export const useSigninMutation = <TData>({
     onError,
   })
 }
+
 export const useSignupMutation = ({
   onSuccessFallback,
 }: {
@@ -89,5 +90,27 @@ export const useLogoutMutation = () => {
       router.push('/login')
       queryClient.clear()
     },
+  })
+}
+
+// 탈퇴 요청을 비동기적으로 처리
+export const useDeleteMutation = <TData>({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: (data: TData) => void
+  onError?: (error: Error) => void
+}) => {
+  return useMutation({
+    // 탈퇴 요청 함수
+    mutationFn: ({
+      username,
+      password,
+    }: {
+      username: string
+      password: string
+    }) => authApi.postDelete({ username, password }),
+    onSuccess,
+    onError,
   })
 }
