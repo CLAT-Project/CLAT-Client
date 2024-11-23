@@ -29,7 +29,7 @@ const postSingin = async ({
 /**
  * @description 회원가입 요청
  * @description multipart/form-data 형식으로 요청
- * @param param { formData : joinDto: json형태의 입력값, file: 이미지 파일 }
+ * @param param { formData : joinDto -> joinReqDTO로: json형태의 입력값, file: 이미지 파일 }
  * @returns user name을 반환
  */
 const postSignup = async ({ formData }: { formData: FormData }) => {
@@ -143,6 +143,19 @@ const postDelete = async ({
   }
 }
 
+// 비밀번호 찾기
+const postFindPwd = async ({
+  username,
+  email,
+}: {
+  username: string
+  email: string
+}) => {
+  const { data } = await Api.post('/member/findPwd', { username, email })
+
+  return data
+}
+
 const authApi = {
   postSingin,
   postSignup,
@@ -152,6 +165,7 @@ const authApi = {
   postCheckId,
   postLogout,
   postDelete,
+  postFindPwd,
 }
 
 export default authApi
