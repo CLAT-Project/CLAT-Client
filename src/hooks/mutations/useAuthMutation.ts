@@ -51,6 +51,22 @@ export const useVerifyEmailMutation = () => {
   })
 }
 
+// 비밀번호찾기
+export const useFindPassword = <TData>({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: (data: TData) => void
+  onError?: (error: Error) => void
+}) => {
+  return useMutation({
+    mutationFn: ({ username, email }: { username: string; email: string }) =>
+      authApi.postFindPwd({ username, email }),
+    onSuccess,
+    onError,
+  })
+}
+
 export const useVerifyCodeMutation = ({
   onSuccessFallback,
 }: {

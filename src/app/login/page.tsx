@@ -116,7 +116,9 @@ const Login = () => {
             </button>
           </form>
           <div className="mt-[36px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack">
-            <p className="cursor-pointer">비밀번호를 잊으셨나요?</p>
+            <Link href="/login/find/password">
+              <p className="cursor-pointer">비밀번호를 잊으셨나요?</p>
+            </Link>
             <Link href="/signup">
               <p className="cursor-pointer">회원가입 하기</p>
             </Link>
