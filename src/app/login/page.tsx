@@ -5,7 +5,7 @@ import './login.css'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { useSigninMutation } from '@/hooks/mutations/useAuthMutation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 interface FormValue {
@@ -38,6 +38,14 @@ const Login = () => {
       password: data.password,
     })
   }
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      // 이미 로그인된 상태라면 홈으로 리다이렉트
+      route.push('/home')
+    }
+  }, [route])
 
   return (
     <div className="relative h-screen w-screen">
