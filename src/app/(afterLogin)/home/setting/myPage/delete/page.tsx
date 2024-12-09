@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import DeleteModal from './_component/deleteModal'
+import ErrorModal from './_component/errorModal'
+import DeleteSuccess from './_component/deleteSuccess'
 
 interface FormValue {
   id: string
@@ -16,6 +18,8 @@ export default function DeleteAccountPage() {
   const router = useRouter() // route.push('/login')
   const [modalOpen, setModalOpen] = useState(false)
   const [formData, setFormData] = useState<FormValue | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [deleteSuccess, setDeleteSuccess] = useState(false)
 
   const {
     register,
@@ -25,11 +29,19 @@ export default function DeleteAccountPage() {
 
   const accountDelete = useDeleteMutation({
     onSuccess: () => {
-      // 탈퇴완료되면 안녕히가세요 모달 뜨고 2초후 로그인페이지이동
+      // 탈퇴성공시 에러메세지 제거
+      setErrorMessage(null)
+      // 탈퇴 성공시 탈퇴확인버튼과 감사합니다 모달
       setModalOpen(true)
+      setDeleteSuccess(true)
       setTimeout(() => {
         router.push('/login')
       }, 2000)
+    },
+    // 아이디와 비밀번호가 다른경우
+    onError: (error) => {
+      setModalOpen(false)
+      setErrorMessage(error.message)
     },
   })
 
@@ -47,6 +59,10 @@ export default function DeleteAccountPage() {
   const onSubmitDelete = (data: FormValue) => {
     setModalOpen(true)
     setFormData(data) // 폼 데이터를 상태로 저장
+  }
+
+  const handleErrorModalClose = () => {
+    setErrorMessage(null) // 에러 메시지 초기화하고 모달 닫기
   }
 
   return (
@@ -67,6 +83,7 @@ export default function DeleteAccountPage() {
               아이디와 비밀번호를 입력해주세요
             </div>
           </div>
+
           <form
             className="flex flex-col items-center"
             onSubmit={handleSubmit(onSubmitDelete)}
@@ -103,8 +120,19 @@ export default function DeleteAccountPage() {
           </form>
         </div>
       </main>
-      {modalOpen && (
-        <DeleteModal onConfirm={handleConfirmDelete} formData={formData!} />
+
+      {modalOpen && formData && !errorMessage && !deleteSuccess && (
+        <DeleteModal
+          onConfirm={handleConfirmDelete}
+          formData={{ username: formData.id, password: formData.password }}
+        />
+      )}
+      {deleteSuccess && <DeleteSuccess />}
+      {errorMessage && (
+        <ErrorModal
+          errorMessage={errorMessage}
+          onClose={handleErrorModalClose}
+        />
       )}
     </div>
   )

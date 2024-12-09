@@ -99,6 +99,7 @@ const postCheckId = async ({ username }: { username: string }) => {
 
   return data
 }
+
 const postLogout = async () => {
   const { data } = await Api.post('/logout')
 
@@ -132,10 +133,15 @@ const postDelete = async ({
       },
     )
 
+    // 로컬 스토리지에서 토큰 제거
+    localStorage.removeItem('accessToken')
+
     return response.data
   } catch (error: any) {
-    // 에러가 발생하면 콘솔에 출력하고 사용자에게 알림
-    console.error('탈퇴 요청 중 오류 발생:', error)
+    if (error.response?.status === 401) {
+      throw new Error(error.response.data.message || '인증 실패')
+    }
+    // console.error('탈퇴 요청 중 오류 발생:', error)
     throw new Error(
       error.response?.data?.message ||
         '탈퇴 요청에 실패했습니다. 다시 시도해주세요.',
