@@ -127,6 +127,8 @@ export const useDeleteMutation = <TData>({
       password: string
     }) => authApi.postDelete({ username, password }),
     onSuccess,
-    onError,
+    onError: (error) => {
+      onError?.(error)
+    },
   })
 }
