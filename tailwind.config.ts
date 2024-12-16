@@ -18,6 +18,9 @@ const config: Config = {
         verify: '#D3E2FF',
         errorRed: `#E94B2C`,
       },
+      sidebar: {
+        active: '#2C75FF',
+      },
       borderRadius: {
         18: '18px',
         49: '49px',

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLogoutMutation } from '@/hooks/mutations/useAuthMutation'
 import { useUserQuery } from '@/hooks/queries/useUserQuery'
@@ -32,31 +33,63 @@ const ProfilePanel = ({
   const logoutMutation = useLogoutMutation()
   const { data: userData } = useUserQuery()
 
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  const handleClick = (event: MouseEvent) => {
+    if (
+      panelRef.current &&
+      !panelRef.current.contains(event.target as HTMLElement)
+    ) {
+      onClose()
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClick)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClick)
+    }
+  })
+
   return (
     <div
-      className={`fixed right-0 top-0 h-3/4 w-1/4 transform bg-slate-500 bg-opacity-70 p-4 text-white ${isOpen ? 'rounded-l-lg-costum translate-x-0' : 'translate-x-full'} transition-transform duration-300`}
+      ref={panelRef}
+      className={`fixed right-0 top-0 h-3/4 w-1/4 transform rounded-l-3xl bg-slate-500 bg-opacity-70 p-7 text-white ${isOpen ? 'rounded-l-lg-costum translate-x-0' : 'translate-x-full'} transition-transform duration-300`}
     >
       <div className="flex justify-end">
-        <button onClick={onClose}>Close</button>
+        <button
+          type="button"
+          className="rounded-lg bg-blue-700 px-2 py-1 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          onClick={onClose}
+        >
+          Close
+        </button>
       </div>
 
       {/* 상단 */}
-      <div className="mb-4 flex items-center justify-end border-b border-white pb-4">
+      <div className="mb-4 flex items-center justify-end border-b border-white pb-2">
         <div className="mr-4 text-right">
           <h6 className="text-xs">어서오세요!</h6>
           <h5 className="mt-1 text-sm">{userData?.name}님</h5>
-          <button
-            type="button"
-            className="mt-1 text-xs"
-            onClick={() => logoutMutation.mutate()}
-          >
-            Logout
-          </button>
+
+          {isOpen && (
+            <button
+              type="button"
+              className="mt-5 rounded-lg bg-blue-700 px-2 py-1 text-center text-xs font-medium text-white hover:bg-blue-800 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={() => logoutMutation.mutate()}
+            >
+              Logout
+            </button>
+          )}
         </div>
-        <img
-          src="/images/png/profile-on.png"
-          alt="Profile"
-          className="h-12 w-12 rounded-full"
+        <Image
+          className="rounded-full"
+          src="/image.jpg"
+          alt="프로필이미지"
+          width={48}
+          height={48}
         />
       </div>
 
@@ -76,17 +109,26 @@ const ProfilePanel = ({
       {/* 하단 */}
       <div className="mt-4 flex justify-around">
         <Link href="/home/setting/myPage">
-          <button className="responsive_typo rounded-full border border-white bg-cyan-700 px-4 py-2">
+          <button
+            type="button"
+            className="responsive_typo rounded-full border border-white bg-cyan-700 px-4 py-2"
+          >
             &nbsp;&nbsp;설정&nbsp;&nbsp;
           </button>
         </Link>
         <Link href="/home/collect/questions">
-          <button className="responsive_typo rounded-full border border-white bg-cyan-800 px-4 py-2">
+          <button
+            type="button"
+            className="responsive_typo rounded-full border border-white bg-cyan-800 px-4 py-2"
+          >
             모아보기
           </button>
         </Link>
         <Link href="/home/csCenter/contactUs/">
-          <button className="responsive_typo rounded-full border border-white bg-cyan-900 px-4 py-2">
+          <button
+            type="button"
+            className="responsive_typo rounded-full border border-white bg-cyan-900 px-4 py-2"
+          >
             고객센터
           </button>
         </Link>

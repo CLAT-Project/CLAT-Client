@@ -36,19 +36,20 @@ export default function MyPage() {
   }, [])
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen sm:w-full">
       {/* 사이드바 */}
-      <div className="w-1/4 px-4">
+      <div className="hidden w-1/4 px-4 sm:block">
         <NavigationBar />
       </div>
 
       {/* 메인 콘텐츠 */}
-      <div className="w-3/4">
-        <div className="h-[calc(100vh-100px)] overflow-y-auto rounded-lg border border-black p-6">
+      <div className="w-auto sm:w-full">
+        <div className="h-[calc(100vh-100px)] min-w-[350px] overflow-y-auto rounded-lg border border-black p-6">
           <div className="mb-6 flex justify-center">
             <div className="relative">
               <div className="mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-gray-300">
                 <Image
+                  className="rounded-full"
                   src="/image.jpg"
                   alt="프로필이미지"
                   width={100}

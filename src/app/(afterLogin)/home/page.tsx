@@ -143,15 +143,19 @@ const HomePage = () => {
       <div className="flex flex-1">
         {/* 왼쪽 수업 목록 */}
         <aside className="w-1/2 bg-white p-4 pr-8">
-          <div className="mb-4 flex items-center gap-3 relative">
+          <div className="relative mb-4 flex items-center gap-3">
             <div
               onClick={toggleSelect}
-              className="flex h-[44px] w-[149px] items-center justify-between rounded-[50px] border border-black px-4 cursor-pointer"
+              className="flex h-[44px] w-[149px] cursor-pointer items-center justify-between rounded-[50px] border border-black px-4"
             >
-              <p className="text-black  w-full text-center">
-                {selectedTerm === '24-2' ? '24년도 2학기' :
-                  selectedTerm === '24-1' ? '24년도 1학기' :
-                    selectedTerm === '23-2' ? '23년도 2학기' : '23년도 1학기'}
+              <p className="w-full text-center text-black">
+                {selectedTerm === '24-2'
+                  ? '24년도 2학기'
+                  : selectedTerm === '24-1'
+                    ? '24년도 1학기'
+                    : selectedTerm === '23-2'
+                      ? '23년도 2학기'
+                      : '23년도 1학기'}
               </p>
             </div>
             <Image
@@ -163,11 +167,31 @@ const HomePage = () => {
               className={`transition-transform ${isSelectOpen ? 'rotate-180' : ''} cursor-pointer`}
             />
             {isSelectOpen && (
-              <ul className="absolute top-full left-0 w-[149px] bg-white border border-black rounded-[10px] mt-1 z-10 overflow-hidden">
-                <li onClick={() => handleTermSelect('24-2')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">24년도 2학기</li>
-                <li onClick={() => handleTermSelect('24-1')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">24년도 1학기</li>
-                <li onClick={() => handleTermSelect('23-2')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">23년도 2학기</li>
-                <li onClick={() => handleTermSelect('23-1')} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">23년도 1학기</li>
+              <ul className="absolute left-0 top-full z-10 mt-1 w-[149px] overflow-hidden rounded-[10px] border border-black bg-white">
+                <li
+                  onClick={() => handleTermSelect('24-2')}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                >
+                  24년도 2학기
+                </li>
+                <li
+                  onClick={() => handleTermSelect('24-1')}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                >
+                  24년도 1학기
+                </li>
+                <li
+                  onClick={() => handleTermSelect('23-2')}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                >
+                  23년도 2학기
+                </li>
+                <li
+                  onClick={() => handleTermSelect('23-1')}
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                >
+                  23년도 1학기
+                </li>
               </ul>
             )}
           </div>
