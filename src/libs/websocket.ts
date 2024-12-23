@@ -35,13 +35,19 @@ export const connect = (
     client = createClient()
   }
 
-  client.activate()
-
   client.onConnect = () => {
-    client?.subscribe(`/sub/chat/${roomId}`, (message) => {
-      onMessage(message)
-    })
+    client?.subscribe(
+      `/sub/chat/${roomId}`,
+      (message) => {
+        onMessage(message)
+      },
+      {
+        Authorization: `${localStorage.getItem('accessToken')}`,
+      },
+    )
   }
+
+  client.activate()
 }
 
 // 클라이언트 초기화 및 연결
@@ -56,7 +62,14 @@ export const initializeAndConnect = (
 // 메시지 보내기
 export const sendMessage = (destination: string, body: string) => {
   if (client?.connected) {
-    client.publish({ destination, body })
+    console.log('publish 헤더', client.connectHeaders)
+    client.publish({
+      destination,
+      body,
+      headers: {
+        Authorization: `${localStorage.getItem('accessToken')}`,
+      },
+    })
   } else {
     console.warn('Client is not connected')
   }
