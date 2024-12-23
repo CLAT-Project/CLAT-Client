@@ -1,16 +1,15 @@
 import React from 'react'
 
-export default function Layout({
-  children,
-  // modal,
-}: {
+interface LayoutProps {
   children: React.ReactNode
-  // modal: React.ReactNode
-}) {
+  params: { modal: React.ReactNode }
+}
+
+export default function Layout({ children, params: { modal } }: LayoutProps) {
   return (
-    <>
+    <div>
       {children}
-      {/* {modal} */}
-    </>
+      {modal}
+    </div>
   )
 }

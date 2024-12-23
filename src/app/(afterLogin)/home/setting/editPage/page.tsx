@@ -32,7 +32,7 @@ export default function EditPage() {
     <div className="h-screen">
       <NavigationBar />
 
-      <div className="flex-1 bg-white p-10">
+      <div className="flex bg-white p-10">
         <h1 className="mb-4 text-2xl font-bold">Edit Profile</h1>
         <form
           onSubmit={handleSubmit}

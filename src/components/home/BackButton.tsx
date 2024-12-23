@@ -9,7 +9,7 @@ interface BackButtonProps {
 export default function BackButton({ redirectLogin }: BackButtonProps) {
   const router = useRouter()
 
-  const onClickClose = () => {
+  const onClose = () => {
     if (redirectLogin) {
       // 탈퇴 완료 상태일 경우 로그인 페이지로
       router.push('/login')
@@ -20,7 +20,7 @@ export default function BackButton({ redirectLogin }: BackButtonProps) {
   }
 
   return (
-    <button type="button" onClick={onClickClose}>
+    <button type="button" onClick={onClose}>
       ✖
     </button>
   )

@@ -1,144 +1,81 @@
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+'use client'
+
+import SidebarItem from './item'
+
+interface IsidebarItem {
+  id: string
+  name: string
+  path: string
+  items?: ISubItem[]
+}
+
+interface ISubItem {
+  id: string
+  name: string
+  path: string
+}
+const generateId = () =>
+  `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
+const items: IsidebarItem[] = [
+  { id: generateId(), name: '설정', path: '/home/setting/myPage' },
+  {
+    id: generateId(),
+    name: '모아보기',
+    path: '/home/collect/',
+    items: [
+      {
+        id: generateId(),
+        name: '질문 모아보기',
+        path: '/home/collect/questions',
+      },
+      { id: generateId(), name: '자료 모아보기', path: '/home/collect/files' },
+      { id: generateId(), name: '답변모아보기', path: '/home/collect/answers' },
+      { id: generateId(), name: '북마크', path: '/home/collect/bookmarks' },
+    ],
+  },
+  {
+    id: generateId(),
+    name: '고객센터',
+    path: '/home/csCenter/contactUs/',
+    items: [
+      {
+        id: generateId(),
+        name: '자주 묻는 질문',
+        path: '/home/csCenter/contactUs',
+      },
+      {
+        id: generateId(),
+        name: '커뮤니티이용규칙',
+        path: '/home/csCenter/rules',
+      },
+      {
+        id: generateId(),
+        name: '개인정보처리방침',
+        path: '/home/csCenter/privacyPolicy',
+      },
+      {
+        id: generateId(),
+        name: '청소년보호정책',
+        path: '/home/csCenter/youthPolicy',
+      },
+      {
+        id: generateId(),
+        name: '서비스이용약관',
+        path: '/home/csCenter/terms',
+      },
+    ],
+  },
+]
 
 export default function NavigationBar() {
-  const pathname = usePathname()
-  const [openMenu, setOpenMenu] = useState<string | null>(null)
-
-  const isActive = (href: string) => pathname.startsWith(href)
-
-  const toggleMenu = (menuName: string) => {
-    setOpenMenu((prevMenu) => (prevMenu === menuName ? null : menuName))
-  }
-
-  useEffect(() => {
-    if (isActive('/home/collect/')) {
-      setOpenMenu('moabogi')
-    } else if (isActive('/home/contactUs/')) {
-      setOpenMenu('faq')
-    } else {
-      setOpenMenu(null)
-    }
-  }, [pathname])
-
   return (
-    <aside className="h-1/3 w-full rounded-lg border border-black bg-white p-4">
-      <nav>
-        <ul className="space-y-4">
-          {/* 설정 */}
-          <li>
-            <Link href="/home/setting/myPage">
-              <span
-                className={`${
-                  isActive('/home/setting/myPage')
-                    ? 'font-semibold text-blue-500'
-                    : 'text-gray-700'
-                }`}
-              >
-                설정
-              </span>
-            </Link>
-          </li>
-
-          {/* 모아보기 */}
-          <li>
-            <button
-              className="w-full text-left focus:outline-none"
-              onClick={() => toggleMenu('moabogi')}
-            >
-              <span
-                className={`${
-                  openMenu || isActive('/home/collect/')
-                    ? 'font-semibold text-blue-500'
-                    : 'text-gray-700'
-                }`}
-              >
-                모아보기
-              </span>
-            </button>
-            {(openMenu === 'moabogi' || isActive('/home/collect/')) && (
-              <ul className="ml-4 mt-2 space-y-2">
-                <li>
-                  <Link href="/home/collect/questions">
-                    <span
-                      className={`${isActive('/home/collect/questions') ? 'font-semibold text-blue-500' : 'text-gray-700'}`}
-                    >
-                      질문 모아보기
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/home/collect/files">
-                    <span
-                      className={`${isActive('/home/collect/files') ? 'font-semibold text-blue-500' : 'text-gray-700'}`}
-                    >
-                      자료 모아보기
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/home/collect/answers">
-                    <span
-                      className={`${isActive('/home/collect/answers') ? 'font-semibold text-blue-500' : 'text-gray-700'}`}
-                    >
-                      답변 모아보기
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/home/collect/bookmarks">
-                    <span
-                      className={`${isActive('/home/collect/bookmarks') ? 'font-semibold text-blue-500' : 'text-gray-700'}`}
-                    >
-                      북마크
-                    </span>
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
-
-          {/* 고객센터 */}
-          <li>
-            <button
-              className="w-full text-left focus:outline-none"
-              onClick={() => toggleMenu('faq')}
-            >
-              <span
-                className={`${
-                  openMenu === 'faq' || isActive('/home/csCenter/contactUs/')
-                    ? 'font-semibold text-blue-500'
-                    : 'text-gray-700'
-                }`}
-              >
-                고객센터
-              </span>
-            </button>
-            {(openMenu === 'faq' || isActive('/home/csCenter')) && (
-              <ul className="ml-4 mt-2 space-y-2">
-                <li>
-                  <Link href="/home/csCenter/contactUs/">자주 묻는 질문</Link>
-                </li>
-                <li>
-                  <Link href="/home/csCenter/rules/">커뮤니티이용규칙</Link>
-                </li>
-                <li>
-                  <Link href="/home/csCenter/privacyPolicy/">
-                    개인정보처리방침
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/home/csCenter/youthPolicy/">청소년보호정책</Link>
-                </li>
-                <li>
-                  <Link href="/home/csCenter/terms/">서비스이용약관</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    <div className="hidden h-[60%] w-full min-w-40 rounded-lg border border-black bg-white p-5 md:block">
+      <ul className="flex-col">
+        {items.map((item) => (
+          <SidebarItem key={item.id} item={item} />
+        ))}
+      </ul>
+    </div>
   )
 }
