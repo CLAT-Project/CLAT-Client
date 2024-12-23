@@ -1,12 +1,19 @@
 import chatApi from '@/apis/chat'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 export const useChatMsgQuery = ({ roomId }: { roomId: string }) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ['chatMsg'],
-    queryFn: () => chatApi.getChatMessage(roomId),
-    gcTime: 0,
-    staleTime: 0,
+    queryFn: ({ pageParam = null }: { pageParam: number | null }) =>
+      chatApi.getChatMessage(roomId, pageParam as number | null),
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.content.length || lastPage.content.length < 30) {
+        return undefined
+      }
+      // 가장 오래된(첫 번째) 메시지의 ID를 반환
+      return lastPage.content[lastPage.content.length - 1].messageId
+    },
   })
 }
 
