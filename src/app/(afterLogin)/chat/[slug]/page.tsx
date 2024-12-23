@@ -30,15 +30,22 @@ const Chat = () => {
   const { register, handleSubmit, reset, watch } = useForm<ChatFormData>()
 
   const message = watch('message')
-  const [messages, setMessages] = useState<IChatMessag | undefined>(undefined)
+  const [messages, setMessages] = useState<IChatMessag | undefined>({
+    content: [],
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
   const [isAnswering, setIsAnswering] = useState(false)
   const [answer, setAnswer] = useState('')
   const [answerMessageId, setAnswerMessageId] = useState(0)
   const [currentAnswer, setCurrentAnswer] = useState('')
-
-  const { data: chatMsg } = useChatMsgQuery({ roomId: params.slug })
+  const [isNewMessage, setIsNewMessage] = useState(false)
+  const {
+    data: chatMsg,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = useChatMsgQuery({ roomId: params.slug })
   const { data: userData } = useUserQuery()
   const { data: userClassData } = useUserClassQuery({ term: '24-2' })
   const { data: chatRoomIsAuth } = useChatRoomIsAuthQuery(Number(params.slug))
@@ -76,6 +83,7 @@ const Chat = () => {
           message,
         }),
       )
+      setIsNewMessage(true)
       // queryClient.invalidateQueries({ queryKey: ['chatMsg'] })
     } else {
       toast.error('Please enter your name and a message.')
@@ -95,9 +103,7 @@ const Chat = () => {
       setMessages((prevMessages) => {
         if (!prevMessages) {
           return {
-            courseName: '코스 이름',
-            roomName: '룸 이름',
-            messageFileResponseDTOS: [
+            content: [
               {
                 ...newMessage,
                 answer: '',
@@ -107,12 +113,12 @@ const Chat = () => {
         }
         return {
           ...prevMessages,
-          messageFileResponseDTOS: [
-            ...prevMessages.messageFileResponseDTOS,
+          content: [
             {
               ...newMessage,
               answer: '', // 기본 answer 값 추가
             },
+            ...prevMessages.content,
           ],
         }
       })
@@ -125,7 +131,9 @@ const Chat = () => {
 
   useEffect(() => {
     if (chatMsg) {
-      setMessages(chatMsg)
+      setMessages({
+        content: chatMsg.pages.flatMap((page) => page.content),
+      })
     }
   }, [chatMsg])
 
@@ -154,18 +162,22 @@ const Chat = () => {
 
   return (
     <>
-      {isAnswering &&
-        <div className='absolute top-20 left-[41%] bg-[#F5F5F5] w-[334px] h-[144px] rounded-[20px] shadow-gray-200 shadow-md z-50' >
-          <div className='flex flex-col  justify-center h-full gap-2 flex-nowrap overflow-hidden text-ellipsis items-start px-10 mr-10'>
-            <p className='text-[18px] text-primary'>다음 질문에 답변 중입니다.</p>
-            <p className='text-[18px]'>&quot;{currentAnswer}&quot;</p>
+      {isAnswering && (
+        <div className="absolute left-[41%] top-20 z-50 h-[144px] w-[334px] rounded-[20px] bg-[#F5F5F5] shadow-md shadow-gray-200">
+          <div className="mr-10 flex h-full flex-col flex-nowrap items-start justify-center gap-2 overflow-hidden text-ellipsis px-10">
+            <p className="text-[18px] text-primary">
+              다음 질문에 답변 중입니다.
+            </p>
+            <p className="text-[18px]">&quot;{currentAnswer}&quot;</p>
           </div>
         </div>
-      }
+      )}
       <ChatHeader className={courseName || ''} roomId={params.slug} />
       {isAuth || isProfessor ? (
         <div className="chat-content-height w-full overflow-y-scroll pt-8">
           <Message
+            isFetching={isFetching}
+            isMessage={isNewMessage}
             messages={messages}
             userName={userData?.name}
             chatRoomId={Number(params.slug)}
@@ -173,6 +185,8 @@ const Chat = () => {
             setAnswer={setAnswer}
             setAnswerMessageId={setAnswerMessageId}
             isAnswering={isAnswering}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
           />
           <ChatInput
             handleSendMessage={handleSendMessage}
