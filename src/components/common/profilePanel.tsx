@@ -19,7 +19,7 @@ const ProfilePanel = ({
   isOpen: boolean
   onClose: () => void
 }) => {
-  const [username, setUsername] = useState('User Name')
+  // const [username, setUsername] = useState('User Name')
   const [notifications, setNotifications] = useState<Notification[]>([
     { id: 1, message: '답변', read: false },
     { id: 2, message: '세모세모 도형', read: true },

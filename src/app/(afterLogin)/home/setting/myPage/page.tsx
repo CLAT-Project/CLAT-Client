@@ -25,7 +25,7 @@ export default function MyPage() {
     // 프로필 데이터를 서버에서 가져오는 함수
     const fetchProfile = async () => {
       try {
-        const response = await Api.get('/members')
+        const response = await Api.get('/my-profile')
         setProfile(response.data)
       } catch (err) {
         console.error('프로필 정보 조회 실패:', err)
