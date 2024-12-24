@@ -1,9 +1,10 @@
 'use client'
 
+import authApi from '@/apis/auth'
 import NavigationBar from '@/components/home/navigationBar'
 import { useDeleteMutation } from '@/hooks/mutations/useAuthMutation'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import DeleteModal from './_component/deleteModal'
 import ErrorModal from './_component/errorModal'
@@ -20,12 +21,26 @@ export default function DeleteAccountPage() {
   const [formData, setFormData] = useState<FormValue | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [deleteSuccess, setDeleteSuccess] = useState(false)
+  const [username, setUsername] = useState<string>('')
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitted, errors },
   } = useForm<FormValue>()
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const userInfo = await authApi.getUserName()
+        setUsername(userInfo.username)
+      } catch (error) {
+        console.error('사용자 정보를 가져오는 데 실패했습니다:', error)
+      }
+    }
+
+    fetchUserName()
+  }, [])
 
   const accountDelete = useDeleteMutation({
     onSuccess: () => {
@@ -49,7 +64,7 @@ export default function DeleteAccountPage() {
   const handleConfirmDelete = () => {
     if (formData) {
       accountDelete.mutate({
-        username: formData.id,
+        username,
         password: formData.password,
       })
     }
@@ -58,7 +73,7 @@ export default function DeleteAccountPage() {
   // 확인버튼클릭 시 재확인 모달
   const onSubmitDelete = (data: FormValue) => {
     setModalOpen(true)
-    setFormData(data) // 폼 데이터를 상태로 저장
+    setFormData(data)
   }
 
   const handleErrorModalClose = () => {
@@ -79,9 +94,7 @@ export default function DeleteAccountPage() {
         </div>
         <div className="flex flex-col items-center">
           <div className="mb-[90px]">
-            <div className="text-sm text-gray-500">
-              아이디와 비밀번호를 입력해주세요
-            </div>
+            <div className="text-sm text-gray-500">비밀번호를 입력해주세요</div>
           </div>
 
           <form
@@ -91,13 +104,12 @@ export default function DeleteAccountPage() {
             <div className="mb-11">
               <span className="mr-10 text-base font-medium">아이디</span>
               <input
-                className="w-[185px] border-b border-black"
+                className="w-[185px]"
                 id="id"
                 type="text"
-                placeholder="아이디 입력"
-                {...register('id', {
-                  required: true,
-                })}
+                value={username}
+                {...register('id')}
+                readOnly
                 aria-invalid={isSubmitted && errors.id ? 'true' : 'false'}
               />
             </div>
@@ -111,7 +123,7 @@ export default function DeleteAccountPage() {
                 {...register('password', {
                   required: true,
                 })}
-                aria-invalid={isSubmitted && errors.id ? 'true' : 'false'}
+                aria-invalid={isSubmitted && errors.password ? 'true' : 'false'}
               />
             </div>
             <div className="flex h-[55px] w-[155px] items-center justify-center rounded-md bg-blue-500 text-base font-medium text-white">

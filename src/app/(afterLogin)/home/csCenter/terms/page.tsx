@@ -11,7 +11,7 @@ const termsOfServicePage = () => {
 
       <main className="custom-scrollbar h-4/5 flex-1 overflow-y-auto rounded-lg border border-black p-6">
         <h1 className="border-7B7B7B mb-8 border-b-2 p-4 text-4xl font-bold">
-          서비스 이용규칙 안내
+          서비스 이용약관
         </h1>
 
         <div className="space-y-4">

@@ -13,7 +13,9 @@ const getUserClass = async ({ term }: { term: string }) => {
 }
 
 const getUser = async () => {
-  const response = await Api.get<IUserResponse>(`/member`)
+
+  const response = await Api.get<IUserResponse>(`/my-profile`)
+
 
   return response.data
 }

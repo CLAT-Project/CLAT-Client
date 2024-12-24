@@ -162,6 +162,11 @@ const postFindPwd = async ({
   return data
 }
 
+const getUserName = async () => {
+  const response = await Api.get('/member')
+  return response.data
+}
+
 const authApi = {
   postSingin,
   postSignup,
@@ -172,6 +177,7 @@ const authApi = {
   postLogout,
   postDelete,
   postFindPwd,
+  getUserName,
 }
 
 export default authApi
