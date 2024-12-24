@@ -6,8 +6,10 @@ import {
   IChatRoomInfoResponse,
 } from '@/types/chat.types'
 
-const getChatMessage = async (roomId: string) => {
-  const response = await Api.get<IChatMessag>(`/chatRoom/${roomId}`)
+const getChatMessage = async (roomId: string, pageParam?: number | null) => {
+  const response = await Api.get<IChatMessag>(
+    `/chat?chatRoomId=${roomId}&size=30${pageParam ? `&messageId=${pageParam}` : ''}`,
+  )
 
   return response.data
 }

@@ -1,7 +1,5 @@
 export interface IChatMessag {
-  courseName: string
-  roomName: string
-  messageFileResponseDTOS: {
+  content: {
     messageId: number
     message: string
     senderName: string
@@ -9,6 +7,7 @@ export interface IChatMessag {
     imageUrl: string[]
     answerId?: number
     answer: string
+    likeResDTOS: string[]
   }[]
 }
 
