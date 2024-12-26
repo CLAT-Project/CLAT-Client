@@ -93,6 +93,7 @@ const Chat = () => {
   useEffect(() => {
     connect(params.slug, (m) => {
       const content = JSON.parse(m.body)
+
       const newMessage = {
         messageId: content.messageId,
         senderName: content.senderName,
@@ -174,12 +175,12 @@ const Chat = () => {
       )}
       <ChatHeader className={courseName || ''} roomId={params.slug} />
       {isAuth || isProfessor ? (
-        <div className="chat-content-height w-full overflow-y-scroll pt-8">
+        <>
           <Message
             isFetching={isFetching}
             isMessage={isNewMessage}
             messages={messages}
-            userName={userData?.name}
+            userName={userData?.username}
             chatRoomId={Number(params.slug)}
             setIsAnswering={setIsAnswering}
             setAnswer={setAnswer}
@@ -199,7 +200,7 @@ const Chat = () => {
             isAnswering={isAnswering}
             setAnswer={setAnswer}
           />
-        </div>
+        </>
       ) : (
         <ChatAuth chatRoomId={params.slug} setIsAuth={setIsAuth} />
       )}
