@@ -11,6 +11,7 @@
     -webkit-appearance: none;
     margin: 0;
   }
+
   .required::before {
     content: '*';
     position: absolute;
@@ -24,5 +25,8 @@
 @layer components {
   .signup-input {
     @apply h-[40px] w-[379px] rounded-[14px] border border-black pl-4 text-sm focus:outline-none;
+  }
+  .file-selector-button {
+    @apply hidden;
   }
 }

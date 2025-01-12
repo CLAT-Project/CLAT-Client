@@ -1,43 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRef, useState } from 'react'
 import NavigationBar from '@/components/home/navigationBar'
+import useReportMutation from '@/hooks/mutations/useReportMutation'
 
 const InquiryPage = () => {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
   const [description, setDescription] = useState('')
   const [filepath, setFilepath] = useState<File | null>(null)
-  const [memberId, setMemberId] = useState(1) // 예시로 memberId는 1로 설정
+  const { mutate: submitReport } = useReportMutation()
+
+  const descriptionRef = useRef<HTMLTextAreaElement | null>(null)
+  const checkboxRef = useRef<HTMLInputElement | null>(null)
 
   // 문의 내용과 파일을 서버로 전송하는 함수
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    const memberId = 1
-    const formData = new FormData()
-    formData.append('description', description)
-    formData.append('memberId', String(memberId))
+    if (!description.trim()) {
+      descriptionRef.current?.focus() // description이 비었으면 포커스를 준다
+      return
+    }
 
-    if (filepath) {
-      formData.append('file', filepath)
+    if (!checkboxRef.current?.checked) {
+      checkboxRef.current?.focus() // 체크박스가 체크되지 않았으면 포커스를 준다
+      return
     }
 
     try {
-      const response = await fetch('http://localhost:5000/help/report', {
-        // const response = await fetch('/help/report', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (response.ok) {
-        console.log('문의가 성공적으로 전송되었습니다.')
-
-        router.push('/home/csCenter/contactUs/success')
-      } else {
-        console.error('문의 전송 중 오류 발생')
-      }
+      submitReport({ description, filepath })
     } catch (error) {
       console.error('오류 발생', error)
     }
@@ -63,11 +53,11 @@ const InquiryPage = () => {
               </label>
               <textarea
                 id="description"
+                ref={descriptionRef}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="h-[400px] w-full rounded-lg border border-blue-500 p-2"
+                className="h-[400px] w-full resize-none rounded-lg border border-blue-500 p-2"
                 rows={5}
-                required
               />
             </div>
 
@@ -107,10 +97,11 @@ const InquiryPage = () => {
                   <input
                     type="file"
                     id="filepath"
-                    onChange={(e) =>
-                      setFilepath(e.target.files ? e.target.files[0] : null)
-                    }
-                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files ? e.target.files[0] : null
+                      setFilepath(file)
+                    }}
+                    className="file-selector-button"
                   />
                 </label>
 
@@ -118,10 +109,13 @@ const InquiryPage = () => {
                 <div className="mt-4 flex items-start">
                   {/* 체크박스 */}
                   <input
+                    ref={checkboxRef}
                     type="checkbox"
                     id="privacyConsent"
                     name="privacyConsent"
-                    className="mr-2 mt-1 h-4 w-4"
+                    className="mr-2 mt-1 h-4 w-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white"
+                    tabIndex={0}
+                    required
                   />
                   {/* 개인정보 동의 텍스트 및 설명 */}
                   <div className="flex flex-col">
@@ -138,6 +132,7 @@ const InquiryPage = () => {
 
           {/* 문의 접수 버튼 */}
           <button
+            type="submit"
             onClick={handleSubmit}
             className="mt-6 w-full rounded-lg bg-blue-500 py-3 text-white"
           >
