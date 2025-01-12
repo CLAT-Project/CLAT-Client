@@ -20,7 +20,7 @@ const ContactUsPage = () => {
   useEffect(() => {
     const getFAQPosts = async () => {
       try {
-        const { data } = await Api.get<FAQPost[]>('/help/faq') // 여기에 실제 API 엔드포인트를 넣으세요
+        const { data } = await Api.get<FAQPost[]>('/help/faq')
         // const response = await fetch('/help/faq');
         setFaqItems(data)
       } catch (error) {
