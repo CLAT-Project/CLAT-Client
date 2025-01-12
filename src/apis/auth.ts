@@ -167,6 +167,28 @@ const getUserName = async () => {
   return response.data
 }
 
+// 비밀번호 재확인
+const postReconfirmPassword = async ({ password }: { password: string }) => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  try {
+    const response = await Api.post(
+      '/my-profile/auth',
+      { password },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    )
+    return response.data
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || '비밀번호 확인에 실패했습니다. ',
+    )
+  }
+}
+
 const authApi = {
   postSingin,
   postSignup,
@@ -178,6 +200,7 @@ const authApi = {
   postDelete,
   postFindPwd,
   getUserName,
+  postReconfirmPassword,
 }
 
 export default authApi

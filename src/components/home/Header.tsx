@@ -57,7 +57,7 @@ const Header = ({ onProfileClick }: { onProfileClick: () => void }) => {
             className="mr-4 h-10 w-10 fill-white"
           ></img>
         </button>
-        <button onClick={onProfileClick}>
+        <button onClick={onProfileClick} type="button">
           {/* <img src="/profile-off.png" alt="Profile" className="w-10 h-10 rounded-full" /> */}
           <Image
             src="/images/png/user2.png"

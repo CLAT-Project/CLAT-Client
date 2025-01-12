@@ -18,9 +18,9 @@ interface FormValue {
 export default function DeleteAccountPage() {
   const router = useRouter() // route.push('/login')
   const [modalOpen, setModalOpen] = useState(false)
-  const [formData, setFormData] = useState<FormValue | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [deleteSuccess, setDeleteSuccess] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [formData, setFormData] = useState<FormValue | null>(null)
   const [username, setUsername] = useState<string>('')
 
   const {
@@ -127,7 +127,9 @@ export default function DeleteAccountPage() {
               />
             </div>
             <div className="flex h-[55px] w-[155px] items-center justify-center rounded-md bg-blue-500 text-base font-medium text-white">
-              <button type="submit">확인</button>
+              <button type="submit" className="h-auto w-full">
+                확인
+              </button>
             </div>
           </form>
         </div>

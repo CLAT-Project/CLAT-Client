@@ -1,8 +1,15 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import NavigationBar from '@/components/home/navigationBar'
 
 const SuccessPage = () => {
+  const router = useRouter()
+
+  const handleNavigation = () => {
+    router.push('/home/csCenter/contactUs')
+  }
+
   return (
     <div className="flex h-screen">
       <div className="w-1/4 px-4">
@@ -46,15 +53,14 @@ const SuccessPage = () => {
                 <p className="text-sm">감사합니다.</p>
               </div>
             </div>
-            <div className="border-7b7b7b border-t text-center">
+            <div className="border-t text-center">
               <p className="mt-10 text-xs font-light text-gray-400">
                 다른 문의 사항이 있으신가요?
               </p>
               <button
+                type="button"
                 className="mt-2 w-1/3 rounded-lg bg-blue-500 px-4 py-2 text-white"
-                onClick={() =>
-                  (window.location.href = '/home/csCenter/contactUs')
-                } // 홈 페이지로 이동
+                onClick={handleNavigation} // 홈 페이지로 이동
               >
                 문의하기
               </button>
