@@ -88,6 +88,18 @@ const putModifyMemo = async (payload: {
   return response.data
 }
 
+const postChatBookmark = async (messageId: number) => {
+  const response = await Api.post(`/bookMark/${messageId}`)
+
+  return response.data
+}
+
+const getChatBookmark = async () => {
+  const response = await Api.get(`/bookMark`)
+
+  return response.data
+}
+
 const chatApi = {
   getChatMessage,
   postChatImageFile,
@@ -99,6 +111,8 @@ const chatApi = {
   getChatRoomInfo,
   getChatRoomIsAuth,
   putModifyMemo,
+  postChatBookmark,
+  getChatBookmark,
 }
 
 export default chatApi
