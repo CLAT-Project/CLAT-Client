@@ -1,5 +1,5 @@
 import chatApi from '@/apis/chat'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 export const useCreateChatRoomMutation = () => {
@@ -70,3 +70,28 @@ export const usePutModifyMemoMutation = () => {
   })
 }
 
+export const useBookmarkMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (messageId: number) => chatApi.postChatBookmark(messageId),
+    onSuccess: () => {
+      toast.success('북마크가 등록되었습니다.')
+      queryClient.invalidateQueries(['bookmarks'])
+    },
+    onError: (error: any) => {
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message)
+      } else {
+        toast.error('북마크 등록에 실패했습니다.')
+      }
+    },
+  })
+}
+
+export const useBookmarkListQuery = () => {
+  return useQuery({
+    queryKey: ['bookmarks'],
+    queryFn: chatApi.getChatBookmark,
+  })
+}

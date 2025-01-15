@@ -8,8 +8,6 @@ import MessageItem from '@/components/chat/MessageItem'
 import { InfiniteQueryObserverResult } from '@tanstack/react-query'
 
 interface IMessageProps {
-  isFetching: boolean
-  isMessage: boolean
   messages?: IChatMessag
   userName?: string
   chatRoomId: number

@@ -14,7 +14,10 @@ import { useRouter } from 'next/navigation'
 import { IUserClassResponse } from '@/types/chat.types'
 import Modal from '@/components/common/Modal'
 import toast from 'react-hot-toast'
-import { useCreateChatRoomMutation } from '@/hooks/mutations/useChatMutation'
+import {
+  useBookmarkListQuery,
+  useCreateChatRoomMutation,
+} from '@/hooks/mutations/useChatMutation'
 
 const HomePage = () => {
   const router = useRouter()
@@ -34,6 +37,13 @@ const HomePage = () => {
   const [chatRoomName, setChatRoomName] = useState('')
   const [classWeek, setClassWeek] = useState('')
   const [isSelectOpen, setIsSelectOpen] = useState(false)
+
+  const {
+    data: bookmarkList,
+    isLoading,
+    isError,
+    refetch,
+  } = useBookmarkListQuery()
 
   const onClickClass = (classItem: IUserClassResponse) => {
     if (isProfessor && classItem.chatRooms?.length === 0) {
@@ -258,7 +268,25 @@ const HomePage = () => {
 
           {/* 탭 내용 */}
           {activeTab === 'questions' && (
-            <div className="mb-8 space-y-4 rounded-xl border border-black">
+            <div className="mb-8 h-[440px] space-y-4 rounded-xl border border-black">
+              <div className="rounded p-4">
+                <p className="text-sm">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <p className="text-xs text-gray-400 shadow">
+                  그래픽 디자인 | 박철수 24.03.24 13:32
+                </p>
+              </div>
+              <div className="rounded p-4">
+                <p className="text-sm">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+                <p className="text-xs text-gray-400 shadow">
+                  그래픽 디자인 | 박철수 24.03.24 13:32
+                </p>
+              </div>
               <div className="rounded p-4">
                 <p className="text-sm">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
@@ -281,7 +309,20 @@ const HomePage = () => {
           )}
 
           {activeTab === 'bookmarks' && (
-            <div className="mb-8 space-y-4 rounded-xl border border-black">
+            <div className="mb-8 h-[440px] space-y-4 overflow-auto rounded-xl border border-black p-2">
+              {bookmarkList &&
+                bookmarkList.map(
+                  (item: { messageContent: string; bookmarkId: number }) => {
+                    return (
+                      <div className="rounded p-4">
+                        <p className="text-sm">{item.messageContent}</p>
+                        <p className="text-xs text-gray-400 shadow">
+                          {item.bookmarkId}
+                        </p>
+                      </div>
+                    )
+                  },
+                )}
               <div className="rounded p-4">
                 <p className="text-sm">북마크된 항목 1</p>
                 <p className="text-xs text-gray-400 shadow">

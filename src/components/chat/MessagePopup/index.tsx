@@ -1,3 +1,4 @@
+import { useBookmarkMutation } from '@/hooks/mutations/useChatMutation'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
 
@@ -14,6 +15,8 @@ const MessagePopup = ({
   onMemoClick,
   isMessager,
 }: MessagePopupProps) => {
+  const bookmarkMutation = useBookmarkMutation()
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message)
@@ -30,8 +33,12 @@ const MessagePopup = ({
     onMemoClick(messageId)
   }
 
+  const handleBookmark = () => {
+    bookmarkMutation.mutate(messageId)
+  }
+
   return (
-    <div className="relative  flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg">
+    <div className="relative flex flex-col items-start rounded-[20px] bg-[#F5F5F5] px-[18px] py-[13px] shadow-lg">
       <div className="flex w-full items-center justify-center gap-[4px]">
         <Image
           src="/images/png/heart.png"
@@ -66,7 +73,10 @@ const MessagePopup = ({
         <p className="px-[10px]">복사</p>
       </div>
       <div className="my-[7px] h-[0.2px] w-[100px] bg-[#A1A1A1]" />
-      <div className="w-[100%] rounded-[10px] transition-colors duration-200 hover:bg-[#DDDDDD]">
+      <div
+        className="w-[100%] rounded-[10px] transition-colors duration-200 hover:bg-[#DDDDDD]"
+        onClick={handleBookmark}
+      >
         <p className="px-[10px]">북마크</p>
       </div>
       {isMessager ? (
