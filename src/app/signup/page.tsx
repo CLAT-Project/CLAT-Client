@@ -19,6 +19,7 @@ export interface IDataType {
 
 const Signup = () => {
   const [currentStep, setCurrentStep] = useState(1)
+  const [email, setEmail] = useState('')
   const [userType, setUserType] = useState('')
   const [selectedImgFile, setSelectedImgFile] = useState<File | null>(null)
   const [status, setStatus] = useState(false)
@@ -46,6 +47,7 @@ const Signup = () => {
       username: watch('username'),
       password: watch('password'),
       schoolName: watch('schoolName'),
+      email,
       userType,
     })
 
@@ -61,6 +63,7 @@ const Signup = () => {
     if (status === true) {
       signup.mutate({ formData })
     }
+    console.log('최종 제출', dataString)
   }
 
   return (
@@ -85,6 +88,7 @@ const Signup = () => {
           status={status}
           setStatus={setStatus}
           onSubmitSignup={onSubmitSignup}
+          setEmail={setEmail}
         />
       )}
       {currentStep === 4 && <Welcome name={signup?.data?.name} />}
