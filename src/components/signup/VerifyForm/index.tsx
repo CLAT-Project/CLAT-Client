@@ -11,12 +11,14 @@ interface IVerifyFormProps {
   status: boolean
   setStatus: Dispatch<SetStateAction<boolean>>
   onSubmitSignup: () => void
+  setEmail: Dispatch<SetStateAction<string>>
 }
 
 const VerifyForm = ({
   status,
   setStatus,
   onSubmitSignup,
+  setEmail,
 }: IVerifyFormProps) => {
   const [verificationCode, setVerificationCode] = useState<number[]>(
     Array(6).fill(''),
@@ -49,6 +51,8 @@ const VerifyForm = ({
   }
 
   const onSubmitEmail = () => {
+    const emailValue = watch('email')
+    setEmail(emailValue)
     verifyEmail.mutate({ email: watch('email') })
   }
 
