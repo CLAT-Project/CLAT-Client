@@ -10,16 +10,14 @@ interface Profile {
   name: string
   username: string
   schoolName: string
+  email: string
 }
 
 export default function MyPage() {
   const [profile, setProfile] = useState<Profile | null>(null)
+
   const user = {
-    nickname: '배부른 햄스터',
-    username: 'asdfds546',
     phone: '010-0000-0000',
-    email: '123456789@gmail.com',
-    school: '@@@대학교',
   }
   useEffect(() => {
     // 프로필 데이터를 서버에서 가져오는 함수
@@ -64,12 +62,12 @@ export default function MyPage() {
               <div className="space-y-6">
                 {/* 별명 */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-semibold">별명</span>
+                  <span className="text-xl font-semibold">닉네임</span>
                   <div>
-                    <span>{user.nickname}</span>
-                    <a href="#" className="ml-2 text-blue-500">
+                    <span>{profile.name}</span>
+                    {/* <a href="#" className="ml-2 text-blue-500">
                       수정
-                    </a>
+                    </a> */}
                   </div>
                 </div>
 
@@ -77,10 +75,10 @@ export default function MyPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xl font-semibold">아이디</span>
                   <div>
-                    <span>{profile.name}</span>
-                    <a href="#" className="ml-2 text-blue-500">
+                    <span>{profile.username}</span>
+                    {/* <a href="#" className="ml-2 text-blue-500">
                       아이디 변경하기
-                    </a>
+                    </a> */}
                   </div>
                 </div>
 
@@ -89,9 +87,9 @@ export default function MyPage() {
                   <span className="text-xl font-semibold">전화번호</span>
                   <div>
                     <span>{user.phone}</span>
-                    <a href="#" className="ml-2 text-blue-500">
+                    {/* <a href="#" className="ml-2 text-blue-500">
                       전화번호 변경하기
-                    </a>
+                    </a> */}
                   </div>
                 </div>
 
@@ -99,10 +97,10 @@ export default function MyPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xl font-semibold">이메일</span>
                   <div>
-                    <span>{user.email}</span>
-                    <a href="#" className="ml-2 text-blue-500">
+                    <span>{profile.email}</span>
+                    {/* <a href="#" className="ml-2 text-blue-500">
                       이메일 변경하기
-                    </a>
+                    </a> */}
                   </div>
                 </div>
 
@@ -113,18 +111,18 @@ export default function MyPage() {
                     <span>{profile.schoolName}</span>
                   </div>
                 </div>
-
-                {/* 비밀번호 */}
-                <div className="flex items-center justify-between">
-                  <span className="text-xl font-semibold">비밀번호</span>
-                  <a href="#" className="text-blue-500">
-                    비밀번호 변경하기
-                  </a>
-                </div>
               </div>
             )}
-            {/* 탈퇴하기 버튼 */}
+            {/* 회원 수정 */}
             <div className="mt-10 flex justify-end">
+              <Link href="/home/setting/myPage/reconfirm">
+                <span className="h-[38px] w-[80px] rounded-md font-bold text-blue-700">
+                  회원 수정
+                </span>
+              </Link>
+            </div>
+            {/* 탈퇴하기 버튼 */}
+            <div className="mt-4 flex justify-end">
               <Link href="/home/setting/myPage/delete">
                 <span className="bottom-1 text-red-500">탈퇴하기</span>
               </Link>

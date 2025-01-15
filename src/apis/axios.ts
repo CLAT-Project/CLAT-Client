@@ -70,6 +70,7 @@ Api.interceptors.response.use(
     localStorage.setItem('retry', 'true')
 
     config.sent = true // 무한 재요청 방지
+
     const { headers } = await authApi.silentRefresh()
     const accessToken = headers.access
     if (accessToken) {
@@ -80,12 +81,12 @@ Api.interceptors.response.use(
     }
 
     // 토큰 재발급 후 WebSocket 재연결
-      const currentRoomId = localStorage.getItem('currentRoomId')
-      if (currentRoomId) {
-        reconnectWithNewToken(currentRoomId, (message) => {
-          console.log('Received message:ㅇㅁㄴㅇ', message)
-        })
-      }
+    const currentRoomId = localStorage.getItem('currentRoomId')
+    if (currentRoomId) {
+      reconnectWithNewToken(currentRoomId, (message) => {
+        console.log('Received message:ㅇㅁㄴㅇ', message)
+      })
+    }
 
     return axios(config) // 재요청
   },

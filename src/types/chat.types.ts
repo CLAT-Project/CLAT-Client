@@ -7,7 +7,7 @@ export interface IChatMessag {
     imageUrl: string[]
     answerId?: number
     answer: string
-    likeResDTOS: string[]
+    likeResDTOS?: string[]
   }[]
 }
 

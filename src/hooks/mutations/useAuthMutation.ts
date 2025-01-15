@@ -1,5 +1,6 @@
 import authApi from '@/apis/auth'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 
@@ -44,6 +45,20 @@ export const useVerifyEmailMutation = () => {
       authApi.postVerifyEmail({ email }),
     onSuccess: () => {
       toast.success('인증번호가 발송되었습니다.')
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message)
+    },
+  })
+}
+
+// 이메일변경시 (회원정보변경)
+export const useModifyEmailMutation = () => {
+  return useMutation({
+    mutationFn: ({ email }: { email: string }) =>
+      authApi.postVerifyEmail({ email }),
+    onSuccess: () => {
+      toast.success('인증이 완료되었습니다.')
     },
     onError: (error: any) => {
       toast.error(error.response.data.message)
@@ -129,6 +144,29 @@ export const useDeleteMutation = <TData>({
     onSuccess,
     onError: (error) => {
       onError?.(error)
+    },
+  })
+}
+
+export const useReconfirmPassword = ({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: (data: any) => void
+  onError?: (error: Error) => void
+}) => {
+  const router = useRouter()
+
+  return useMutation({
+    mutationFn: ({ password }: { password: string }) =>
+      authApi.postReconfirmPassword({ password }),
+    onSuccess: (data) => {
+      onSuccess?.(data)
+      router.push('/home/setting/myPage/userInfo')
+    },
+    onError: (error) => {
+      onError?.(error)
+      alert('비밀번호가 틀렸습니다.')
     },
   })
 }
