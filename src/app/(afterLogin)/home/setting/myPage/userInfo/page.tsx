@@ -1,8 +1,12 @@
 'use client'
 
 import { Api } from '@/apis/axios'
-import { useRouter } from 'next/navigation'
-// import { useModifyEmailMutation } from '@/hooks/mutations/useAuthMutation'
+import VerifyModal from '@/components/signup/VerifyForm/verifyModal'
+import {
+  useModifyProfileMutation,
+  useVerifyCodeMutation,
+  useVerifyEmailMutation,
+} from '@/hooks/mutations/useAuthMutation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -14,14 +18,20 @@ interface Profile {
 }
 
 export default function UserInfoPage() {
-  const router = useRouter()
+  const [modalOpen, setModalOpen] = useState(false)
   const [emailVerified, setEmailVerified] = useState(false) // 이메일 인증 여부
 
   const { register, handleSubmit, reset, watch, getValues } = useForm<Profile>()
 
-  // const onSubmitEmail = () => {
-  //   verifyEmail.mutate({ email: watch('email') })
-  // }
+  const modifyProfile = useModifyProfileMutation()
+  const verifyEmail = useVerifyEmailMutation()
+  const verifyCode = useVerifyCodeMutation({
+    onSuccessFallback: () => {
+      setEmailVerified(true)
+      alert('인증되었습니다.')
+      setModalOpen(false)
+    },
+  })
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -41,55 +51,47 @@ export default function UserInfoPage() {
   }, [reset])
 
   const onEmailVerify = async () => {
-    try {
-      const email = watch('email') // 현재 입력된 이메일 값 반환(확인)
-      if (!email) {
-        alert('이메일을 입력하세요!')
-        return
-      }
-
-      // 이메일 인증 요청
-      const response = await Api.post('/verify-email', { email })
-      if (response.data.success) {
-        alert('이메일 인증이 완료되었습니다!')
-        setEmailVerified(true) // 인증 성공 시 플래그 업데이트
-      }
-    } catch (err) {
-      console.error('이메일 인증 실패:', err)
-      alert('이메일 인증에 실패했습니다.')
+    const email = watch('email') // 현재 입력된 이메일
+    if (!email) {
+      alert('이메일을 입력하세요!')
+      return
     }
+
+    setModalOpen(true)
+    verifyEmail.mutate({ email })
+  }
+
+  const onSubmitVerifyCode = (verificationCode: string) => {
+    const email = watch('email') || ''
+
+    if (!email) {
+      alert('이메일을 입력하세요!')
+      return
+    }
+
+    verifyCode.mutate({
+      email,
+      verificationCode: Number(verificationCode),
+    })
   }
 
   const onSubmitModify = async () => {
     try {
-      // 현재값 가져오기
       const { name, newEmail, password } = getValues()
 
-      // 변경한 정보만 newData 업데이트
+      // console.log({ name, newEmail, password, emailVerified })
+
       const newData: Profile = {}
       if (name) newData.name = name
       if (password) newData.password = password
-      if (newEmail) newData.newEmail = newEmail
+      if (newEmail) newData.email = newEmail
 
-      const query = `?emailVerified=${emailVerified}`
-
-      const accessToken = localStorage.getItem('accessToken')
-      if (!accessToken) {
-        alert('인증 토큰이 없습니다.')
-        return
-      }
-
-      await Api.put(`/my-profile/modify${query}`, newData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+      modifyProfile.mutate({
+        newData,
+        emailVerified,
       })
-
-      alert('회원 정보가 수정되었습니다.')
-      router.push('/home/setting/myPage')
     } catch (err) {
       console.error('회원 정보 수정 실패:', err)
-      alert('회원 정보 수정에 실패했습니다.')
     }
   }
 
@@ -165,24 +167,12 @@ export default function UserInfoPage() {
                   </div>
 
                   {/* 인증 코드 */}
-                  <div className="mt-7 flex items-center justify-end">
-                    <input
-                      type="text"
-                      placeholder="인증 코드를 입력하세요."
-                      // {...register('verificationCode', {
-                      //   required: '인증 코드를 입력하세요.',
-                      // })}
-                      className="mr-5 border-b"
+                  {modalOpen && (
+                    <VerifyModal
+                      onClose={() => setModalOpen(false)}
+                      onVerify={onSubmitVerifyCode}
                     />
-
-                    <button
-                      // onClick={onVerifyCode}
-                      type="button"
-                      className="h-[30px] w-[40px] items-center justify-center rounded-md bg-blue-700 text-sm text-white"
-                    >
-                      확인
-                    </button>
-                  </div>
+                  )}
 
                   {/* 새 이메일 */}
                   <div className="mt-7 flex items-center justify-start">

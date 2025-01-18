@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import { Api, multipartApi, refreshApi } from '@/apis/axios'
+import { Profile } from '@/types/user.type'
 
 /**
  * @description 로그인 요청
@@ -121,7 +122,6 @@ const postDelete = async ({
     throw new Error('로그인 정보가 없습니다. 다시 로그인 해주세요.')
   }
 
-  // 헤더에 accessToken 포함하여 요청 보내기
   try {
     const response = await Api.post(
       '/delete',
@@ -133,7 +133,6 @@ const postDelete = async ({
       },
     )
 
-    // 로컬 스토리지에서 토큰 제거
     localStorage.removeItem('accessToken')
 
     return response.data
@@ -189,6 +188,20 @@ const postReconfirmPassword = async ({ password }: { password: string }) => {
   }
 }
 
+const postModifyProfile = async (newData: Profile, emailVerified: boolean) => {
+  const query = `?emailVerified=${emailVerified}`
+
+  const accessToken = localStorage.getItem('accessToken')
+
+  const { data } = await Api.put(`/my-profile/modify${query}`, newData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+
+  return data
+}
+
 const authApi = {
   postSingin,
   postSignup,
@@ -201,6 +214,7 @@ const authApi = {
   postFindPwd,
   getUserName,
   postReconfirmPassword,
+  postModifyProfile,
 }
 
 export default authApi

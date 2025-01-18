@@ -4,3 +4,10 @@ export interface IUserResponse {
   schoolName: string
   userType: string
 }
+
+export interface Profile {
+  name?: string
+  email?: string
+  password?: string
+  newEmail?: string
+}
