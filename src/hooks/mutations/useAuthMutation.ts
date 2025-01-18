@@ -1,4 +1,5 @@
 import authApi from '@/apis/auth'
+import { Profile } from '@/types/user.type'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useRouter } from 'next/navigation'
@@ -45,20 +46,6 @@ export const useVerifyEmailMutation = () => {
       authApi.postVerifyEmail({ email }),
     onSuccess: () => {
       toast.success('인증번호가 발송되었습니다.')
-    },
-    onError: (error: any) => {
-      toast.error(error.response.data.message)
-    },
-  })
-}
-
-// 이메일변경시 (회원정보변경)
-export const useModifyEmailMutation = () => {
-  return useMutation({
-    mutationFn: ({ email }: { email: string }) =>
-      authApi.postVerifyEmail({ email }),
-    onSuccess: () => {
-      toast.success('인증이 완료되었습니다.')
     },
     onError: (error: any) => {
       toast.error(error.response.data.message)
@@ -167,6 +154,28 @@ export const useReconfirmPassword = ({
     onError: (error) => {
       onError?.(error)
       alert('비밀번호가 틀렸습니다.')
+    },
+  })
+}
+
+export const useModifyProfileMutation = () => {
+  const router = useRouter()
+  return useMutation({
+    mutationFn: ({
+      newData,
+      emailVerified,
+    }: {
+      newData: Profile
+      emailVerified: boolean
+    }) => authApi.postModifyProfile(newData, emailVerified),
+    onSuccess: () => {
+      toast.success('회원 정보가 수정되었습니다.')
+      router.push('/home/setting/myPage')
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response?.data?.message || '회원 정보 수정에 실패했습니다.',
+      )
     },
   })
 }
