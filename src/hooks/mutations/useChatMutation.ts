@@ -77,7 +77,6 @@ export const useBookmarkMutation = () => {
     mutationFn: (messageId: number) => chatApi.postChatBookmark(messageId),
     onSuccess: () => {
       toast.success('북마크가 등록되었습니다.')
-      queryClient.invalidateQueries(['bookmarks'])
     },
     onError: (error: any) => {
       if (error.response?.data?.message) {
