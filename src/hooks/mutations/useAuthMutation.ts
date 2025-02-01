@@ -40,6 +40,20 @@ export const useSignupMutation = ({
   })
 }
 
+export const useSocialSignupMutation = ({
+  onSuccessFallback,
+}: {
+  onSuccessFallback: () => void
+}) => {
+  return useMutation({
+    mutationFn: ({ formData }: { formData: FormData }) =>
+      authApi.postSocialSignup({ formData }),
+    onSuccess: () => {
+      onSuccessFallback()
+    },
+  })
+}
+
 export const useVerifyEmailMutation = () => {
   return useMutation({
     mutationFn: ({ email }: { email: string }) =>

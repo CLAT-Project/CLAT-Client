@@ -43,6 +43,17 @@ const postSignup = async ({ formData }: { formData: FormData }) => {
   }
   return data
 }
+
+const postSocialSignup = async ({ formData }: { formData: FormData }) => {
+  const { data, headers } = await multipartApi.post('/social-join', formData)
+
+  const accessToken = headers.access
+
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken)
+  }
+  return data
+}
 /**
  * @description 이메일 인증 요청
  * @param param { email:string }
@@ -202,6 +213,15 @@ const postModifyProfile = async (newData: Profile, emailVerified: boolean) => {
   return data
 }
 
+// 구글로그인
+const googleLogin = async () => {
+  window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/google`
+}
+
+// 네이버로그인
+const naverLogin = async () => {
+  window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/naver`
+}
 const authApi = {
   postSingin,
   postSignup,
@@ -215,6 +235,9 @@ const authApi = {
   getUserName,
   postReconfirmPassword,
   postModifyProfile,
+  googleLogin,
+  naverLogin,
+  postSocialSignup,
 }
 
 export default authApi

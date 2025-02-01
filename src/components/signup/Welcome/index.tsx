@@ -2,9 +2,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 interface WelcomeProps {
+  isSocialLogin?: boolean
   name: string
 }
-const Welcome = ({ name }: WelcomeProps) => {
+const Welcome = ({ name, isSocialLogin = false }: WelcomeProps) => {
   const route = useRouter()
 
   const onClickHomeBtn = () => {
@@ -45,13 +46,15 @@ const Welcome = ({ name }: WelcomeProps) => {
         >
           메인화면
         </button>
-        <button
-          type="button"
-          className="h-[55px] w-[171px] rounded-[9px] bg-primary text-white"
-          onClick={onClickLoginBtn}
-        >
-          로그인
-        </button>
+        {!isSocialLogin && (
+          <button
+            type="button"
+            className="h-[55px] w-[171px] rounded-[9px] bg-primary text-white"
+            onClick={onClickLoginBtn}
+          >
+            로그인
+          </button>
+        )}
       </div>
     </>
   )
