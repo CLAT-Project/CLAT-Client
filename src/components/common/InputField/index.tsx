@@ -5,12 +5,14 @@ interface IInputFiledProps {
   type: string
   name: string
   placeholder?: string
-  isButton: boolean
+  isButton?: boolean
   buttonText?: string
   register?: UseFormRegister<any>
   errors?: FieldErrors<any>
   validationRules?: any
   onClickBtn?: (data?: any) => void
+  value?: string
+  readOnly?: boolean
 }
 
 const InputField = ({
@@ -24,6 +26,8 @@ const InputField = ({
   errors,
   validationRules,
   onClickBtn,
+  value = '',
+  readOnly = false,
 }: IInputFiledProps) => {
   return (
     <div className="relative flex items-center gap-5">
@@ -35,7 +39,9 @@ const InputField = ({
           id={name}
           className={`signup-input ${errors?.[name] ? 'border-red-500' : ''}`}
           type={type}
+          defaultValue={value}
           placeholder={placeholder}
+          readOnly={readOnly}
           {...(register && register(name, validationRules))}
         />
       </div>

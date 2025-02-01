@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { useSigninMutation } from '@/hooks/mutations/useAuthMutation'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import authApi from '@/apis/auth'
 
 interface FormValue {
   id: string
@@ -37,6 +38,14 @@ const Login = () => {
       username: data.id,
       password: data.password,
     })
+  }
+
+  const handleGoogleLogin = () => {
+    authApi.googleLogin()
+  }
+
+  const handleNaverLogin = () => {
+    authApi.naverLogin()
   }
 
   useEffect(() => {
@@ -98,7 +107,7 @@ const Login = () => {
                 />
               </div>
             </div>
-            <div className="flex h-[39px] items-center justify-center gap-2">
+            <div className="flex h-[35px] items-center justify-center gap-2">
               {errorMsg && (
                 <>
                   <p>
@@ -123,7 +132,30 @@ const Login = () => {
               로그인
             </button>
           </form>
-          <div className="mt-[36px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack">
+          <div className="mt-10 flex justify-center gap-6">
+            {/* 구글 로그인 */}
+            <button type="button">
+              <Image
+                src="/images/png/구글아이콘원형.png"
+                onClick={handleGoogleLogin}
+                alt="googleIcon"
+                width={40}
+                height={40}
+              />
+            </button>
+            {/* 네이버 로그인 */}
+            <button type="button">
+              <Image
+                src="/images/png/네이버아이콘원형.png"
+                onClick={handleNaverLogin}
+                alt="naverIcon"
+                width={40}
+                height={40}
+              />
+            </button>
+          </div>
+
+          <div className="mt-[30px] flex flex-col gap-[10px] text-center text-[14px] font-light text-lightBlack">
             <Link href="/login/find/password">
               <p className="cursor-pointer">비밀번호를 잊으셨나요?</p>
             </Link>
