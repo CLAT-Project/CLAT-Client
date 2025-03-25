@@ -44,8 +44,8 @@ const Login = () => {
     authApi.googleLogin()
   }
 
-  const handleNaverLogin = () => {
-    authApi.naverLogin()
+  const handleKakaoLogin = () => {
+    authApi.kakaoLogin()
   }
 
   useEffect(() => {
@@ -143,14 +143,14 @@ const Login = () => {
                 height={40}
               />
             </button>
-            {/* 네이버 로그인 */}
+            {/* 카카오 로그인 */}
             <button type="button">
               <Image
-                src="/images/png/네이버아이콘원형.png"
-                onClick={handleNaverLogin}
-                alt="naverIcon"
-                width={40}
-                height={40}
+                src="/images/png/카카오아이콘.png"
+                onClick={handleKakaoLogin}
+                alt="kakaoIcon"
+                width={80}
+                height={70}
               />
             </button>
           </div>

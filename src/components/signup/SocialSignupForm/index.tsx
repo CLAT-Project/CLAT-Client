@@ -184,7 +184,7 @@ const SocialSignupForm = ({
               <button
                 type="submit"
                 className="rounded-[9px] bg-primary px-[42px] py-[14px] text-[18px] font-bold text-white"
-                onClick={() => onClickNextBtn()}
+                onClick={onClickNextBtn}
               >
                 다음 단계
               </button>

@@ -213,14 +213,23 @@ const postModifyProfile = async (newData: Profile, emailVerified: boolean) => {
   return data
 }
 
-// 구글로그인
+// 구글로그인(단순히 백엔드 로그인 URL로 이동만 시키는 역할)
 const googleLogin = async () => {
   window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/google`
 }
 
-// 네이버로그인
-const naverLogin = async () => {
-  window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/naver`
+// 카카오로그인
+const kakaoLogin = async () => {
+  window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/kakao`
+}
+
+const postSocialRedirect = async ({ username }: { username: string }) => {
+  const { data, headers } = await Api.post('/social-redirect', { username })
+  const accessToken = headers.access
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken)
+  }
+  return data
 }
 const authApi = {
   postSingin,
@@ -236,8 +245,9 @@ const authApi = {
   postReconfirmPassword,
   postModifyProfile,
   googleLogin,
-  naverLogin,
+  kakaoLogin,
   postSocialSignup,
+  postSocialRedirect,
 }
 
 export default authApi

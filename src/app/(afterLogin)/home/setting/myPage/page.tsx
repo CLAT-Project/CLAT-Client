@@ -15,18 +15,19 @@ interface Profile {
 
 export default function MyPage() {
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const user = {
     phone: '010-0000-0000',
   }
   useEffect(() => {
-    // 프로필 데이터를 서버에서 가져오는 함수
     const fetchProfile = async () => {
       try {
         const response = await Api.get('/my-profile')
         setProfile(response.data)
       } catch (err) {
         console.error('프로필 정보 조회 실패:', err)
+        setError('프로필 정보를 불러오는 데 실패했습니다.')
       }
     }
 
@@ -58,6 +59,11 @@ export default function MyPage() {
             </div>
           </div>
           <div className="ml-5 mr-5">
+            {error && (
+              <div className="mb-4 text-center text-red-500">
+                {error} {/* 에러 메시지 표시 */}
+              </div>
+            )}
             {profile && (
               <div className="space-y-6">
                 {/* 별명 */}

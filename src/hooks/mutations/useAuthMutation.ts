@@ -43,13 +43,13 @@ export const useSignupMutation = ({
 export const useSocialSignupMutation = ({
   onSuccessFallback,
 }: {
-  onSuccessFallback: () => void
+  onSuccessFallback: (data: any) => void
 }) => {
   return useMutation({
     mutationFn: ({ formData }: { formData: FormData }) =>
       authApi.postSocialSignup({ formData }),
-    onSuccess: () => {
-      onSuccessFallback()
+    onSuccess: (data) => {
+      onSuccessFallback(data)
     },
   })
 }
@@ -190,6 +190,20 @@ export const useModifyProfileMutation = () => {
       toast.error(
         error.response?.data?.message || '회원 정보 수정에 실패했습니다.',
       )
+    },
+  })
+}
+
+export const useSocialRedirectMutation = ({
+  onSuccess,
+}: {
+  onSuccess: () => void
+}) => {
+  return useMutation({
+    mutationFn: ({ username }: { username: string }) =>
+      authApi.postSocialRedirect({ username }),
+    onSuccess: () => {
+      onSuccess()
     },
   })
 }

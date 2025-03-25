@@ -3,7 +3,7 @@
 import SocialSignupForm from '@/components/signup/SocialSignupForm'
 import Welcome from '@/components/signup/Welcome'
 import { useSocialSignupMutation } from '@/hooks/mutations/useAuthMutation'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -14,6 +14,7 @@ export interface IDataType {
 }
 
 const SocialLogin = () => {
+  const route = useRouter()
   const searchParams = useSearchParams()
 
   const initialSocialData = {
@@ -34,13 +35,28 @@ const SocialLogin = () => {
   } = useForm()
 
   const isSocialLogin = true
-
   const socialSignup = useSocialSignupMutation({
-    onSuccessFallback: () => {
-      // console.log('회원가입 성공')
-      setIsSignupComplete(true)
+    onSuccessFallback: (data) => {
+      try {
+        const token = data.headers?.get('Authorization')
+        if (token) {
+          localStorage.setItem('accessToken', token)
+        }
+
+        setIsSignupComplete(true)
+      } catch (error) {
+        console.error(error)
+      }
     },
   })
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (accessToken) {
+      // 이미 로그인된 상태라면 홈으로 리다이렉트
+      route.push('/home')
+    }
+  }, [route])
 
   useEffect(() => {
     const username = searchParams.get('username')
